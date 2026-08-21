@@ -257,3 +257,6 @@ and adding to it.
 
 **tech** — Short for "technical": to do with how a thing is built or
 made to work.
+
+**enact** — To carry a want through, in the world, over time: the
+third of Modio's own three powers, beside Perceive and Remember.

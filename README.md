@@ -55,6 +55,18 @@ and an answer that shifts run to run.
 | Same input, same answer | no                    | **yes**          |
 | Mobile                  | no                    | **yes, zero-GC** |
 
+## What must stand first
+
+**Modio cannot be built before `germio`'s own sensor (TASK-014)
+stands.**
+
+Seeking — finding a thing that is still far off — is the ground the
+whole layer rests on. A meeting (two bodies touching) is proof of
+arrival, never a way of seeking. A character that waits to be run
+into is not carrying a want through.
+
+See `docs/modio_spec.md` §6.3.
+
 ## Where to read next
 
 + `docs/modio_spec.md` — the full reference spec

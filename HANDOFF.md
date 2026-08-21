@@ -6,8 +6,10 @@ Where things stand right now, for whoever picks this up next.
 
 **Design only. No code at all yet.**
 
-`docs/modio_spec.md` (v0.0.1) holds the first true draft, written
-2026-08-20 in a long plan talk with Master. Every part of it was
+`docs/modio_spec.md` (v0.0.2) was written again from nothing on
+2026-08-21. v0.0.1 had let a meeting stand in where the sensor was
+missing; Master threw that out, and was right to — it is the very move
+that left `animo` missing a whole side of itself. Every part of it was
 found by reading real code in `germio`, `animo`, `tropika`, and
 `super-nekokun` — not by guessing.
 
@@ -17,14 +19,17 @@ found by reading real code in `germio`, `animo`, `tropika`, and
 + A Deed ends Done, Failed, or Dropped. Only Done writes anything.
 + The memory holds four columns: `when`, `what`, `object`, `with`.
 + `Recall` is one road, two ways: back to memory, ahead to what comes.
-+ Modio never picks what to want, never moves a body itself, and
-  never writes into `animo`.
++ Modio holds three powers, and may drop none: Perceive (seeking),
+  Remember (a past), Enact (a Deed over time).
++ Modio never picks what to want, never moves a body itself, never
+  writes into `animo`, and never lets a want quietly fall away.
 
 ## What is not settled
 
-See `TASKLIST.md`, TASK-001 through TASK-004. In short: how fast
-memory fades, what stands behind the 30-second limit, the whole set
-of forward-facing questions, and a real G review of the spec itself.
+**TASK-001 blocks every other task: `germio`'s own sensor is written
+but not built.** Then TASK-002 through TASK-005: how fast memory
+fades, the whole set of forward-facing questions, a home for a line
+said over a head, and a hard-questioning G review.
 
 ## The one rule to hold to
 

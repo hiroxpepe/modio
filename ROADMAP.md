@@ -2,44 +2,56 @@
 
 <!-- format: v1 | fields: status, phase, title -->
 
-+ [~] P-01: Settle the spec, and every real-world limit, first
-+ [ ] P-02: Build the Deed core, with a test written first
-+ [ ] P-03: Build the memory, and its own fading
-+ [ ] P-04: Build Recall, both ways — back, and ahead
-+ [ ] P-05: Join Modio to a real Germio game, and check it by real play
++ [~] P-01: Wait on the sensor, and settle every real-world limit
++ [ ] P-02: Build Perceive — seeking, through the sensor
++ [ ] P-03: Build Remember — the memory, and its own fading
++ [ ] P-04: Build Enact — the Deed, ending three ways
++ [ ] P-05: Build the far look — the memory, faced the other way
++ [ ] P-06: Join Modio to a real Germio game, and check it by real play
 + [~] P-XX: Work that does not fit the phases above
 
 ## Detail
 
 ### P-01
 
-`docs/modio_spec.md` holds the first true draft. Still owed: real
-sums for how fast memory fades, a true measure behind `limit`, and a
-full working out of every forward-facing question. See `TASKLIST.md`.
+**Modio cannot be built before `germio`'s own TASK-014 (the sensor)
+stands.** Without seeking, every want that reaches outside the
+character falls back on waiting to be run into — and that quietly
+throws away what `animo` decided. See `docs/modio_spec.md` §6.3.
+
+Also owed here: real sums for how fast memory fades, and a full
+working out of every forward-facing question.
 
 ### P-02
 
-Build `Deed`: one Behavior, carried out over time, ending Done,
-Failed, or Dropped. Every test written first, the same true way
-`animo` was built.
+Build Perceive: asking the sensor for a thing of a given type, within
+a reach and a spread, and holding what comes back. **Meeting is not
+seeking; it belongs to P-04, as proof of arrival.**
 
 ### P-03
 
-Build the memory table (`when`/`what`/`object`/`with`), and its own
-fading. Must make no garbage on the hot path — the same bar `animo`
-met with a test running `Live()` 100,000 times.
+Build the memory table (`when`/`what`/`object`/`with`), the three
+depths of meeting, and the fading P-01 settles. Must make no garbage
+on the hot path — the bar `animo` met with a test running `Live()`
+100,000 times.
 
 ### P-04
 
-Build `Recall`. Facing back reads the memory. Facing ahead reads the
-memory's own shape, plus `animo`'s own `rates`. **One road, two
-ways** — Tulving's own claim, put to work.
+Build `Deed`: one Behavior, carried through over time, ending Done,
+Failed, or Dropped. Held together by `animo`'s own `Lock(Soft)`
+while it plays out. Every test written first.
 
 ### P-05
 
+Build the far look: the same memory, read facing the other way, plus
+`animo`'s own `rates` and `GetNeed`. **One road, two ways** —
+Tulving's own claim, put to work.
+
+### P-06
+
 Put Modio into `stemic`, driving the two given personas
 (`place_curious`, `company_seeking`), and check by real play that
-each one truly acts on what it remembers.
+each truly seeks, remembers, and acts on both.
 
 ### P-XX
 
