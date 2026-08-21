@@ -6,7 +6,7 @@ change in as a commit.
 
 <!-- format: v1 | fields: status, id, title, phase -->
 
-+ [ ] TASK-001 [P-01]: Fold germio's own older sensor plan in here, and drop it there
++ [ ] TASK-001 [P-01]: Wait on germio TASK-015 to TASK-018, then fold the older plan in
 + [ ] TASK-002 [P-01]: Set a fading rate against the count, not a fixed number
 + [ ] TASK-003 [P-01]: Work out the whole set of forward-facing questions
 + [ ] TASK-004 [P-01]: Find a home in germio for a line said over a head
@@ -33,10 +33,24 @@ in three places (`docs/modio_spec.md` §3.3), all from one cause:
 seeking had been cut off from remembering. Even the drop-off check
 belongs here — knowing an edge is dangerous is remembering it.
 
-Bring over what that plan got right: the two stages (a cheap wide
+Four things must stand on the `germio` side first:
+
+| Task     | What                                            | Blocks                       |
+| -------- | ----------------------------------------------- | ---------------------------- |
+| TASK-015 | a mark that holds past a scene being read again | **the memory itself**        |
+| TASK-016 | `Rule.actor`                                    | telling two characters apart |
+| TASK-017 | `Command.request_deed`                          | starting a deed              |
+| TASK-018 | `Command.update_need`                           | reaching `animo`             |
+
+TASK-015 weighs most: counted on a real scene, `Level_1` holds 24
+pieces with three names used twice over, so a name cannot say which
+one. **Modio cannot remember a place until it can name the same place
+twice.**
+
+Bring over what the older plan got right: the two stages (a cheap wide
 check every tick, a straight-line check only where the cheap one
 finds something), the measured cost on a phone, and the drop-off
-check itself. Drop the file and the task on the `germio` side.
+check itself.
 
 `germio` holds no part of it: Modio calls Unity's own `Physics`
 straight, from its own `Runtime`.

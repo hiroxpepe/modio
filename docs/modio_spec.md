@@ -146,71 +146,171 @@ Every want that reaches outside the character needs seeking:
 **Meeting cannot stand in for any of these.** A body that waits to
 be run into does not seek. It waits.
 
-### 3.2 What Modio asks of a sensor
+Real sums, on a field 30 steps across, two characters set down at
+random: seeking brings them together in **8 seconds**; waiting to be
+run into takes **316 seconds** — forty times longer. `loneliness`
+climbs at 1.0 a second and stops at 100. **Waiting means it is pinned
+at the top long before they meet, and never falls again.** The want
+is not slowed. It is broken.
 
-| Asked for  | Sense                                                      |
-| ---------- | ---------------------------------------------------------- |
-| `type`     | what kind of thing to look for (`germio`'s own type marks) |
-| `reach`    | how far to look                                            |
-| `spread`   | how wide to look                                           |
-| Given back | what was found, and where it sits                          |
+### 3.2 Perceive reports, and never judges
 
-`germio`'s own `docs/sensor_spec.md` sets out a sensor of this shape.
-**It is written, and not yet built.**
+§2.4 gives Perceive one time only: **now**.
 
-### 3.3 Seeking sits here, whole
+| Belongs to Perceive                     | Belongs elsewhere                          |
+| --------------------------------------- | ------------------------------------------ |
+| "a Ground sits 2.0 ahead, 3.0 below"    | "that is a fall; keep away" — **Remember** |
+| "a Human sits 8.5 off, 20 degrees left" | "go to them" — **Enact**                   |
+| "a Block sits 1.0 ahead, 0.5 up"        | "that can be climbed" — **Enact**          |
 
-Seeking was first planned for `germio`
-(`docs/sensor_spec.md`, TASK-014 there). Held up against what Modio
-truly asks, that plan broke in three places:
+**Where Perceive judges, the line between the three powers is lost.**
+An early draft had Perceive hand back how wide and deep each
+thing was, so a fall could be worked out from that. That was
+Remember's work, slipped in where it did not belong. It was cut.
 
-| Break                            | Why it broke                                                                                                                                            |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| It picked things by `layer_mask` | `stemic` holds only Unity's own five stock layers; no Block, Ground or Player layer at all. `germio` picks by name (`Like()`) through all three builds. |
-| It gave back one thing only      | "find a Block not yet met" needs every near thing, then a choice against memory. One thing back leaves no second try.                                   |
-| No fading rate could be settled  | `Level_1` holds 12 blocks. Fade at 120 seconds and every one sits in memory, so nothing is new and the want dies.                                       |
+### 3.3 What Perceive hands back
 
-**All three come from one cause: seeking had been cut off from
-remembering.**
+Five fields. Not one more.
 
-At first the drop-off check (§4 of that older plan — watching for a
-step or a fall in front) looked as though it could stay in `germio`,
-as a matter of the body alone. **That was wrong too.** A character
-that walks to the same drop, turns away, and walks back again has
-taken in nothing. **Knowing an edge is dangerous is remembering
-it** — the same power, the same table, a different row.
+```text
+kind      what it is
+id        which one it is
+angle     how far round, from straight ahead
+distance  how far off
+height    how far up or down, from where the feet are
+```
 
-So seeking comes here whole. `germio` holds no part of it at all: Modio
-calls Unity's own `Physics` straight, from its own `Runtime`.
+**Why each one, and no other:**
 
-### 3.4 How it is laid out, inside
+| Field      | Why it must be there                                                     | Ground for it |
+| ---------- | ------------------------------------------------------------------------ | ------------- |
+| `kind`     | `seek` names a kind (`"Ground"`, `"Human"`), and something must match it | §3.4          |
+| `id`       | memory's own `object` column must name the same thing twice, on two days | §4.1          |
+| `angle`    | Enact turns the body before walking (`face`)                             | §5            |
+| `distance` | `until: near 2.0` needs a number to test                                 | §5            |
+| `height`   | how far up or down a thing sits, from where the feet are                 | §4.3          |
 
-The judging and the physical ask are held apart, the way `signo` holds
-its own `Scripts` apart from `Audition~`:
+**What is left out, and why:**
 
-| Part       | Does                                                             | Knows Unity? |
-| ---------- | ---------------------------------------------------------------- | ------------ |
-| `Scripts/` | memory, Deed, and the judging — "of these, which is not yet met" | **no**       |
-| `Runtime/` | the physical ask — calls `Physics`, hands back a plain list      | yes          |
+| Left out                             | Why                                                                                           |
+| ------------------------------------ | --------------------------------------------------------------------------------------------- |
+| How wide, how deep, how big          | Judging a fall from size is Remember's work (§3.2)                                            |
+| `Vector3`, `Transform`, `GameObject` | Perceive must be open to a check with no Unity at all (§3.6)                                  |
+| Whether it may be held               | That is `germio`'s own live state, read at the moment of taking, not seen from a distance     |
+| The full name string                 | `kind` and `id` say all Modio needs; a name would draw a reader into taking meaning out of it |
 
-`Runtime` gives `Scripts` a plain list: an angle, a distance, a name.
-No `Vector3`, no `GameObject`. **So the whole of the judging can be
-checked with no Unity at all** — the same bar `animo` holds, with
-`Scripts` free of Unity and `MiniUnity` standing in.
+### 3.4 The world is read the way `germio` names it
 
-`Runtime` carries the two stages the older plan set out, and they
-still hold: a cheap wide check every tick, and a straight-line check
-only where the cheap one finds something. Measured on `stemic`:
-`BoxCollider` sits on every Ground and Block piece, with no
-`MeshCollider` at all, so a straight-line check stays cheap.
+`germio`'s own `Env.cs` holds the marks a thing is known by:
 
-### 3.4 Meeting is proof of arrival
+```text
+GROUND_TYPE  = "Ground"     the floor underfoot
+BLOCK_TYPE   = "Block"      a solid thing in the way, or to climb
+WALL_TYPE    = "Wall"       a bound not to pass
+PLAYER_TYPE  = "Human"      a character, player-led or not
+ITEM_TYPE    = "Item"       a thing that may be taken
+HOME_TYPE    = "Home"       a place come back to
+```
+
+`germio` reads these by name — `Like(type)` is `name.Contains(type)`
+— and has done so through all three builds (`super-nekokun`, then
+`germio`, then `tropika`).
+
+**Perceive reads the world by the same marks.** Not by Unity layer:
+`stemic` holds only Unity's own five stock layers (Default, Water,
+UI, one for see-through art, and one that lines pass through) with no Block, Ground or
+Player layer at all — a check on 2026-08-21. Not by the name a piece
+was built under, either: the size written into such a name
+(`Ground_10.0x0.5x10.0_Green`) is `briko`'s own doing, for laying
+out a level in the Editor, and is no part of what a character sees.
+
+**So `kind` is one of `germio`'s own marks, and nothing else.** Where
+`germio` gains a mark, Modio gains a kind. Where it does not, Modio
+cannot invent one.
+
+### 3.5 How a seek is asked, and answered
+
+```text
+asked:    kind, reach, spread, and what memory to leave out
+answered: every thing found, nearest first
+```
+
+| Asked           | Sense                                                           |
+| --------------- | --------------------------------------------------------------- |
+| `kind`          | which of `germio`'s own marks to look for                       |
+| `reach`         | how far out to look                                             |
+| `spread`        | how far round to look, in degrees                               |
+| `not_in_memory` | which memory mark to leave out (`met`, `gave`, `shown`, `edge`) |
+
+**Every thing found comes back, not one.** An early draft gave back
+one thing only. It broke at once: "a place not yet met" needs the
+whole near set, weighed against memory. One thing back, already met,
+leaves no second try.
+
+Nearest first, so that where two are alike, the near one wins with no
+further sorting.
+
+### 3.6 Two parts, held apart
+
+| Part       | Does                                                                | Knows Unity? |
+| ---------- | ------------------------------------------------------------------- | ------------ |
+| `Runtime/` | asks Unity's own `Physics`, and turns each hit into the five fields | yes          |
+| `Scripts/` | takes that list, weighs it against memory, and picks one            | **no**       |
+
+This is the shape `signo` already holds, with its own `Scripts` apart
+from `Audition~`, and `quyno` with its own `Core` apart from
+`Bridge~`.
+
+**Why it must be so:** `animo` proved itself with 452 tests, no
+garbage on the hot path, and a runner giving the same answer every
+run — all because it holds no place at all. Modio must hold places.
+**If judging and Physics sat in one part, none of that could be
+proved.** Held apart, the judging takes a plain list, and a test may
+write that list by hand:
+
+```text
+given:   Ground/id=1  angle=20   distance=8.5   height=0.0
+         Ground/id=2  angle=-45  distance=12.0  height=0.0
+memory:  id=1 is met
+asked:   kind=Ground, not_in_memory=met
+then:    id=2 is picked
+```
+
+No Physics. No Transform. Same answer, every run.
+
+### 3.7 What `Runtime` does, and what it costs
+
+Two stages, carried over from the older plan that once sat in
+`germio`:
+
+| Stage | What                                                       | How often                            |
+| ----- | ---------------------------------------------------------- | ------------------------------------ |
+| One   | a wide, cheap check — is anything near at all              | every tick                           |
+| Two   | a straight-line check — is it truly in sight, and how high | only where stage one finds something |
+
+Measured on `stemic`: every Ground and Block piece carries a
+`BoxCollider`, with no `MeshCollider` anywhere, so a straight-line
+check against one stays cheap. **The saving is in not running stage
+two every tick, for every character.**
+
+`Level_1` holds 24 pieces set down, from 8 kinds. A wide check at 30
+reach turns up a few, not a great number. **A fixed list of 16 holds
+every case seen so far**, and `Runtime` fills the same list again each
+tick, so nothing is made new.
+
+### 3.8 Meeting is proof of arrival
 
 A meeting (`OnCollisionEnter`) says one thing, and says it well:
-**"you got there."** Modio uses it for exactly that — to close a
-deed, never to open one.
+**"you got there."**
 
----
+|         | Seeking                   | Meeting                |
+| ------- | ------------------------- | ---------------------- |
+| When    | before, from far off      | at the moment of touch |
+| Says    | "the thing is over there" | "you are here"         |
+| Used by | `seek`                    | `until`                |
+
+**Modio uses a meeting to close a deed, never to open one.** This is
+why `seek` will not take a meeting, in any form, ever.
 
 ## 4. Remember
 
@@ -367,103 +467,113 @@ same road twice.
 
 ---
 
-## 7. The DSL — `modio.json`
+## 7. No DSL of its own
+
+**Modio holds no language of its own. It reads `germio.json`.**
+
+An early draft set out a `modio.json`, with words of its own —
+`seek`, `until`, `then`. It was thrown out. Two files, each holding
+half of what a character does, would drift apart the first time one
+was changed and the other forgotten.
+
+**One file. `germio` reads the rules with no `actor`; Modio reads the
+rules that name one.**
+
+### 7.1 What `germio` gains, so that Modio needs nothing else
+
+Three things, and no more (see `germio`'s own TASK-016 to TASK-018):
+
+| Added to  | Name           | Shape                                      |
+| --------- | -------------- | ------------------------------------------ |
+| `Rule`    | `actor`        | a plain name. Empty means the world's rule |
+| `Command` | `request_deed` | work that takes time                       |
+| `Command` | `update_need`  | the one way to reach `animo`               |
+
+Each was named to sit beside what is already there:
+
+| New            | Sits beside                            | Why                                                |
+| -------------- | -------------------------------------- | -------------------------------------------------- |
+| `actor`        | `kind`, `scene`                        | a plain noun, as every `Rule` and `Node` field is  |
+| `request_deed` | `request_transition`, `request_notify` | all three ask for what does not finish on the spot |
+| `update_need`  | `update_counter`, `update_inventory`   | same shape: a key, and a change to it              |
+
+### 7.2 A deed, written out
 
 ```json
 {
-  "schema_version": "1.0",
-  "deeds": [
-    {
-      "behavior": "Explore",
-      "seek": { "type": "Block", "reach": 15.0, "spread": 90.0,
-                "not_in_memory": "met" },
-      "phases": [
-        { "body": "face" },
-        { "body": "walk" }
-      ],
-      "until": { "meets": "Block" },
-      "hold": { "mode": "soft", "at_most": 30.0 },
-      "then": {
-        "affect": [ { "need": "curiosity", "delta": -25 } ],
-        "remember": "met"
-      }
-    },
-    {
-      "behavior": "Approach",
-      "seek": { "type": "Human", "reach": 30.0, "spread": 120.0 },
-      "phases": [
-        { "body": "face" },
-        { "body": "walk" }
-      ],
-      "until": { "near": 2.0 },
-      "hold": { "mode": "soft", "at_most": 30.0 },
-      "then": {
-        "affect": [
-          { "need": "loneliness", "delta": -30 },
-          { "need": "separation", "delta": -40 }
-        ]
-      }
-    },
-    {
-      "behavior": "Give",
-      "given": { "holding": "Item" },
-      "seek": { "type": "Human", "reach": 30.0, "spread": 120.0,
-                "not_in_memory": "gave" },
-      "phases": [
-        { "body": "face" },
-        { "body": "walk" },
-        { "act": "hand_over" }
-      ],
-      "until": { "reparented": true },
-      "hold": { "mode": "soft", "at_most": 30.0 },
-      "then": {
-        "affect": [ { "need": "togetherness", "delta": -30 } ],
-        "remember": "gave",
-        "world": { "flag": "gift_given", "value": true }
-      }
-    },
-    {
-      "behavior": "GoHome",
-      "seek": { "type": "Home", "reach": 60.0, "spread": 360.0,
-                "before": { "need": "fatigue", "reaches": 70 } },
-      "phases": [
-        { "body": "face" },
-        { "body": "walk" }
-      ],
-      "until": { "near": 1.5 },
-      "hold": { "mode": "soft", "at_most": 30.0 },
-      "then": {
-        "affect": [ { "need": "exposure", "delta": -30 } ],
-        "remember": "met"
+  "id": "rule_explore",
+  "trigger": "sig_behavior_explore",
+  "actor": "place_curious_01",
+  "condition": "",
+  "command": {
+    "request_deed": {
+      "target": { "kind": "Ground", "reach": 15.0, "spread": 90.0 },
+      "condition": "history.time_since(kind=met, target_id=$target) > 60",
+      "motion": "walk",
+      "until": "meets($target)",
+      "command": {
+        "update_need": { "key": "curiosity", "delta": -25 },
+        "record_event": { "kind": "met", "target_id": "$target" }
       }
     }
-  ]
+  },
+  "once": false
 }
 ```
 
-### 7.1 The words each part may take
+**Every word here but four is `germio`'s own already.** `id`,
+`trigger`, `condition`, `command`, `once`, `record_event`,
+`history.time_since` — all stood before Modio did.
 
-| Part                 | Words                                                                   | Where it comes from                          |
-| -------------------- | ----------------------------------------------------------------------- | -------------------------------------------- |
-| `given`              | `holding`, `other_is`                                                   | `transform`, `DoUpdate`                      |
-| `seek.type`          | `Block`, `Human`, `Home`, `Item`                                        | `germio`'s own `Env.cs`                      |
-| `seek.reach`         | how far to look                                                         | sensor                                       |
-| `seek.spread`        | how wide to look                                                        | sensor                                       |
-| `seek.not_in_memory` | `met`, `gave`, `shown`                                                  | Modio's own memory, facing back              |
-| `seek.before`        | a Need, and the value it reaches                                        | Modio's own memory, facing forward           |
-| `phases[].body`      | `idle`, `walk`, `run`, `backward`, `jump`, `abort_jump`, `stop`, `face` | `germio`'s own `FixedUpdate`                 |
-| `phases[].act`       | `hand_over`                                                             | making it a child of the other               |
-| `until`              | `near`, `meets`, `reparented`, `elapsed`, `while`                       | sensor, meeting, `transform`, timer          |
-| `hold.mode`          | `soft`, `hard`                                                          | `animo`'s own `LockMode`                     |
-| `hold.at_most`       | seconds                                                                 | `animo`'s own `LOCK_DURATION_WARN_THRESHOLD` |
-| `then.affect`        | a Need and a number (**more than one allowed**)                         | `animo`'s own `Affect`                       |
-| `then.remember`      | `met`, `gave`, `shown`                                                  | Modio's own memory                           |
-| `then.world`         | `flag`, `counter`                                                       | `germio`'s own `Scenario.initial_state`      |
+### 7.3 `$target` — the one new mark
 
-**`seek` never takes a `trigger`. Meeting is proof of arrival, and
-belongs in `until` alone.**
+A rule as written today names everything up front:
 
----
+```text
+"flags.route_forest == true"                    a name, fixed
+"record_event": { "target_id": "stage_01" }     a name, fixed
+```
+
+**A deed cannot.** What it finds is known only once it looks. So
+`$target` stands for whatever was found, in three places: choosing
+(`condition`), ending (`until`), and writing down (`command`).
+
+It is put in place **before** the Evaluator runs:
+
+```text
+before : history.time_since(kind=met, target_id=$target) > 60
+after  : history.time_since(kind=met, target_id=g_0041) > 60
+```
+
+**`ExprLexer`, `ExprParser` and `Evaluator` are untouched.** `$`
+belongs to no token kind today, so it runs into nothing else.
+
+### 7.4 Why a mark of `germio`'s own making is needed
+
+`$target` must hold something that means the same thing twice.
+Counted on a real scene, 2026-08-21: **the object name will not do.**
+
+| Tried             | Why it fails                                                                      |
+| ----------------- | --------------------------------------------------------------------------------- |
+| The name          | `Level_1` holds 24 pieces; three names are used twice over                        |
+| `GetInstanceID()` | made new on every scene load, and `Despawn.cs` reads the scene again on each fall |
+| `GlobalObjectId`  | Editor only; cannot be read while the game runs                                   |
+
+So `germio` must give each piece a mark that is saved with the scene
+(TASK-015 there). **Modio cannot remember a place until it can name
+the same place twice.**
+
+### 7.5 One rule at a time, by design
+
+`germio`'s own `docs/dsl_spec.md` §6 sets a limit: a `history.*` call
+works alone, or right inside one comparison. **Inside `&&`, `||` or
+`!` it gives back `false`, always.**
+
+Modio holds to this, and writes one condition to a rule. Where two
+must be true at once, two rules are written, each with its own
+trigger — the way that spec itself calls for.
+
+**A limit taken on with open eyes, not a limit walked into.**
 
 ## 8. What Modio never does
 
