@@ -1,7 +1,7 @@
 # Modio Specification
 
 > **Tulving-driven Memory and Seeing Ahead, for Game Agents**
-> **v0.0.2** (written again from nothing, 2026-08-21) / first draft 2026-08-20
+> **v0.0.3** (seeking moved in, 2026-08-21) / written again from nothing v0.0.2 / first draft 2026-08-20
 > STUDIO MeowToon — h.adachi
 
 ---
@@ -22,7 +22,7 @@ Style rules:
 + Avoid long chains of describing words.
 + Common verbs and nouns. Do not use rare words.
 
-### Why v0.0.2 was written from nothing
+### Why this was written twice over
 
 v0.0.1 held a way out: where the sensor was missing, it said a
 meeting would do instead. **That was wrong, and it was wrong in a
@@ -40,8 +40,13 @@ still far off. **One waits; the other looks.** A character that
 waits to knock into a friend is not seeking company, whatever `animo`
 may have wanted.
 
-v0.0.2 holds no way out. Where Modio needs a thing, it says so, and
-waits for that thing to be built.
+v0.0.2 held no way out, and named the sensor in `germio` as the one
+thing that had to come first.
+
+v0.0.3 went further. Held up against what Modio truly asks, the
+`germio` sensor plan broke in three places — and all three came from
+one cause: **seeking had been cut off from remembering.** So seeking
+moved here, beside memory. See §3.3.
 
 ---
 
@@ -84,9 +89,10 @@ purpose.**
 | **Seeking**    | **on purpose** — finding a thing still far off                             |
 | Meeting        | by chance — two bodies touch. **Proof of arrival, never a way of seeking** |
 
-**Modio must be able to seek.** A sensor (`germio`'s own TASK-014)
-is what makes seeking possible. Until it stands, Modio cannot be
-built. See §6.
+**Seeking belongs to Modio itself.** It was once meant to sit in
+`germio`, as a sensor there. That was wrong, and §3.4 sets out why:
+seeking and remembering are one act, and splitting them across two
+apart builds breaks both.
 
 ### 2.2 Remember — to hold a past
 
@@ -152,7 +158,53 @@ be run into does not seek. It waits.
 `germio`'s own `docs/sensor_spec.md` sets out a sensor of this shape.
 **It is written, and not yet built.**
 
-### 3.3 Meeting is proof of arrival
+### 3.3 Seeking sits here, whole
+
+Seeking was first planned for `germio`
+(`docs/sensor_spec.md`, TASK-014 there). Held up against what Modio
+truly asks, that plan broke in three places:
+
+| Break                            | Why it broke                                                                                                                                            |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| It picked things by `layer_mask` | `stemic` holds only Unity's own five stock layers; no Block, Ground or Player layer at all. `germio` picks by name (`Like()`) through all three builds. |
+| It gave back one thing only      | "find a Block not yet met" needs every near thing, then a choice against memory. One thing back leaves no second try.                                   |
+| No fading rate could be settled  | `Level_1` holds 12 blocks. Fade at 120 seconds and every one sits in memory, so nothing is new and the want dies.                                       |
+
+**All three come from one cause: seeking had been cut off from
+remembering.**
+
+At first the drop-off check (§4 of that older plan — watching for a
+step or a fall in front) looked as though it could stay in `germio`,
+as a matter of the body alone. **That was wrong too.** A character
+that walks to the same drop, turns away, and walks back again has
+taken in nothing. **Knowing an edge is dangerous is remembering
+it** — the same power, the same table, a different row.
+
+So seeking comes here whole. `germio` holds no part of it at all: Modio
+calls Unity's own `Physics` straight, from its own `Runtime`.
+
+### 3.4 How it is laid out, inside
+
+The judging and the physical ask are held apart, the way `signo` holds
+its own `Scripts` apart from `Audition~`:
+
+| Part       | Does                                                             | Knows Unity? |
+| ---------- | ---------------------------------------------------------------- | ------------ |
+| `Scripts/` | memory, Deed, and the judging — "of these, which is not yet met" | **no**       |
+| `Runtime/` | the physical ask — calls `Physics`, hands back a plain list      | yes          |
+
+`Runtime` gives `Scripts` a plain list: an angle, a distance, a name.
+No `Vector3`, no `GameObject`. **So the whole of the judging can be
+checked with no Unity at all** — the same bar `animo` holds, with
+`Scripts` free of Unity and `MiniUnity` standing in.
+
+`Runtime` carries the two stages the older plan set out, and they
+still hold: a cheap wide check every tick, and a straight-line check
+only where the cheap one finds something. Measured on `stemic`:
+`BoxCollider` sits on every Ground and Block piece, with no
+`MeshCollider` at all, so a straight-line check stays cheap.
+
+### 3.4 Meeting is proof of arrival
 
 A meeting (`OnCollisionEnter`) says one thing, and says it well:
 **"you got there."** Modio uses it for exactly that — to close a
@@ -187,7 +239,18 @@ one meeting, not three separate things.
 **This mirrors `animo`'s own five stages: `animo` holds want in
 layers; Modio holds meeting in layers.**
 
-### 4.3 Fading
+### 4.3 `edge` — a place to keep away from
+
+`met` says "no longer new". **`edge` says the opposite: keep away.**
+
+A step too high, or a fall in front, is written as `edge`. A place
+held as `edge` is left out of every later seek, so the character
+turns aside before reaching it, not after knocking into it.
+
+Two rows, one table, opposite uses — which is why `edge` is its own
+mark, and not a kind of `met`.
+
+### 4.4 Fading
 
 Rows fade with time: the ones longest past, and the ones least deep,
 go first.
@@ -199,7 +262,7 @@ Fading is not for looks. It keeps two things true:
 + **A want for new places keeps working.** Once every place has been
   met, nothing is new any more. Fading makes a place new again.
 
-### 4.4 Facing the other way
+### 4.5 Facing the other way
 
 The same table, read facing the other way, says what is to come.
 
@@ -283,17 +346,24 @@ friend may quiet both "I am alone" and "I am cut off" together.
 | 3 | `Lock(Soft)` — holding a Deed  | built |
 | 4 | `GetNeed` — for facing forward | built |
 
-### 6.3 The one thing that blocks everything
+### 6.3 Nothing blocks Modio now
 
-**Modio cannot be built before `germio`'s own TASK-014 (the sensor)
-stands.**
+Seeking sits in Modio itself (§3.3), so no other build has to
+make a thing first. Work may start.
 
-This is not a wish. Without seeking, every want that reaches outside
-the character falls back on waiting to be run into — and a
-character that waits is not carrying a want through. **It would look
-as though it worked, while quietly throwing away everything `animo`
-decided.** That is the very way `animo` came to be missing a whole
-side of itself, and this spec will not walk the same road twice.
+**What must never be done is stand a meeting in for seeking.**
+Without seeking, every want reaching outside the character falls back
+on waiting to be run into — and a character that waits is not
+carrying a want through. It would look as though it worked, while
+quietly throwing away everything `animo` decided.
+
+Real sums show the cost: on a field 30 steps across, seeking brings
+two characters together in **8 seconds**; waiting to be run into
+takes **316 seconds**, forty times longer. `loneliness` climbs at 1.0
+a second and stops at 100. **Waiting means it is pinned at the top
+long before arrival, and never falls again.** That is how a whole
+side of `animo` came to be missing, and this spec will not walk the
+same road twice.
 
 ---
 

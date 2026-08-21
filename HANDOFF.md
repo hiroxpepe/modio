@@ -6,10 +6,15 @@ Where things stand right now, for whoever picks this up next.
 
 **Design only. No code at all yet.**
 
-`docs/modio_spec.md` (v0.0.2) was written again from nothing on
-2026-08-21. v0.0.1 had let a meeting stand in where the sensor was
-missing; Master threw that out, and was right to — it is the very move
-that left `animo` missing a whole side of itself. Every part of it was
+`docs/modio_spec.md` (v0.0.3), 2026-08-21.
+
+v0.0.1 had let a meeting stand in where the sensor was missing.
+Master threw that out — it is the very move that left `animo` missing
+a whole side of itself. v0.0.2 was written again from nothing.
+
+v0.0.3 moved seeking itself into Modio. Three breaks in the `germio`
+sensor plan all came from one cause: seeking had been cut off from
+remembering. Every part of it was
 found by reading real code in `germio`, `animo`, `tropika`, and
 `super-nekokun` — not by guessing.
 
@@ -26,10 +31,14 @@ found by reading real code in `germio`, `animo`, `tropika`, and
 
 ## What is not settled
 
-**TASK-001 blocks every other task: `germio`'s own sensor is written
-but not built.** Then TASK-002 through TASK-005: how fast memory
-fades, the whole set of forward-facing questions, a home for a line
-said over a head, and a hard-questioning G review.
+**Nothing blocks work now.** Seeking moved into Modio (v0.0.3), so
+no other build must make a thing first.
+
+Open: a fading rate set against the count (a fixed number breaks —
+`Level_1` holds 12 blocks, and fading at 120 seconds leaves nothing
+new), the whole set of forward-facing questions, a home for a line
+said over a head, word to `germio` that its own sensor plan should be
+cut back, and a hard-questioning G review.
 
 ## The one rule to hold to
 

@@ -6,12 +6,12 @@ change in as a commit.
 
 <!-- format: v1 | fields: status, id, title, phase -->
 
-+ [ ] TASK-001 [P-01]: Wait on germio TASK-014, the sensor — blocks everything
-+ [ ] TASK-002 [P-01]: Work out, by real sums, how fast the memory must fade
++ [ ] TASK-001 [P-01]: Fold germio's own older sensor plan in here, and drop it there
++ [ ] TASK-002 [P-01]: Set a fading rate against the count, not a fixed number
 + [ ] TASK-003 [P-01]: Work out the whole set of forward-facing questions
 + [ ] TASK-004 [P-01]: Find a home in germio for a line said over a head
 + [ ] TASK-005 [P-01]: Put the spec through a hard-questioning G review
-+ [ ] TASK-006 [P-02]: Build seeking, asking the sensor by type, reach, spread
++ [ ] TASK-006 [P-02]: Build seeking, by type and reach, against memory
 + [ ] TASK-007 [P-03]: Build the memory table, and the three depths of meeting
 + [ ] TASK-008 [P-03]: Build fading, to the rate TASK-002 settles
 + [ ] TASK-009 [P-03]: Prove no garbage is made on the hot path
@@ -27,23 +27,36 @@ change in as a commit.
 
 ### TASK-001
 
-**Everything waits on this.** `germio`'s own TASK-014 builds the
-sensor. Without seeking, Modio has no way to find a thing still far
-off, and every want reaching outside the character would fall back on
-waiting to be run into.
+`germio`'s own `docs/sensor_spec.md` and TASK-014 planned a sensor
+built there. Held up against what Modio truly asks, that plan broke
+in three places (`docs/modio_spec.md` §3.3), all from one cause:
+seeking had been cut off from remembering. Even the drop-off check
+belongs here — knowing an edge is dangerous is remembering it.
 
-`docs/modio_spec.md` §6.3 sets out why no way around this is taken:
-it would look as though it worked, while quietly throwing away
-everything `animo` decided. **That is how `animo` itself came to be
-missing a whole side, and this repository will not walk the same road
-twice.**
+Bring over what that plan got right: the two stages (a cheap wide
+check every tick, a straight-line check only where the cheap one
+finds something), the measured cost on a phone, and the drop-off
+check itself. Drop the file and the task on the `germio` side.
+
+`germio` holds no part of it: Modio calls Unity's own `Physics`
+straight, from its own `Runtime`.
 
 ### TASK-002
 
-With no fading, the memory table grows with no end. Count the blocks
-in a real `stemic` level, and work out, by real sums, whether the
-table stays small at a given rate. **A guess is not a measure** — the
-bar `animo` met when its own `suppression` sums were checked.
+Counted, 2026-08-21: `stemic`'s own `Level_1` holds 12 blocks.
+
+| Fade  | Held in memory | Left new  |
+| ----- | -------------- | --------- |
+| 30 s  | 4              | 8         |
+| 60 s  | 8              | 4         |
+| 90 s  | 11             | 1 or none |
+| 120 s | 12 (all)       | **none**  |
+
+**At 120 seconds the want for new places dies flat out.** 30 to 60
+seconds works on this level — but the right rate turns on how many
+things there are, so any fixed number will break on another level.
+What is owed is a rate set against the count (hold no more than half
+of what is there, say), not a number written in.
 
 ### TASK-003
 
@@ -65,9 +78,20 @@ review. This one does not yet.
 
 ### TASK-006
 
-Build seeking: ask the sensor for a thing of a given `type`, within a
-`reach` and a `spread`, and hold what comes back. **Meeting is not
-seeking** — it belongs to TASK-010, as proof of arrival.
+Build seeking in two parts, held apart: `Runtime/` calls Unity's own
+`Physics` straight and hands back a plain list (angle, distance,
+name); `Scripts/` judges that list against memory, with no Unity in
+sight.
+
+Pick things **by name** (`germio`'s own `Env.cs` type marks, read
+through `Like()`), never by layer: `stemic` holds only Unity's own
+five stock layers, with no Block, Ground or Player layer at all.
+
+Give back **every** thing found, near to far — one thing back leaves
+no second try where the first sits in memory already.
+
+**Meeting is not seeking** — it belongs to TASK-010, as proof of
+arrival.
 
 ### TASK-007
 

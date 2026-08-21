@@ -55,17 +55,21 @@ and an answer that shifts run to run.
 | Same input, same answer | no                    | **yes**          |
 | Mobile                  | no                    | **yes, zero-GC** |
 
-## What must stand first
+## Seeking sits here, beside memory
 
-**Modio cannot be built before `germio`'s own sensor (TASK-014)
-stands.**
+Seeking — finding a thing still far off — is the ground the whole
+layer rests on. A meeting (two bodies touching) is proof of arrival,
+never a way of seeking.
 
-Seeking — finding a thing that is still far off — is the ground the
-whole layer rests on. A meeting (two bodies touching) is proof of
-arrival, never a way of seeking. A character that waits to be run
-into is not carrying a want through.
+Real sums, on a field 30 steps across: seeking brings two
+characters together in **8 seconds**; waiting to be run into takes
+**316 seconds**. `loneliness` climbs at 1.0 a second and stops at
+100 — so waiting means it is pinned at the top long before arrival,
+and never falls again.
 
-See `docs/modio_spec.md` §6.3.
+Seeking was first planned for `germio`. It broke in three places, all
+from one cause: **"find a Block not yet met" is one act, and cannot
+be split across two apart builds.** See `docs/modio_spec.md` §3.3.
 
 ## Where to read next
 

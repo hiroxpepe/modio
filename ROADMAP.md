@@ -2,8 +2,8 @@
 
 <!-- format: v1 | fields: status, phase, title -->
 
-+ [~] P-01: Wait on the sensor, and settle every real-world limit
-+ [ ] P-02: Build Perceive — seeking, through the sensor
++ [~] P-01: Settle every real-world limit, before any code
++ [ ] P-02: Build Perceive — seeking, with memory beside it
 + [ ] P-03: Build Remember — the memory, and its own fading
 + [ ] P-04: Build Enact — the Deed, ending three ways
 + [ ] P-05: Build the far look — the memory, faced the other way
@@ -14,19 +14,27 @@
 
 ### P-01
 
-**Modio cannot be built before `germio`'s own TASK-014 (the sensor)
-stands.** Without seeking, every want that reaches outside the
-character falls back on waiting to be run into — and that quietly
-throws away what `animo` decided. See `docs/modio_spec.md` §6.3.
+Seeking sits in Modio itself, beside memory (`docs/modio_spec.md`
+§3.3), so no other build must make a thing first.
 
-Also owed here: real sums for how fast memory fades, and a full
-working out of every forward-facing question.
+Owed here: a fading rate set against how many things there are (a
+fixed number breaks — `Level_1` holds 12 blocks, and fading at 120
+seconds leaves nothing new), a full working out of every
+forward-facing question, and word to `germio` that its own sensor
+plan should be cut back to the plain physical ask.
 
 ### P-02
 
-Build Perceive: asking the sensor for a thing of a given type, within
-a reach and a spread, and holding what comes back. **Meeting is not
-seeking; it belongs to P-04, as proof of arrival.**
+Build Perceive, in two parts held apart: `Runtime/` calls Unity's own
+`Physics` straight and hands back a plain list (angle, distance,
+name); `Scripts/` judges that list against memory. Picks things by
+name (`germio`'s own `Env.cs` type marks), never by layer: `stemic`
+holds only Unity's own five stock layers.
+
+The drop-off check comes here too, not `germio`: an edge worth
+keeping away from is a thing worth remembering.
+
+**Meeting is not seeking; it belongs to P-04, as proof of arrival.**
 
 ### P-03
 
