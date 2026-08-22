@@ -265,3 +265,8 @@ third of Modio's own three powers, beside Perceive and Remember.
 real one, so the two may be set against each other.
 
 **radar** — A screen mark showing what lies about, and how far off.
+
+**Evaluator** — `germio`'s own part that works out whether a condition
+is true, given the state of the world.
+
+**Executor** — `germio`'s own part that carries out a command.

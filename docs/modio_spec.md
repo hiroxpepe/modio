@@ -192,7 +192,7 @@ height    how far up or down, from where the feet are
 | `kind`     | `seek` names a kind (`"Ground"`, `"Human"`), and something must match it | §3.4          |
 | `id`       | memory's own `object` column must name the same thing twice, on two days | §4.1          |
 | `angle`    | Enact turns the body before walking (`face`)                             | §5            |
-| `distance` | `until: near 2.0` needs a number to test                                 | §5            |
+| `distance` | `until` with `near` needs a number to test                               | §5            |
 | `height`   | how far up or down a thing sits, from where the feet are                 | §4.3          |
 
 **What is left out, and why:**
@@ -220,8 +220,10 @@ Three other ways were weighed, and each was dropped:
 `GetInstanceID()` is made new when a scene is read again — and that is
 right, not wrong. **A scene read again is a world built new: the
 old pieces are gone.** A memory of a piece that no longer stands has
-lost what it spoke of, and should go with it. The memory of a *place*
-is held apart (§4.5), and lives on.
+lost what it spoke of, and should go with it.
+
+**This holds only for things near by.** A memory of another character,
+or of a place, is named otherwise and lives on — see §4.5.1.
 
 ### 3.3.2 `heading` — which way the character itself faces
 
@@ -335,7 +337,9 @@ a thing that moved would read as one thing gone and another made.
 
 This is the shape `signo` already holds, with its own `Scripts` apart
 from `Audition~`, and `quyno` with its own `Core` apart from
-`Bridge~`.
+`Bridge~`. **Modio's own two are named `Scripts/` and `Runtime/`,
+neither with a `~`**: unlike `Audition~` or `Droid~`, both are read by
+Unity, since Modio is taken in as a package.
 
 **Why it must be so:** `animo` proved itself with 452 tests, no
 garbage on the hot path, and a runner giving the same answer every
@@ -374,6 +378,23 @@ two every tick, for every character.**
 reach turns up a few, not a great number. **A fixed list of 16 holds
 every case seen so far**, and `Runtime` fills the same list again each
 tick, so nothing is made new.
+
+**How many characters at once: 64** (Master's own word, 2026-08-21).
+Worked out at 50 ticks a second:
+
+| What                       | How much                                                            |
+| -------------------------- | ------------------------------------------------------------------- |
+| Stage one, wide and cheap  | 64 × 50 = **3,200 a second**                                        |
+| Stage two, one line thrown | only where stage one finds something — at 3 in 10, **960 a second** |
+| Memory, all 64 together    | 15 rows each = 960 rows, near **37 KB**                             |
+| The found-list             | 16 to a character, filled again each tick, never made new           |
+
+**Every character runs, seen or not** (Master's own word): one that
+walked off screen goes on wanting, seeking, and remembering, so a
+player coming back finds it somewhere else, doing something else.
+Holding still what cannot be seen would be cheaper, and would make the
+world stop where no one looks. **Should the cost ever bite, that is
+when to weigh it** — see §9.
 
 ### 3.7.1 What stands in the way is not seen
 
@@ -542,6 +563,53 @@ A character that walks to the same drop, turns away, and walks back
 again has taken in nothing. Knowing an edge is dangerous **is**
 remembering it.
 
+### 4.5.1 Three memories, three lives
+
+Master's own word, 2026-08-21: a character carries what it feels from
+one level into the next, and a game may be saved and taken up later.
+That settles how long each memory lives, and what names what.
+
+| Memory                | Named by          | Lives past a level? | Saved?  |
+| --------------------- | ----------------- | ------------------- | ------- |
+| **a thing near by**   | `GetInstanceID()` | no                  | no      |
+| **another character** | **`agent_id`**    | **yes**             | **yes** |
+| **a place**           | where it stood    | **yes**             | **yes** |
+
+**Each name suits the life it must hold.**
+
++ A block, a step, an item picked up — these belong to one level, one
+  reading of one scene. `GetInstanceID()` is made new each time, and
+  so is the memory. **Nothing is lost that had anything left to say.**
++ Another character is named in `animo.json` and in `germio.json` both
+  (`agent_id`, §7.1). **That name goes on past any scene, past any save.** So
+  "I have given to this one" holds true a week later.
++ A place is where it is. Nothing names it but itself (§4.5).
+
+**This is why the three could never share one name.** An earlier
+draft held all memory under `GetInstanceID()`, which would have made
+"I gave to them" go dark the moment a level was left. Three lives,
+three names.
+
+### 4.5.2 Carrying it over, and saving it
+
+`animo`'s own `Engine.Snapshot()` reads a whole state out. Its other
+half — `Restore` — is being built (`animo`'s own TASK-014).
+
+| At a level's end | What Modio does                                               |
+| ---------------- | ------------------------------------------------------------- |
+| Needs            | `Snapshot()` each Engine, and hold it                         |
+| memory           | keep the rows named by `agent_id` and by place; drop the rest |
+| a deed running   | let it go — it belonged to a world now gone                   |
+| a lock           | let it go with the deed                                       |
+
+At the next level's start, `Restore` puts the Needs back, and the kept
+rows go on standing. **A character walks into a new level still worn out,
+still alone, and still knowing who it has given to.**
+
+A save writes the same two things — the Snapshots, and the kept rows.
+`germio`'s own save already carries the world (`Store`); these ride
+beside it.
+
 ### 4.6 Letting go
 
 Two ways of letting go were weighed. **`germio` already does both, and
@@ -583,19 +651,91 @@ so the least deep goes before the deepest, as it does in a person.
 ### 4.7 Facing the other way
 
 The same table, read facing the other way, says what is to come.
+**One table, one way of reading it. Only the question changes.**
 
-| Facing  | Asks                                     | Reads                                             |
-| ------- | ---------------------------------------- | ------------------------------------------------- |
-| Back    | "have I met that place?"                 | the table                                         |
-| Forward | "where will my Needs sit in 30 seconds?" | the table's own shape, plus `animo`'s own `rates` |
+| Facing  | Asks                                 |
+| ------- | ------------------------------------ |
+| Back    | "have I met **that** one?"           |
+| Forward | "what came of the ones **like** it?" |
 
-Facing forward works because `animo`'s own `rates` are fixed and
-plain: a Need climbing at +1.2 a second will sit 36 points higher in
-30 seconds. `animo`'s own `GetNeed(need)` gives the value now.
-**What is to come can be worked out; it need not be guessed.**
+Tulving's own claim, put to work: the paths that bring a past thing
+back are the paths that build a picture of what is to come. **Not two
+machines. One, faced two ways.**
 
-**What this can be asked, in full, is not yet worked out.** §7 shows
-one shape only. See §9.
+#### 4.7.1 What "like it" means
+
+Facing back matches on the `thing` — one `id`, one row. Facing forward
+matches on **what Perceive hands back about it** (§3.3): its `kind`,
+how far off, how far up or down.
+
+```text
+a Ground, 12 off, 3.0 down     was met, and written `edge`
+a Ground, 14 off, 2.8 down     was met, and written `edge`
+                ↓
+now: a Ground, 13 off, 3.1 down
+                ↓
+"ones like this went badly"
+```
+
+**Nothing is worked out. Nothing is run forward.** The rows already
+say it.
+
+#### 4.7.2 Why not run the Needs forward instead
+
+An earlier draft had Modio read `animo`'s own rates and work out where
+a Need would sit in thirty seconds. Three things were wrong with it.
+
+**It cannot be done.** `_rates_flat` and `_decay_rates` are held
+private, and `GetActionScore`, `GetAllNeedNames`, `GetAllActionIds`
+are all `internal`. Nothing outside `animo` can read them. To work a
+Need forward, Modio would have to hold `animo`'s own sums over
+again — suppression, influences, the commitment bonus — and then there
+would be two of everything, drifting apart.
+
+**It would not help even if it could.** Checked by real sums,
+2026-08-21: at `fatigue` 55, `Rest` scores 40.8 and `GoHome` 6.9. Push
+`exposure` up with an influence and it still loses — at `fatigue` 85,
+`Rest` 78.4 against `GoHome` 36.7. **Maslow's own holding-back says
+so, and says it well: one who is worn out rests where they stand.**
+No amount of looking ahead changes which want wins; that is `animo`'s
+to say, not Modio's.
+
+**And it is not what Tulving said.** He held that the memory of living
+is what lets a mind picture what is to come — not a sum worked out
+from a rate. **A person does not work out how worn out they will be in thirty
+seconds. They know how it went last time.**
+
+#### 4.7.3 Where the forward-facing question is put
+
+Not to `animo`. **To the seek.**
+
+`animo` says what is wanted; that is settled, and Modio never touches
+it. What Modio settles is **which thing to reach for**, and there the
+past speaks:
+
+```json
+"target": { "kind": "Ground", "reach": 15.0, "spread": 90.0 },
+"condition": "history.count(kind=edge, like=$target) == 0"
+```
+
+**`like` is the forward-facing word.** Where `target_id` asks after one
+thing, `like` asks after every row whose thing was of a kind, and at a
+reach, and at a height, near enough to this one to count.
+
+So a character keeps away from a drop it has never stood on, because
+it stood on ones like it. **It does not know. It expects.** That is
+what a memory of living buys, and it buys it with no sum at all.
+
+#### 4.7.4 The three times, held together
+
+| Time    | Held by             | How it is known                      |
+| ------- | ------------------- | ------------------------------------ |
+| past    | the table           | rows, matched on `thing`             |
+| now     | Perceive            | what stands within reach, this tick  |
+| to come | **the table again** | rows, matched on **what it is like** |
+
+**Modio is the only layer that holds all three**, and it holds them in
+one place, because Tulving said they are one thing.
 
 ### 4.8 What Modio never remembers
 
@@ -631,20 +771,27 @@ there.
 
 ### 5.2 The steps within one Deed
 
-A Deed is not one motion. It runs in steps, and each has its own end:
+A Deed is not one motion. Up to three steps run, in this order:
 
-```text
-face      turn toward what was found       until it faces
-walk      go there                          until near, or met
-act       do the thing (hand over, and so on)  until it is done
-```
+| Step | What                       | Runs when           | Ends when              |
+| ---- | -------------------------- | ------------------- | ---------------------- |
+| face | turn toward what was found | there is a `target` | it faces — of itself   |
+| move | do what `motion` says      | always              | **`until` says so**    |
+| act  | do what `act` says         | there is an `act`   | it is done — of itself |
+
+**Only the middle step is watched.** `until` (§7.6) belongs to it, and
+to it alone: facing ends when the turn is finished, and an act ends
+when it is carried out. Neither needs watching.
+
+**Steps are skipped where they do not apply.** `Rest` holds no
+`target` and no `act`, so it runs one step: stand still, until so many
+seconds have gone by. `Give` runs all three.
 
 `super-nekokun`'s own `Player.cs` shows this shape already, in taking
 something up: it turns to face the thing (`faceToObject`), then lifts,
-then holds. **Three steps, not one.**
+then holds.
 
-Where any step cannot end, the whole Deed ends **Failed**. The steps
-run in order, and none is skipped.
+Where the middle step cannot end, the whole Deed ends **Failed**.
 
 ### 5.3 Holding a Deed together, while it plays out
 
@@ -659,9 +806,24 @@ run in order, and none is skipped.
 deed plays out, and a sudden Need — fear, say — can still break in and
 drop it.
 
-`animo`'s own `LOCK_DURATION_WARN_THRESHOLD` is 30 seconds. **This is
-the ground under how long a Deed may run** — not a number picked out
-of the air.
+**How long a Deed may run** rests on two numbers `animo` already
+holds, and they are not the same:
+
+| Number                         | Value | What it is                                    |
+| ------------------------------ | ----- | --------------------------------------------- |
+| `LOCK_DURATION_WARN_THRESHOLD` | 30 s  | past this, `animo` warns — but still takes it |
+| `LOCK_DURATION_MAX`            | 600 s | past this, `animo` cuts it down to 600        |
+
+**Modio holds to 30 seconds**, the warning mark, and does not go
+near the hard cap. A deed that has run half a minute and not landed is
+a deed that will not land.
+
+**Which Behavior to read.** `Engine.Behavior` gives back what was last
+picked. `Engine.LockedBehavior` gives back what a lock is holding, and
+is empty where no lock stands. **Modio reads `Behavior`, always** — a
+lock Modio itself set holds that very Behavior steady, so the two say
+the same thing while a deed runs, and `Behavior` is the one that keeps
+saying something after.
 
 Where a Deed ends, by any of the three ways, the lock is let go at
 once. **A Deed that has ended must never hold `animo` still.**
@@ -773,7 +935,7 @@ was changed and the other forgotten.
 **One file. `germio` reads the rules with no `actor`; Modio reads the
 rules that name one.**
 
-### 7.1 What `germio` gains, so that Modio needs nothing else
+### 7.1 What `germio` gains
 
 Three things, and no more (see `germio`'s own TASK-016 to TASK-018):
 
@@ -791,7 +953,339 @@ Each was named to sit beside what is already there:
 | `request_deed` | `request_transition`, `request_notify` | all three ask for what does not finish on the spot |
 | `update_need`  | `update_counter`, `update_inventory`   | same shape: a key, and a change to it              |
 
-### 7.2 A deed, written out
+### 7.2 `update_need` — a list, never one
+
+```json
+"update_need": [
+  { "key": "loneliness", "delta": -30 },
+  { "key": "separation", "delta": -40 }
+]
+```
+
+| Field   | Type   | Sense                                          | May be left out |
+| ------- | ------ | ---------------------------------------------- | --------------- |
+| `key`   | text   | which Need, by the name `animo` holds it under | no              |
+| `delta` | number | how far it moves. Below zero to quiet a want   | no              |
+
+**A list, always — even where it holds one.** §5.4 sets out why:
+`company_seeking` holds `separation` at Stage 2 and `loneliness` at
+Stage 3, and one arrival must quiet both. Were this one pair only,
+`separation` would climb with no way down, and `Call` would win for
+ever.
+
+### 7.3 `request_deed` — the five parts
+
+```json
+"request_deed": {
+  "target":    { "kind": "Ground", "reach": 15.0, "spread": 90.0 },
+  "condition": "history.time_since(kind=met, target_id=$target) > 60",
+  "motion":    "walk",
+  "until":     { "meets": "$target" },
+  "command":   { ... }
+}
+```
+
+| Part        | Type      | Sense                           | May be left out                                          |
+| ----------- | --------- | ------------------------------- | -------------------------------------------------------- |
+| `target`    | see §7.4  | what to seek                    | **yes** — for a deed that seeks nothing (`Rest`, `Call`) |
+| `condition` | text      | which of the found ones to take | yes — empty takes the nearest                            |
+| `motion`    | text      | how the body moves              | no                                                       |
+| `until`     | see §7.6  | when the deed is done           | no                                                       |
+| `command`   | `Command` | what to do once it lands        | no                                                       |
+
+**`given` is checked again, right before the `act`.** Two characters
+may reach for the same thing at the same moment: both saw it free,
+both walked to it, and the first to arrive takes it. Were the second
+to go on and hand over what it no longer holds, one item would land in
+two places. **So the check runs twice — once to start the deed, and
+once more before the act — and a deed that fails the second check ends
+Failed.**
+
+**`command` is `germio`'s own `Command` type, held inside.** So
+`update_need`, `record_event`, `set_flag` — every command there is —
+works here with nothing new added. **A `request_deed` inside a
+`request_deed` is not let through (`germio`'s own V032).**
+
+### 7.4 `target` — what to seek
+
+| Field    | Type   | Sense                             | May be left out             |
+| -------- | ------ | --------------------------------- | --------------------------- |
+| `kind`   | text   | one of `germio`'s own type marks  | no                          |
+| `reach`  | number | how far out to look               | yes — a set value stands in |
+| `spread` | number | how far round to look, in degrees | yes — a set value stands in |
+
+**`kind` takes one of these, and nothing else** (`germio`'s own
+`Env.cs`, read by name — §3.4):
+
+| `kind`    | What it names                         |
+| --------- | ------------------------------------- |
+| `Block`   | a solid thing, in the way or to climb |
+| `Ground`  | the floor under the feet              |
+| `Wall`    | a bound not to pass                   |
+| `Item`    | a thing that may be taken             |
+| `Coin`    | a thing picked up for a count         |
+| `Balloon` | a thing that lifts what holds it      |
+| `Human`   | a character, player-led or not        |
+| `Vehicle` | a thing ridden                        |
+| `Home`    | a place come back to                  |
+| `Scene`   | a mark that a level ends here         |
+| `Despawn` | a mark that what falls here is gone   |
+
+**Eleven, read straight off `germio`'s own `Env.cs` (checked
+2026-08-21).** Where `germio` gains a mark, Modio gains a kind; where
+it does not, Modio cannot make one up.
+
+### 7.5 `motion` — how the body moves
+
+**One of `germio`'s own seven doing-states, and nothing else**
+(`FixedUpdate`):
+
+| `motion`     | What the body does                 |
+| ------------ | ---------------------------------- |
+| `idle`       | stands still                       |
+| `walk`       | goes forward, slowly               |
+| `run`        | goes forward, quickly              |
+| `backward`   | goes back                          |
+| `jump`       | leaves the ground                  |
+| `abort_jump` | cuts a jump short                  |
+| `stop`       | brings to a stop what it was doing |
+
+**Turning to face comes first, and is not named here.** Every deed
+with a `target` turns toward it before the `motion` begins (§5.2).
+
+#### `act` — doing, where moving is not enough
+
+Some of them end in a doing that no motion covers: handing a thing over,
+holding one up. These take an `act`, written beside `motion`:
+
+| `act`       | What happens                                       |
+| ----------- | -------------------------------------------------- |
+| `hand_over` | what is held is made a child of the target instead |
+| `take_up`   | the target is made a child of this one             |
+| `put_down`  | what is held is let go, and stands on its own      |
+
+| Field    | May be left out | Sense                                   |
+| -------- | --------------- | --------------------------------------- |
+| `motion` | no              | how the body moves, while getting there |
+| `act`    | **yes**         | what is done once there. Most need none |
+
+Holding has been the parent-child tie through three whole builds
+(`super-nekokun`'s own `Item.cs`, then `Holdable.cs`, then `germio`'s
+own `Common.Holdable` with `tropika`'s own `Block_Holdable`), so an
+`act` moves that tie and nothing else.
+
+**Without `act`, `Give` and `ShowFind` cannot be written at all.**
+
+### 7.6 `until` — when a deed is done
+
+**`until` is not read by `germio`'s own Evaluator.** That reads
+`history.*` and the state of the world; `until` watches how a deed
+itself is going — how near, how long, what was touched. **The one
+carrying the deed out is the one that knows.** So Modio reads it, and
+it is written as a shape, not a line of text:
+
+| Written                     | Done when                                             | Takes      |
+| --------------------------- | ----------------------------------------------------- | ---------- |
+| `{ "near": 2.0 }`           | within that far of the target                         | a number   |
+| `{ "meets": "$target" }`    | the bodies touch                                      | `$target`  |
+| `{ "elapsed": 4.0 }`        | that many seconds have gone by                        | a number   |
+| `{ "while": "other_near" }` | **never done of itself** — held while the state holds | a set name |
+
+**One key to an `until`, never two.** Where a deed must watch for two
+things, it is written as two of them, each with its own trigger — the
+same road §7.7 takes for conditions.
+
+**There is no `until` for a tie moving, and none is needed.** Handing
+a thing over is an `act`, and an act ends on its own clock (§5.2). A
+deed that hands something over is watched to the point of arrival —
+`{ "near": 1.5 }` — and the handing is what follows.
+
+**Counted off against every deed the two given personas hold:**
+
+| Deed       | `until`                     | `act`       |
+| ---------- | --------------------------- | ----------- |
+| `Rest`     | `{ "elapsed": 4.0 }`        | none        |
+| `Call`     | `{ "while": "other_near" }` | none        |
+| `Approach` | `{ "near": 2.0 }`           | none        |
+| `Explore`  | `{ "meets": "$target" }`    | none        |
+| `GoHome`   | `{ "near": 1.5 }`           | none        |
+| `ShowFind` | `{ "near": 1.5 }`           | `show`      |
+| `Tend`     | `{ "near": 1.2 }`           | `tend`      |
+| `Give`     | `{ "near": 1.5 }`           | `hand_over` |
+
+**Every one of the 10 is written with one `until` and no more.**
+Where a deed takes time once it arrives — `Tend` cares for a few
+seconds — that time belongs to the `act`, not to `until` (§5.2). So no
+deed ever needs two.
+
+`{ "while": ... }` is the odd one. It marks a deed that has no end of
+its own: `Call` (standing and calling out) goes on until something
+else brings it down — the lock running out (§5.3), or `animo` giving
+another Behavior. **A deed that ends this way ends Failed, never
+Done.**
+
+**And that is meant.** `Call` never quiets `separation` by itself: a
+call is not an answer. What quiets it is the other one arriving, and
+`Approach` carries that (§5.4, two `update_need` entries on one
+arrival). So `Call` is a deed that shows what a character feels, and
+never a deed that puts it right.
+
+Read with §5.1, this holds together: `separation` keeps climbing while
+`Call` runs, which is right — the character is still cut off. Once it
+climbs past what holds `Approach` down, `Approach` wins, and the round
+closes.
+
+### 7.7 `$target` — the one new mark
+
+A rule as written today names everything up front:
+
+```text
+"flags.route_forest == true"                    a name, fixed
+"record_event": { "target_id": "stage_01" }     a name, fixed
+```
+
+**A deed cannot.** What it finds is known only once it looks. So
+`$target` stands for whatever was found.
+
+**Where `$target` may be written:**
+
+| Place                                        | Read by                             | Example                  |
+| -------------------------------------------- | ----------------------------------- | ------------------------ |
+| `request_deed.condition`                     | Evaluator, after it is put in place | `target_id=$target`      |
+| `request_deed.until`                         | Modio                               | `{ "meets": "$target" }` |
+| any text field inside `request_deed.command` | Executor, after it is put in place  | `"target_id": "$target"` |
+
+**Nowhere else.** It has no meaning in a `Rule`'s own `condition`,
+because no deed is running yet.
+
+**How it is put in place.** Before the Evaluator or the Executor is
+called, the text `$target` is put aside for what the deed found:
+
+```text
+before : history.time_since(kind=met, target_id=$target) > 60
+after  : history.time_since(kind=met, target_id=g_0041) > 60
+```
+
+**`ExprLexer`, `ExprParser` and `Evaluator` are untouched.** `$`
+belongs to no token kind today, so it runs into nothing else.
+
+**What it holds** is the `id` of §3.3.1 — Unity's own
+`GetInstanceID()`, written out as text.
+
+**`like=$target` is the forward-facing form.** Where
+`target_id=$target` asks after that one thing, `like=$target` asks
+after every row whose thing was near enough to this one in `kind`, in
+reach, and in height, to count as the same sort (§4.7.1). It is
+`germio`'s own `history.*` call with one more word:
+
+```text
+history.count(kind=met,  target_id=$target) == 0     have I met this one
+history.count(kind=edge, like=$target)      == 0     did ones like it go badly
+```
+
+`germio`'s own `history.*` functions gain `like` beside `target_id`
+(its own TASK-045).
+
+### 7.8 Why a mark of `germio`'s own making is needed
+
+`$target` must hold something that means the same thing twice.
+Counted on a real scene, 2026-08-21: **the object name will not do.**
+
+| Tried             | Why it fails                                                  |
+| ----------------- | ------------------------------------------------------------- |
+| The name          | `Level_1` holds 24 pieces; three names are used twice over    |
+| `GetInstanceID()` | made new on every scene load — **and that is right** (§3.3.1) |
+| `GlobalObjectId`  | Editor only; cannot be read while the game runs               |
+
+`GetInstanceID()` serves: it holds while that one thing stands, and a
+memory of a thing that no longer stands has lost what it spoke of.
+**Nothing is added to `germio` for this** (its own TASK-015, dropped).
+
+### 7.9 One condition to a rule, by design
+
+`germio`'s own `docs/dsl_spec.md` §6 sets a limit: a `history.*` call
+works alone, or right inside one comparison. **Inside `&&`, `||` or
+`!` it gives back `false`, always.**
+
+Modio holds to this, and writes one condition to a rule. Where two
+must be true at once, two rules are written, each with its own
+trigger — the way that spec itself calls for.
+
+**A limit taken on with open eyes, not a limit walked into.**
+
+### 7.10 How a Behavior becomes a deed
+
+`animo` gives back a Behavior — a plain string, `"Explore"` — every
+tick. `germio`'s own rules fire on a trigger. **Something must join
+the two, and that something is Modio.**
+
+Each tick, for each character it holds a mind for:
+
+| Step | What Modio does                                                   |
+| ---- | ----------------------------------------------------------------- |
+| 1    | reads `Engine.Behavior`                                           |
+| 2    | where it has not changed since last tick, does nothing            |
+| 3    | where it has changed, calls `Bus.Publish(signal, actor)`          |
+| 4    | `germio` fires whatever rule matches that trigger, for that actor |
+| 5    | a `request_deed` in that rule comes back to Modio (§7.11)         |
+
+**The trigger name is worked out, never written by hand:**
+
+```text
+"sig_behavior_" + the Behavior, in lower letters
+
+"Explore"  →  sig_behavior_explore
+"Give"     →  sig_behavior_give
+"ShowFind" →  sig_behavior_show_find
+```
+
+A name in more than one word (`ShowFind`) is broken at each big
+letter, and joined with a low line — the same shape `germio`'s own
+JSON keys take (`set_flag`, `update_counter`).
+
+**Why worked out, and not written by hand:** an `animo` persona and a
+`germio` rule set are two files, written apart. A hand-written trigger
+would fall out of step the first time an Action was given a new name on one
+side. **Worked out from the Behavior itself, it cannot.**
+
+**Step 2 matters.** `animo` gives back the same Behavior tick after
+tick while a want holds. Firing every tick would start a fresh deed
+each frame, and no deed would ever run its course. **A signal goes out
+only where the Behavior has changed** — which is also when a running
+deed ends **Dropped** (§5.1).
+
+### 7.11 Who hears what `germio` fires
+
+`germio` knows nothing of `animo`, and nothing of Modio. So the
+Executor calls neither: it fires an event out of the `Store`, and
+whoever is listening picks it up. This is the road
+`request_notify` already takes — the Executor calls
+`store.RequestNotify(id)`, `Store` fires `NotifyRequested`, and
+`NoticeSystem` hears it.
+
+| Command          | `Store` fires     | Heard by                                      |
+| ---------------- | ----------------- | --------------------------------------------- |
+| `request_notify` | `NotifyRequested` | `germio`'s own `NoticeSystem`                 |
+| `update_need`    | `NeedRequested`   | **Modio**, which calls `animo`'s own `Affect` |
+| `request_deed`   | `DeedRequested`   | **Modio**, which starts the deed              |
+
+**Modio is the one listening for both.** Nothing in `germio` hears
+them, and nothing in `germio` needs to.
+
+`Store` holds two events today — `TransitionRequested` and
+`NotifyRequested` — and the two above must be added beside them
+(`germio`'s own TASK-040 and TASK-041). The shape is already set by
+what stands: a `public event Action<...>`, and a method that fires it,
+called from the Executor.
+
+**The Executor takes them without trouble.** It runs a plain row of
+`if (command.X != null)` checks — not a `switch` — so two more sit
+beside the 10 already there, and none of those 10 is touched. **This
+is also why one `Command` may hold `update_need` **and**
+`record_event` at once (§7.3): the Executor was built that way from
+the start.**
+
+### 7.12 A deed, written out whole
 
 ```json
 {
@@ -804,9 +1298,9 @@ Each was named to sit beside what is already there:
       "target": { "kind": "Ground", "reach": 15.0, "spread": 90.0 },
       "condition": "history.time_since(kind=met, target_id=$target) > 60",
       "motion": "walk",
-      "until": "meets($target)",
+      "until": { "meets": "$target" },
       "command": {
-        "update_need": { "key": "curiosity", "delta": -25 },
+        "update_need": [ { "key": "curiosity", "delta": -25 } ],
         "record_event": { "kind": "met", "target_id": "$target" }
       }
     }
@@ -815,59 +1309,35 @@ Each was named to sit beside what is already there:
 }
 ```
 
-**Every word here but four is `germio`'s own already.** `id`,
-`trigger`, `condition`, `command`, `once`, `record_event`,
-`history.time_since` — all stood before Modio did.
+And one that hands a thing over, running all three steps (§5.2):
 
-### 7.3 `$target` — the one new mark
-
-A rule as written today names everything up front:
-
-```text
-"flags.route_forest == true"                    a name, fixed
-"record_event": { "target_id": "stage_01" }     a name, fixed
+```json
+{
+  "id": "rule_give",
+  "trigger": "sig_behavior_give",
+  "actor": "company_seeking_01",
+  "condition": "",
+  "command": {
+    "request_deed": {
+      "target": { "kind": "Human", "reach": 30.0, "spread": 120.0 },
+      "condition": "history.count(kind=gave, target_id=$target) == 0",
+      "motion": "walk",
+      "act": "hand_over",
+      "until": { "near": 1.5 },
+      "command": {
+        "update_need": [ { "key": "togetherness", "delta": -30 } ],
+        "record_event": { "kind": "gave", "target_id": "$target" },
+        "set_flag": { "key": "gift_given", "value": true }
+      }
+    }
+  },
+  "once": false
+}
 ```
 
-**A deed cannot.** What it finds is known only once it looks. So
-`$target` stands for whatever was found, in three places: choosing
-(`condition`), ending (`until`), and writing down (`command`).
-
-It is put in place **before** the Evaluator runs:
-
-```text
-before : history.time_since(kind=met, target_id=$target) > 60
-after  : history.time_since(kind=met, target_id=g_0041) > 60
-```
-
-**`ExprLexer`, `ExprParser` and `Evaluator` are untouched.** `$`
-belongs to no token kind today, so it runs into nothing else.
-
-### 7.4 Why a mark of `germio`'s own making is needed
-
-`$target` must hold something that means the same thing twice.
-Counted on a real scene, 2026-08-21: **the object name will not do.**
-
-| Tried             | Why it fails                                                                      |
-| ----------------- | --------------------------------------------------------------------------------- |
-| The name          | `Level_1` holds 24 pieces; three names are used twice over                        |
-| `GetInstanceID()` | made new on every scene load, and `Despawn.cs` reads the scene again on each fall |
-| `GlobalObjectId`  | Editor only; cannot be read while the game runs                                   |
-
-So `germio` must give each piece a mark that is saved with the scene
-(TASK-015 there). **Modio cannot remember a place until it can name
-the same place twice.**
-
-### 7.5 One rule at a time, by design
-
-`germio`'s own `docs/dsl_spec.md` §6 sets a limit: a `history.*` call
-works alone, or right inside one comparison. **Inside `&&`, `||` or
-`!` it gives back `false`, always.**
-
-Modio holds to this, and writes one condition to a rule. Where two
-must be true at once, two rules are written, each with its own
-trigger — the way that spec itself calls for.
-
-**A limit taken on with open eyes, not a limit walked into.**
+**Every word in both but four is `germio`'s own already.** `id`,
+`trigger`, `condition`, `command`, `once`, `record_event`, `set_flag`,
+`history.count`, `history.time_since` — all stood before Modio did.
 
 ## 8. What Modio never does
 
@@ -878,19 +1348,32 @@ trigger — the way that spec itself calls for.
   carried through, the Deed ends **Failed**, and `animo` is left to
   ask again. It never stands in something easier and calls it done.
 
+And these belong elsewhere, by design:
+
+| Not Modio's                          | Whose                                                                                                                                                           |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Two bodies knocking together         | `germio`'s own motion work. Modio names a `motion`; what happens when two characters meet on the way is the body's own doing, and works as it does for a player |
+| What a character looks like doing    | the game's own, through its `Animator` (Master's own word, 2026-08-21: this is handled apart)                                                                   |
+| Sound                                | `germio`'s own `SoundSystem`. Nothing is wired to it yet — see §9                                                                                               |
+| A character falling out of the world | `germio`'s own. Where the body goes, the mind goes: the Engine is let go with it, as a running deed and its lock are (§4.5.2)                                   |
+| Being blocked by a player            | nothing at all. A character that cannot get past waits, and its deed ends Failed at 30 seconds (§5.3). **That is the answer, not a hole in it**                 |
+
 ---
 
 ## 9. Still open
 
-| # | Point                    | What is owed                                                                                                                                                                                                                                                     |
-| - | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1 | Three things in `germio` | `Rule.actor`, `Command.request_deed`, `Command.update_need` (TASK-016 to TASK-018 there). Nothing else is owed by `germio`: TASK-014 (a sensor) moved here, and TASK-015 (a mark on every piece) was dropped once `GetInstanceID()` was found to serve (§3.3.1). |
-| 2 | How places are drawn     | §4.3 sets out how a place is begun and where it ends, but no sums have been run on a real level. **How many places `Level_1` truly holds, walked end to end, is not yet counted.**                                                                               |
-| 3 | Saying a line            | `Store.NotifyRequested` shows a line for the whole screen. A line over one character's head — as `super-nekokun`'s own `say()` gave — has no home in `germio` yet. Without it, what a character has in mind cannot be seen, and cannot be checked by eye.        |
-| 4 | Facing forward, in full  | §4.7 and §7 show one shape only (`before`). The whole set — every question a character may put about what is to come — is not worked out.                                                                                                                        |
-| 5 | Same answer, every run   | `animo` has `ScenarioRunner`, proving same input, same answer. Modio needs its own. §3.6 shows the shape a test would take; nothing is built.                                                                                                                    |
-| 6 | Zero-GC                  | `animo` proved it with a test running `Live()` 100,000 times. Modio must meet the same bar. The memory table must be a ring held at a fixed size — **never `germio`'s own `List` with `RemoveAt(0)`, which shifts every row and grows the backing store.**       |
-| 7 | How much is let go of    | §4.6 takes both of `germio`'s own ways — by count, and by age. **The count itself is not settled.** `germio` uses 1000 for the whole game; Modio holds one table to a character, and what number serves there has not been worked out.                           |
+| #  | Point                     | What is owed                                                                                                                                                                                                                                                        |
+| -- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1  | Three things in `germio`  | `Rule.actor`, `Command.request_deed`, `Command.update_need` (TASK-016 to TASK-018 there). Nothing else is owed by `germio`: TASK-014 (a sensor) moved here, and TASK-015 (a mark on every piece) was dropped once `GetInstanceID()` was found to serve (§3.3.1).    |
+| 2  | How places are drawn      | §4.3 sets out how a place is begun and where it ends, but no sums have been run on a real level. **How many places `Level_1` truly holds, walked end to end, is not yet counted.**                                                                                  |
+| 3  | Saying a line             | `Store.NotifyRequested` shows a line for the whole screen. A line over one character's head — as `super-nekokun`'s own `say()` gave — has no home in `germio` yet. Without it, what a character has in mind cannot be seen, and cannot be checked by eye.           |
+| 4  | Facing forward, in full   | §4.7 and §7 show one shape only (`before`). The whole set — every question a character may put about what is to come — is not worked out.                                                                                                                           |
+| 5  | Same answer, every run    | `animo` has `ScenarioRunner`, proving same input, same answer. Modio needs its own. §3.6 shows the shape a test would take; nothing is built.                                                                                                                       |
+| 6  | Zero-GC                   | `animo` proved it with a test running `Live()` 100,000 times. Modio must meet the same bar. The memory table must be a ring held at a fixed size — **never `germio`'s own `List` with `RemoveAt(0)`, which shifts every row and grows the backing store.**          |
+| 7  | The cost at 64 characters | Every character runs, seen or not (Master's own word). Worked out: 3,200 wide checks a second, near 960 thrown lines, 37 KB of memory (§3.7). **Not measured on a real phone.** Should it bite, holding still what cannot be seen is the first thing to weigh.      |
+| 8  | Sound                     | `germio` holds `SoundSystem`, and `signo`/`quyno` stand behind it. **Nothing here calls any of them.** A deed that hands a thing over makes no sound at all. To be taken up later (Master's own word, 2026-08-21).                                                  |
+| 9  | Reading a level's rules   | Rules for the world and rules for each character sit side by side under one `Node`. With many characters, which rule belongs to which character grows hard to see by eye. **A way to list them by `actor` is owed** — `germio`'s own Validator is the place for it. |
+| 10 | How much is let go of     | §4.6 takes both of `germio`'s own ways — by count, and by age. **The count itself is not settled.** `germio` uses 1000 for the whole game; Modio holds one table to a character, and what number serves there has not been worked out.                              |
 
 ---
 

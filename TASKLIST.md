@@ -156,9 +156,16 @@ needs its own, or nothing here can be checked ahead of play.
 ### TASK-015
 
 Put Modio into `stemic`, driving `place_curious` and
-`company_seeking` (see `animo`'s own `docs/persona_design_spec.md`
-§6), and check by real play that each truly seeks, remembers, and
-acts on both.
+`company_seeking`, and check by real play that each truly seeks,
+remembers, and acts on both.
+
+**Three things must stand first:**
+
+| Owed by  | What                                                                                                                                                                |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `animo`  | the two personas, written out as a real `animo.json` file (its own TASK-013). They are worked out in full in `docs/persona_design_spec.md` §6, and not yet written. |
+| `germio` | `Rule.actor`, `request_deed`, `update_need` (its own TASK-016 to TASK-039)                                                                                          |
+| Modio    | everything in P-02 to P-05 here                                                                                                                                     |
 
 ### TASK-016
 
