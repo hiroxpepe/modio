@@ -26,17 +26,25 @@ namespace Modio.Core {
         /// <summary>How far round to look, where a deed names no spread of its own.</summary>
         public const float SPREAD_BY_DEFAULT = 360.0f;
 
+        /// <summary>
+        /// Set where a deed asks only whether a thing was met at all, and never
+        /// how long ago. Below zero, so no true count of seconds can reach it.
+        /// </summary>
+        public const float NEVER_NEW_AGAIN = -1f;
+
         ///////////////////////////////////////////////////////////////////////////////////////////////
         // Constructor
 
         public Seek(string kind, float reach = REACH_BY_DEFAULT, float spread = SPREAD_BY_DEFAULT,
-            string not_in_memory = "", string not_given_to = "", string keep_from = "") {
+            string not_in_memory = "", string not_given_to = "", string keep_from = "",
+            float new_again_after = NEVER_NEW_AGAIN) {
             Kind = kind;
             Reach = reach;
             Spread = spread;
             NotInMemory = not_in_memory;
             NotGivenTo = not_given_to;
             KeepFrom = keep_from;
+            NewAgainAfter = new_again_after;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,5 +86,17 @@ namespace Modio.Core {
         /// after that one thing, this asks after every row of a sort with it.
         /// </summary>
         public string KeepFrom { get; }
+
+        /// <summary>
+        /// How long must pass before a thing already met counts as new again.
+        ///
+        /// **The row is never touched**: how long since is weighed each time the
+        /// question is put. This is the other way of letting go, beside letting
+        /// go by count — a place met once and then never thought of again would
+        /// otherwise sit in memory for ever.
+        ///
+        /// NEVER_NEW_AGAIN asks only whether it happened at all.
+        /// </summary>
+        public float NewAgainAfter { get; }
     }
 }

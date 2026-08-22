@@ -85,7 +85,12 @@ namespace Modio.Core {
         /// <param name="memory">
         /// What this character remembers. Null asks nothing of memory at all.
         /// </param>
-        public static Choice Choose(IReadOnlyList<Found> found, Seek seek, Memory? memory) {
+        /// <param name="now">
+        /// The time it is. Wanted only where the seek names a while after which
+        /// a thing is new again.
+        /// </param>
+        public static Choice Choose(IReadOnlyList<Found> found, Seek seek, Memory? memory,
+            float now = 0f) {
             bool facing_back = memory != null && seek.NotInMemory.Length > 0;
             bool by_name = memory != null && seek.NotGivenTo.Length > 0;
             bool facing_forward = memory != null && seek.KeepFrom.Length > 0;
@@ -104,7 +109,11 @@ namespace Modio.Core {
                 if (round > half_spread) { continue; }
 
                 // Facing back: have I already had to do with that very one?
-                if (facing_back && memory!.Holds(deed: seek.NotInMemory, thing: one.ID)) { continue; }
+                // Where a while is named, a thing met long enough ago counts as
+                // new again — and the row it sits in is never touched.
+                if (facing_back && metTooRecently(memory: memory!, seek: seek, id: one.ID, now: now)) {
+                    continue;
+                }
 
                 // Asked of another character, and always by name: one is not of
                 // a sort with another, so there is no "like it" to ask after.
@@ -125,6 +134,21 @@ namespace Modio.Core {
             }
 
             return taken ? Choice.Of(found: nearest) : Choice.None();
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        // private static Methods [verb]
+
+        /// <summary>
+        /// Tells whether this was met, and met too lately to count as new again.
+        /// </summary>
+        static bool metTooRecently(Memory memory, Seek seek, string id, float now) {
+            if (seek.NewAgainAfter < 0f) {
+                return memory.Holds(deed: seek.NotInMemory, thing: id);
+            }
+            float since = memory.Since(deed: seek.NotInMemory, thing: id, now: now);
+            if (since < 0f) { return false; }
+            return since < seek.NewAgainAfter;
         }
 
     }

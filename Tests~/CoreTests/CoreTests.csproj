@@ -46,6 +46,7 @@
     <Compile Include="PerceiveLikeTests.cs" />
     <Compile Include="MemoryRoomTests.cs" />
     <Compile Include="PerceiveOtherTests.cs" />
+    <Compile Include="PerceiveAgainTests.cs" />
   </ItemGroup>
 
 </Project>

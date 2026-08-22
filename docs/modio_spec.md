@@ -674,15 +674,23 @@ memory, so nothing is new and the want for new places dies flat out.
 The right time turns on how many things there are, which a written-in
 number cannot know. **A count does.**
 
-**By age, read at the time of asking.** `history.time_since(kind=...,
-target_id=...)` gives how long since a thing was last done.
+**By age, read at the time of asking.** `Memory.Since(deed, thing,
+now)` gives how long since a thing was last done to, or `NEVER` where
+it never was.
 
 ```text
-history.time_since(kind=met, target_id=$target) > 60
+"target": { "kind": "Ground", "not_in_memory": "met", "new_again_after": 60.0 }
 ```
 
 **"New again, if it has been a while."** The row is never touched. Age
 is weighed each time the question is put.
+
+**`germio`'s own `history.time_since` is not this**, and must not be
+taken for it. Checked 2026-08-22: that one gives back **the time mark
+on the latest matching row**, counted from when the session began — not
+how long since. So `history.time_since(...) > 60` reads "written down
+later than the 60 second mark", which is another thing altogether. And
+it reads the world's own past, not a character's own (§4.2).
 
 | Way   | The row                     | Holds                                  |
 | ----- | --------------------------- | -------------------------------------- |
@@ -1061,7 +1069,7 @@ ever.
 ```json
 "request_deed": {
   "target":    { "kind": "Ground", "reach": 15.0, "spread": 90.0 },
-  "condition": "history.time_since(kind=met, target_id=$target) > 60",
+  "condition": "",
   "motion":    "walk",
   "until":     { "meets": "$target" },
   "command":   { ... }
@@ -1091,11 +1099,27 @@ works here with nothing new added. **A `request_deed` inside a
 
 ### 7.4 `target` — what to seek
 
-| Field    | Type   | Sense                             | May be left out             |
-| -------- | ------ | --------------------------------- | --------------------------- |
-| `kind`   | text   | one of `germio`'s own type marks  | no                          |
-| `reach`  | number | how far out to look               | yes — a set value stands in |
-| `spread` | number | how far round to look, in degrees | yes — a set value stands in |
+| Field             | Type   | Sense                                        | May be left out             |
+| ----------------- | ------ | -------------------------------------------- | --------------------------- |
+| `kind`            | text   | one of `germio`'s own type marks             | no                          |
+| `reach`           | number | how far out to look                          | yes — a set value stands in |
+| `spread`          | number | how far round to look, in degrees            | yes — a set value stands in |
+| `not_in_memory`   | text   | leave out any this was already done to       | yes                         |
+| `not_given_to`    | text   | leave out any this was already done **with** | yes                         |
+| `keep_from`       | text   | leave out any of a sort with what went badly | yes                         |
+| `new_again_after` | number | how long before a thing done to is new again | yes                         |
+
+**The last four are the questions a deed puts to its own past** (§4.7.4).
+They are written here, and not in `condition`, for three reasons:
+
++ **`condition` is read too late.** `germio`'s own Evaluator reads it,
+  and it holds `$target` — which is only known once Modio has looked.
++ **`condition` reads the wrong past.** `history.*` reads the world's
+  own record, one for the whole game; these questions are put to the
+  memory Modio keeps for each character (§4.2).
++ **`keep_from` cannot be written as an expression at all.** It matches
+  on kind, reach and height, and `germio`'s own `HistoryEntry` holds
+  none of the three.
 
 **`kind` takes one of these, and nothing else** (`germio`'s own
 `Env.cs`, read by name — §3.4):
@@ -1245,8 +1269,8 @@ because no deed is running yet.
 called, the text `$target` is put aside for what the deed found:
 
 ```text
-before : history.time_since(kind=met, target_id=$target) > 60
-after  : history.time_since(kind=met, target_id=g_0041) > 60
+before : history.count(kind=gave, target_id=$target) == 0
+after  : history.count(kind=gave, target_id=g_0041) == 0
 ```
 
 **`ExprLexer`, `ExprParser` and `Evaluator` are untouched.** `$`
@@ -1408,7 +1432,7 @@ the start.**
   "command": {
     "request_deed": {
       "target": { "kind": "Ground", "reach": 15.0, "spread": 90.0 },
-      "condition": "history.time_since(kind=met, target_id=$target) > 60",
+      "condition": "",
       "motion": "walk",
       "until": { "meets": "$target" },
       "command": {
@@ -1449,7 +1473,7 @@ And one that hands a thing over, running all three steps (§5.2):
 
 **Every word in both but four is `germio`'s own already.** `id`,
 `trigger`, `condition`, `command`, `once`, `record_event`, `set_flag`,
-`history.count`, `history.time_since` — all stood before Modio did.
+`history.count` — all stood before Modio did.
 
 ## 8. What Modio never does
 

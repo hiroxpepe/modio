@@ -22,6 +22,7 @@ change in as a commit.
 + [x] TASK-017 [P-05]: Hold the reach and the height of every remembered meeting
 + [x] TASK-014 [P-05]: Build a runner, proving same input, same answer
 + [ ] TASK-015 [P-06]: Join Modio to stemic, and check it by real play
++ [x] TASK-018 [P-XX]: Put the questions in the target, not in a condition
 + [ ] TASK-016 [P-XX]: Put the rest of the docs into Basic English
 
 ## Detail
@@ -423,3 +424,31 @@ Below the height bound a fall is a step down; above it, it is a fall.
 
 `germio`'s own `HistoryEntry` keeps none of the three, and should not:
 it holds the **world's** past, not a character's own (§4.2).
+
+### TASK-018
+
+**Done 2026-08-22**, with 8 tests, and it closes a break that ran the
+whole length of the spec.
+
+**`condition` cannot carry the questions a deed puts to its own past.**
+Three reasons, each on its own enough:
+
+| Why not                              | Measured                                                                                 |
+| ------------------------------------ | ---------------------------------------------------------------------------------------- |
+| read too late                        | `germio`'s Evaluator reads it, and it holds `$target` — known only once Modio has looked |
+| reads the wrong past                 | `history.*` reads the world's own record, one for the whole game (§4.2)                  |
+| `keep_from` cannot be written at all | it matches on kind, reach and height, and `HistoryEntry` holds none of the three         |
+
+So the four questions are written in `target` instead:
+`not_in_memory`, `not_given_to`, `keep_from`, `new_again_after`.
+
+**And one more thing came out of it.** The spec used
+`history.time_since(...) > 60` in four places to mean "new again, if it
+has been a while". Checked against `germio`'s own code:
+`history.time_since` gives back **the time mark on the latest matching
+row**, not how long since. So that line read "written down later than
+the 60 second mark" — another thing altogether.
+
+`Memory.Since(deed, thing, now)` is the one that gives how long since,
+and `Seek.NewAgainAfter` is how a deed asks it. **The row is never
+touched**: age is weighed each time the question is put.
