@@ -6,11 +6,11 @@ change in as a commit.
 
 <!-- format: v1 | fields: status, id, title, phase -->
 
-+ [ ] TASK-001 [P-01]: Wait on germio TASK-015 to TASK-018, then fold the older plan in
++ [x] TASK-001 [P-01]: Wait on germio TASK-015 to TASK-018, then fold the older plan in
 + [x] TASK-002 [P-01]: Set a fading rate against the count, not a fixed number
 + [x] TASK-003 [P-01]: Work out the whole set of forward-facing questions
-+ [ ] TASK-004 [P-01]: Find a home in germio for a line said over a head
-+ [ ] TASK-005 [P-01]: Put the spec through a hard-questioning G review
++ [x] TASK-004 [P-01]: Find a home in germio for a line said over a head
++ [x] TASK-005 [P-01]: Put the spec through a hard-questioning G review
 + [x] TASK-006 [P-02]: Build seeking, by type and reach, against memory
 + [x] TASK-007 [P-03]: Build the memory table, and the three depths of meeting
 + [x] TASK-008 [P-03]: Build fading, to the rate TASK-002 settles
@@ -34,27 +34,23 @@ in three places (`docs/modio_spec.md` §3.3), all from one cause:
 seeking had been cut off from remembering. Even the drop-off check
 belongs here — knowing an edge is dangerous is remembering it.
 
-Four things must stand on the `germio` side first:
+**Every part on the `germio` side landed 2026-08-22.**
 
-| Task     | What                                            | Blocks                       |
-| -------- | ----------------------------------------------- | ---------------------------- |
-| TASK-015 | a mark that holds past a scene being read again | **the memory itself**        |
-| TASK-016 | `Rule.actor`                                    | telling two characters apart |
-| TASK-017 | `Command.request_deed`                          | starting a deed              |
-| TASK-018 | `Command.update_need`                           | reaching `animo`             |
+| Owed there                         | How it came out                                                                                                                                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| a way to name the same thing twice | **Nothing was needed.** Unity's own `GetInstanceID()` names one thing while it stands, and that is the whole of what Perceive asks. `germio`'s own TASK-015 was dropped. |
+| `actor` on a Rule                  | done, with 6 tests there                                                                                                                                                 |
+| `update_need`                      | done, with 5 tests there                                                                                                                                                 |
+| `request_deed`                     | done, with 6 tests there                                                                                                                                                 |
 
-TASK-015 weighs most: counted on a real scene, `Level_1` holds 24
-pieces with three names used twice over, so a name cannot say which
-one. **Modio cannot remember a place until it can name the same place
-twice.**
+What the older plan got right is brought over: **the two stages** (a
+cheap wide check every tick, a straight line only where the cheap one
+finds something) now sit in `Scripts/Core/StageGate.cs`, checked away
+from Unity where they are cheap. The drop-off check came over as
+`edge` in memory, and is asked through `Seek.KeepFrom` (§4.7).
 
-Bring over what the older plan got right: the two stages (a cheap wide
-check every tick, a straight-line check only where the cheap one
-finds something), the measured cost on a phone, and the drop-off
-check itself.
-
-`germio` holds no part of it: Modio calls Unity's own `Physics`
-straight, from its own `Runtime`.
+`germio` holds no part of the seeking itself: Modio calls Unity's own
+`Physics` straight, from its own `Runtime`.
 
 ### TASK-002
 
@@ -124,10 +120,44 @@ of.
 no such thing: `Store.NotifyRequested` shows a line for the whole
 screen. A Behavior that cannot be seen cannot be checked by eye.
 
+**A home was found 2026-08-22: `germio` itself**, and the work is
+split in two there.
+
+| Part        | Where                                  | Done?                           |
+| ----------- | -------------------------------------- | ------------------------------- |
+| the sums    | `germio`'s own `Scripts/SpeechSize.cs` | **yes** — 11 tests, no Unity    |
+| the drawing | `germio`'s own TASK-059                | no — Unity only, checked by eye |
+
+Why there and not here: `germio` is handed out as a package, and every
+game taking it would otherwise write the same thing again. Why not in
+Modio: this build holds no Unity drawing at all (§3.6), and must not
+start.
+
+`WorthDrawing` is asked first, and asked away from Unity where it is
+cheap — with 64 characters running, most lines are not worth drawing.
+
 ### TASK-005
 
-Every other spec in this family stands on a real, hard-questioning G
-review. This one does not yet.
+**Done, over and over, 2026-08-21 and 2026-08-22.** The spec was put
+through hard questioning many times over, at Master's own asking —
+5 hard looks at a time, 10 rounds at a time — and 41 holes came
+out of it. Every one is closed, and the reasoning kept where it was
+found.
+
+The heaviest of them:
+
+| Found                                                                                                                         | Put right by                                                         |
+| ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `GetInstanceID()` will not parse: `ExprLexer` reads an Identifier as `[a-zA-Z_][a-zA-Z0-9_-]*`, and 1042 starts with a number | a letter in front: `g_1042`                                          |
+| working a Need forward cannot be done, would not help, and is not what Tulving said                                           | one table, faced two ways (§4.7)                                     |
+| four checks in `germio` would warn on every deed ever written                                                                 | held back where a rule names an actor (its own TASK-051 to TASK-053) |
+| `ShowFind` and `Tend` could not be written at all                                                                             | `act` grew from three to five                                        |
+| a written-in fading time kills the want for new places                                                                        | held against the count instead (§4.6)                                |
+
+**And once the code stood, the spec was checked against it.** Three
+things built — `StageGate`, `Trace`, `Seen` — were named nowhere in
+the spec at all; §3.6.1 now lists everything that stands in
+`Scripts/`, so the two may be set side by side.
 
 ### TASK-006
 

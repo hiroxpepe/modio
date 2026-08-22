@@ -353,6 +353,37 @@ from `Audition~`, and `quyno` with its own `Core` apart from
 neither with a `~`**: unlike `Audition~` or `Droid~`, both are read by
 Unity, since Modio is taken in as a package.
 
+#### 3.6.1 What stands in `Scripts/` today
+
+Built 2026-08-22, and every one of them free of Unity:
+
+| Name        | Holds                                                               |
+| ----------- | ------------------------------------------------------------------- |
+| `Found`     | one thing seeking found: kind, id, angle, distance, height          |
+| `Near`      | one thing a wide check turned up. No height: only a line tells that |
+| `Self`      | which way the character faces, against the world                    |
+| `Seek`      | what a deed looks for, and the three questions it may put           |
+| `StageGate` | which of the near things are worth a straight line                  |
+| `Perceive`  | weighs what was found against memory, and takes one                 |
+| `Row`       | one thing remembered: the four posts, and what it was like          |
+| `Memory`    | the table one character keeps. A ring, held at a fixed size         |
+| `Depth`     | how deep a meeting sits, and so what goes when a row must           |
+| `Until`     | when a deed is done: near, meets, time up, or while                 |
+| `Deed`      | one Behavior, carried through over time                             |
+| `IMind`     | what Modio asks of a mind, and no more                              |
+| `Hand`      | Modio's own hold on a mind, while a deed plays out                  |
+
+And in `Scripts/Tools/`, for checking a whole round with no Unity:
+
+| Name     | Holds                                          |
+| -------- | ---------------------------------------------- |
+| `Seen`   | one thing, seen at one time                    |
+| `Trace`  | every tick of a run, and how it ended          |
+| `Runner` | carries a deed through a world written by hand |
+
+**Not one of these names Unity, `germio` or `animo`.** What Runtime
+knows of those three, it keeps to itself.
+
 **Why it must be so:** `animo` proved itself with 452 tests, no
 garbage on the hot path, and a runner giving the same answer every
 run — all because it holds no place at all. Modio must hold places.

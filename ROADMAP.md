@@ -2,11 +2,11 @@
 
 <!-- format: v1 | fields: status, phase, title -->
 
-+ [~] P-01: Settle every real-world limit, before any code
-+ [ ] P-02: Build Perceive — seeking, with memory beside it
-+ [ ] P-03: Build Remember — the memory, and its own fading
-+ [ ] P-04: Build Enact — the Deed, ending three ways
-+ [ ] P-05: Build the far look — the memory, faced the other way
++ [x] P-01: Settle every real-world limit, before any code
++ [~] P-02: Build Perceive — seeking, with memory beside it
++ [~] P-03: Build Remember — the memory, and its own fading
++ [~] P-04: Build Enact — the Deed, ending three ways
++ [~] P-05: Build the far look — the memory, faced the other way
 + [ ] P-06: Join Modio to a real Germio game, and check it by real play
 + [~] P-XX: Work that does not fit the phases above
 
@@ -16,6 +16,19 @@
 
 Seeking sits in Modio itself, beside memory (`docs/modio_spec.md`
 §3.3), so no other build must make a thing first.
+
+**Settled 2026-08-22.** Every limit this phase asked after is now
+worked out, and each by real sums rather than by feel:
+
+| Settled                       | How                                                              |
+| ----------------------------- | ---------------------------------------------------------------- |
+| how much a memory holds       | half of what stands in the world (`Memory.RoomFor`)              |
+| how near counts as of a sort  | 3.0 in reach, 1.0 in height, off `stemic`'s own build            |
+| what questions may be put     | three, and no fourth (§4.7.4)                                    |
+| where a line over a head goes | `germio`, split into the sums and the drawing                    |
+| how many characters at once   | 64 (Master's own word), worked out at 3,200 wide checks a second |
+
+What follows is the older wording, kept as it was.
 
 Owed here: a fading rate set against how many things there are (a
 fixed number breaks — `Level_1` holds 12 blocks, and fading at 120
