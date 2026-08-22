@@ -27,6 +27,8 @@
     <Compile Include="..\..\Scripts\Core\Memory.cs" />
     <Compile Include="..\..\Scripts\Core\Until.cs" />
     <Compile Include="..\..\Scripts\Core\Deed.cs" />
+    <Compile Include="..\..\Scripts\Core\IMind.cs" />
+    <Compile Include="..\..\Scripts\Core\Hand.cs" />
           </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +37,7 @@
     <Compile Include="MemoryTests.cs" />
     <Compile Include="MemoryDepthTests.cs" />
     <Compile Include="DeedTests.cs" />
+    <Compile Include="MindTests.cs" />
   </ItemGroup>
 
 </Project>

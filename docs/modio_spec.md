@@ -825,6 +825,14 @@ Where the middle step cannot end, the whole Deed ends **Failed**.
 deed plays out, and a sudden Need — fear, say — can still break in and
 drop it.
 
+**Modio never names `animo` in `Scripts/`.** What it asks of a mind is
+three things — what is wanted now, a way to hold that steady, a way to
+say a want was met — and they are set out as a way in (`IMind`).
+`animo`'s own `Engine` answers to all three already, so a thin piece
+in `Runtime/` joins them. **So a test may stand a plain mind in place
+of the whole engine**, and `modio` stays free of a build it need not
+know.
+
 **How long a Deed may run** rests on two numbers `animo` already
 holds, and they are not the same:
 

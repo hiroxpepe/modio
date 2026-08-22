@@ -16,7 +16,7 @@ change in as a commit.
 + [ ] TASK-008 [P-03]: Build fading, to the rate TASK-002 settles
 + [x] TASK-009 [P-03]: Prove no garbage is made on the hot path
 + [x] TASK-010 [P-04]: Build the Deed, ending Done, Failed, or Dropped
-+ [ ] TASK-011 [P-04]: Hold a Deed together with animo Lock, in Soft mode
++ [x] TASK-011 [P-04]: Hold a Deed together with animo Lock, in Soft mode
 + [ ] TASK-012 [P-04]: Build the DSL reader, and a check that runs before play
 + [ ] TASK-013 [P-05]: Build the far look, matching a found thing against like ones
 + [ ] TASK-017 [P-05]: Hold the reach and the height of every remembered meeting
@@ -235,10 +235,30 @@ a call is not an answer.
 
 ### TASK-011
 
-`animo`'s own `Lock(duration, LockMode.Soft)` holds the Behavior
-steady while a Deed plays out, and still lets a sudden Need break in.
-`LOCK_DURATION_WARN_THRESHOLD` (30 seconds) is the ground under how
-long a Deed may run.
+**Done 2026-08-22**, with 11 tests: `Scripts/Core/IMind.cs` and
+`Scripts/Core/Hand.cs`.
+
+**Modio does not name `animo` at all.** What it asks of a mind is
+three things, and they are set out as a way in:
+
+| Asked                  | For                                   |
+| ---------------------- | ------------------------------------- |
+| `Behavior`             | what is wanted now                    |
+| `Lock(duration, soft)` | holding that steady while a deed runs |
+| `Affect(need, delta)`  | telling it a want was met             |
+
+`animo`'s own `Engine` answers to all three already, so a thin piece
+in `Runtime/` joins them; nothing here needs changing for it.
+
+**The hold is always soft.** Scores still work on the inside, and only
+what is given back is held — so a sudden want, fear say, may still
+break in. Where it does, `Hand.HasMovedOn()` says so, and the deed is
+Dropped.
+
+**What this buys:** a test may stand a plain mind in place of the real
+engine and run a whole round with no engine at all. Three such rounds
+are held here — a deed that lands and quiets its want, one that fails
+and quiets nothing, and one dropped because the mind moved on.
 
 ### TASK-012
 
