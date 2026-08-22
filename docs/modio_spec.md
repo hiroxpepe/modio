@@ -101,8 +101,13 @@ Knowing the world as it is now is not enough.
 + "A want for new places" needs someone who knows which place is new.
 + "A want to give" needs someone who knows who was given to already.
 
-`animo` holds the state of now. `germio` holds the state of now.
-**Modio is the only layer with a past.**
+`animo` holds the state of now, and no past at all. `germio` does hold
+a past — `Store` keeps a history of the game (§4.2) — but it is the
+**world's** past, one for all: "a rule fired", "a node was entered".
+
+**Modio holds a past of its own: what *this one character* did.** That
+is what Tulving's own memory of living means, and no other layer has
+it.
 
 ### 2.3 Enact — to carry a thing through over time
 
@@ -199,6 +204,45 @@ height    how far up or down, from where the feet are
 | Whether it may be held               | That is `germio`'s own live state, read at the moment of taking, not seen from a distance     |
 | The full name string                 | `kind` and `id` say all Modio needs; a name would draw a reader into taking meaning out of it |
 
+### 3.3.1 `id` — how a thing is known to be the same thing twice
+
+`id` is Unity's own `GetInstanceID()`. Every `GameObject` carries one
+already; nothing is added, nothing is attached.
+
+Three other ways were weighed, and each was dropped:
+
+| Tried                      | Why it was dropped                                                                                                                                                                                    |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The object name            | **Not one to a piece.** Counted 2026-08-21: `Level_1` holds 24 pieces, and three names are used twice over — `Ground_5.0x0.5x5.0_Green_2`, `Ground_5.0x0.5x5.0_Green_1`, `Block_1.0x1.0x1.0_Green_1`. |
+| A mark added to each piece | It would take a `MonoBehaviour`, and `germio`'s own `Common` runs three `FixedUpdate` chains. On 24 pieces that is 72 chains, every step of the motion work, for nothing.                             |
+| Where it stands            | Two ways of doing one job, one for things that move and one for things that do not. **One way, no exceptions.**                                                                                       |
+
+`GetInstanceID()` is made new when a scene is read again — and that is
+right, not wrong. **A scene read again is a world built new: the
+old pieces are gone.** A memory of a piece that no longer stands has
+lost what it spoke of, and should go with it. The memory of a *place*
+is held apart (§4.5), and lives on.
+
+### 3.3.2 `heading` — which way the character itself faces
+
+`Perceive` hands back one thing more, and it is not about a thing
+found. It is about the character:
+
+```text
+heading   which way it faces, against the world
+```
+
+Two jobs need it:
+
++ **Writing a place down.** `angle` and `distance` are told from where
+  the character stands. To keep where a thing was, they must be turned
+  into a place in the world — which takes `heading`.
++ **"South is done; try north."** A way cannot be named without a
+  fixed sense of which way is which.
+
+This does not widen §3.3. Those five fields tell of a **thing found**;
+`heading` tells of **the character**. Two reports, not one.
+
 ### 3.4 The world is read the way `germio` names it
 
 `germio`'s own `Env.cs` holds the marks a thing is known by:
@@ -250,6 +294,38 @@ leaves no second try.
 Nearest first, so that where two are alike, the near one wins with no
 further sorting.
 
+### 3.5.1 What is new, what is gone, what has moved
+
+Each tick, what `Perceive` hands back is set against what memory
+holds. Three answers come out:
+
+| Where it sits           | What it means                      | Used for                          |
+| ----------------------- | ---------------------------------- | --------------------------------- |
+| in both                 | seen before                        | not new any more                  |
+| **found only now**      | **never seen**                     | the mark of a want for new places |
+| **held only in memory** | **gone: broken, taken, or hidden** | stop reaching for it              |
+
+This is how a virtual DOM works, turned to a different end. A virtual
+DOM sets a copy against the real thing to **write the real thing
+back**; Modio sets what it sees against what it holds **to know what
+has changed**, and writes nothing.
+
+**And this is why `id` cannot be dropped.** With no `id`, "three
+blocks" against "three blocks" says nothing at all. With `id`, a piece
+that has gone is known to have gone.
+
+The four ways `germio`'s own world moves are all met here:
+
+| In the world | In the answer                                                          |
+| ------------ | ---------------------------------------------------------------------- |
+| broken       | held only in memory                                                    |
+| made         | found only now                                                         |
+| carried off  | held only in memory (out of sight)                                     |
+| **moved**    | **same `id`, new `angle` and `distance`** — known to be the same thing |
+
+The last is the one a virtual DOM keeps a `key` for. Without `id`,
+a thing that moved would read as one thing gone and another made.
+
 ### 3.6 Two parts, held apart
 
 | Part       | Does                                                                | Knows Unity? |
@@ -269,11 +345,12 @@ proved.** Held apart, the judging takes a plain list, and a test may
 write that list by hand:
 
 ```text
-given:   Ground/id=1  angle=20   distance=8.5   height=0.0
-         Ground/id=2  angle=-45  distance=12.0  height=0.0
-memory:  id=1 is met
-asked:   kind=Ground, not_in_memory=met
-then:    id=2 is picked
+self:    heading=90
+given:   Ground/id=1042  angle=20   distance=8.5   height=0.0
+         Ground/id=1055  angle=-45  distance=12.0  height=0.0
+memory:  actor=place_curious_01, deed=met, thing=1042
+asked:   kind=Ground, and not met
+then:    id=1055 is picked
 ```
 
 No Physics. No Transform. Same answer, every run.
@@ -298,6 +375,55 @@ reach turns up a few, not a great number. **A fixed list of 16 holds
 every case seen so far**, and `Runtime` fills the same list again each
 tick, so nothing is made new.
 
+### 3.7.1 What stands in the way is not seen
+
+Stage two throws one straight line. Where a wall or a block stands
+between, the line stops there.
+
+```text
+character ────────█────── the other one
+                block
+
+the line meets   : the block
+Perceive hands back: the block. Not the other one.
+```
+
+**Modio is not told that something was hidden.** To it, this reads the
+same as an empty field. That is right: a person cannot tell, by
+looking, whether someone walked away or stepped behind a rock.
+
+What follows from it:
+
+| Then                               | And so                                           |
+| ---------------------------------- | ------------------------------------------------ |
+| A deed finds nothing               | it ends **Failed**; no `Affect` is called        |
+| The Need does not fall             | `animo` asks for the same thing again, next tick |
+| Something known drops out of sight | it reads as **held only in memory** (§3.5.1)     |
+
+**And this is what makes seeking worth doing at all.** A place behind
+a wall is not handed back, so it stays never-seen until the character
+walks round. **With nothing in the way, one could stand still and take
+in the whole world.**
+
+### 3.7.2 The same power serves more than Modio
+
+Seeking asks one plain question — *what of this kind stands within
+this reach and this spread, with nothing in the way* — and more than
+one caller wants the answer:
+
+| Caller                    | Why                              |
+| ------------------------- | -------------------------------- |
+| A deed, in Modio          | to carry a want through          |
+| **`flugi`'s own `Radar`** | **to draw marks on a screen**    |
+| A drop-off check          | to keep from walking off an edge |
+
+`angle` and `distance` are just what a radar draws; a thrown line
+hides what stands behind a hill; `id` is a mark with no name to build.
+
+**So seeking is written to be called from outside Modio, not only by a
+deed.** Whether `flugi` takes it up is `flugi`'s own call, and belongs
+in `flugi`'s own task list, not here.
+
 ### 3.8 Meeting is proof of arrival
 
 A meeting (`OnCollisionEnter`) says one thing, and says it well:
@@ -314,55 +440,147 @@ why `seek` will not take a meeting, in any form, ever.
 
 ## 4. Remember
 
-### 4.1 One table, one per character
+### 4.1 The four posts
 
-| Column   | Sense                               |
-| -------- | ----------------------------------- |
-| `when`   | when it happened (for fading)       |
-| `what`   | `met`, `held`, `gave`, `shown`      |
-| `object` | what it was done to                 |
-| `with`   | who it was done with (may be empty) |
+Tulving set out what a memory of living is made of: **who, when,
+where, what.** Modio holds these four, and holds nothing else.
+
+| Post      | Column  | Sense                                           |
+| --------- | ------- | ----------------------------------------------- |
+| **who**   | `actor` | whose memory this is                            |
+| **when**  | `at`    | the time it happened                            |
+| **where** | `place` | the stretch of world it happened in             |
+| **what**  | `deed`  | `met`, `held`, `gave`, `shown`, `asked`, `edge` |
+|           | `thing` | what it was done to (an `id`, may be empty)     |
+|           | `other` | who it was done with (an `id`, may be empty)    |
+
+Six columns, four posts. `what` takes three, because a doing has a
+shape: **what was done, to what, and with which other.**
 
 **A row is written only where a deed ends Done.**
 
-### 4.2 How deep a meeting sits
+### 4.2 Why `actor` must be a column
+
+`germio` already holds a past. `Store.RecordHistoryEvent` writes
+`kind`, `target_id` and `timestamp` — three of the same four posts.
+`docs/dsl_cookbook.md` §7 reads them back with
+`history.count(kind=..., target_id=...)`.
+
+**What it does not hold is `who`.** There is one `Store` for the whole
+game, so its past is the **game's** past: "a rule fired", "a node was
+entered".
+
+| Held by            | Whose past            | How many                  |
+| ------------------ | --------------------- | ------------------------- |
+| `germio`'s `Store` | the world's           | one, for all              |
+| **Modio**          | **a character's own** | **one to each character** |
+
+Tulving's word for a memory of living is first-person by
+definition — **what *I* did.** Take `who` away and it is no longer
+that kind of memory at all.
+
+Two characters given minds, both asking the same thing, show it
+plainly: `germio` can only raise one flag, `flags.told_food`. It
+cannot say which of the two asked. **Modio can.**
+
+### 4.3 `place` — where a thing was done
+
+A `thing` can be broken, carried off, or newly made. **The ground it
+stood on cannot.** So `place` is what makes a memory hold up in a
+world that moves.
+
+**How a place is made.** Modio makes places as it walks; nothing
+outside gives them. Standing on a stretch of ground, the character
+holds a place. Step to ground that touches it, and it is the same
+place. Step across a drop, or round a wall, and a new place is begun.
+
+**What a place is worth.** `Level_1` holds 24 pieces, but a character
+walking it meets a much smaller number of places — the ground under those pieces runs
+together. So the number of places stays small, and the memory with it.
+
+**What a place is written as.** Where the character stood when the
+place was begun, turned into the world's own reckoning (§3.3.2), and
+rounded. Two things done on the same stretch of ground fall to the same
+`place`.
+
+| Held      | `thing` | `place` | Lives                       |
+| --------- | ------- | ------- | --------------------------- |
+| **thing** | yes     | yes     | while that one thing stands |
+| **place** | empty   | yes     | on, past a scene read again |
+
+A scene read again makes every `id` new, so every memory of a
+**thing** loses what it spoke of — as it should, since those things
+are gone. Every memory of a **place** stands.
+
+### 4.4 How deep a meeting sits
 
 Master's own word: seeing, touching, and holding are three depths of
 one meeting, not three separate things.
 
 | Depth    | How it happens      | Fades   |
 | -------- | ------------------- | ------- |
-| **seen** | the sensor found it | fast    |
+| **seen** | seeking found it    | fast    |
 | **met**  | the bodies touched  | slower  |
 | **held** | it was made a child | slowest |
 
 **This mirrors `animo`'s own five stages: `animo` holds want in
 layers; Modio holds meeting in layers.**
 
-### 4.3 `edge` — a place to keep away from
+### 4.5 `edge` — a place to keep away from
 
 `met` says "no longer new". **`edge` says the opposite: keep away.**
 
 A step too high, or a fall in front, is written as `edge`. A place
-held as `edge` is left out of every later seek, so the character
-turns aside before reaching it, not after knocking into it.
+held as `edge` is left out of every later seek, so the character turns
+aside before reaching it, not after knocking into it.
 
 Two rows, one table, opposite uses — which is why `edge` is its own
 mark, and not a kind of `met`.
 
-### 4.4 Fading
+**This is why the drop-off check belongs here, and not in `germio`.**
+A character that walks to the same drop, turns away, and walks back
+again has taken in nothing. Knowing an edge is dangerous **is**
+remembering it.
 
-Rows fade with time: the ones longest past, and the ones least deep,
-go first.
+### 4.6 Letting go
 
-Fading is not for looks. It keeps two things true:
+Two ways of letting go were weighed. **`germio` already does both, and
+Modio takes both.**
 
-+ **The table stays small.** With no fading it grows with no end — a
-  thing `animo`'s own zero-GC bar would never allow.
-+ **A want for new places keeps working.** Once every place has been
-  met, nothing is new any more. Fading makes a place new again.
+**By count.** `Store` holds `history.max_entries`, set to 1000, and
+drops the row longest past, once over that. So the table cannot grow with no end.
 
-### 4.5 Facing the other way
+An earlier draft here set a fading time instead — a row gone after so
+many seconds. **Counted on a real level, that broke.** `Level_1` holds
+12 blocks; fade at 120 seconds and every one of them still sits in
+memory, so nothing is new and the want for new places dies flat out.
+The right time turns on how many things there are, which a written-in
+number cannot know. **A count does.**
+
+**By age, read at the time of asking.** `history.time_since(kind=...,
+target_id=...)` gives how long since a thing was last done.
+
+```text
+history.time_since(kind=met, target_id=$target) > 60
+```
+
+**"New again, if it has been a while."** The row is never touched. Age
+is weighed each time the question is put.
+
+| Way   | The row                     | Holds                                  |
+| ----- | --------------------------- | -------------------------------------- |
+| count | dropped, longest past first | the table stays small                  |
+| age   | left alone                  | a place met long ago becomes new again |
+
+**The two do different work, and Modio needs both.** Count keeps the
+table from growing; age is what makes a place new again. Neither
+stands in for the other.
+
+Where the two meet: what fades is set to how deep the meeting was
+(§4.4). Rows of `seen` are dropped first, `met` next, `held` last —
+so the least deep goes before the deepest, as it does in a person.
+
+### 4.7 Facing the other way
 
 The same table, read facing the other way, says what is to come.
 
@@ -376,14 +594,24 @@ plain: a Need climbing at +1.2 a second will sit 36 points higher in
 30 seconds. `animo`'s own `GetNeed(need)` gives the value now.
 **What is to come can be worked out; it need not be guessed.**
 
----
+**What this can be asked, in full, is not yet worked out.** §7 shows
+one shape only. See §9.
+
+### 4.8 What Modio never remembers
+
+| Not held                 | Why                                                                                   |
+| ------------------------ | ------------------------------------------------------------------------------------- |
+| What was said            | `germio`'s own rules hold that. Modio holds **that** it asked, never **what**         |
+| How the world stands now | `germio` holds that. Modio holds only what has been done                              |
+| What it wants            | `animo` holds that. Modio holds no Need at all                                        |
+| A full copy of the world | Modio's own picture is full of holes, and worn by time — and still it serves (§3.5.1) |
 
 ## 5. Enact
 
 ### 5.1 `Deed` — one thing done
 
 A Deed takes one Behavior and carries it through over time. It ends
-one of three ways:
+one of three ways, and only one of them writes anything at all:
 
 | End         | To `animo`                      | To memory | To the world |
 | ----------- | ------------------------------- | --------- | ------------ |
@@ -391,12 +619,34 @@ one of three ways:
 | **Failed**  | nothing                         | nothing   | nothing      |
 | **Dropped** | nothing                         | nothing   | nothing      |
 
-+ **Done** — the Deed reached its end. The Need falls; the memory is kept.
-+ **Failed** — no thing was found, the thing left, or time ran out.
-  The Need does not fall, so `animo` will ask again.
-+ **Dropped** — `animo` gave a different Behavior part way.
++ **Done** — the Deed reached its end. The Need falls; the row is kept.
++ **Failed** — nothing was found, what was found left, or the time ran
+  out. The Need does not fall, so `animo` asks again next tick.
++ **Dropped** — `animo` gave a different Behavior part way. The Deed
+  folds; the next one starts.
 
-### 5.2 Holding a Deed together, while it plays out
+**Done is the one gate into memory.** Every row in the table (§4.1)
+was written by a Deed that reached its end. Nothing else may write
+there.
+
+### 5.2 The steps within one Deed
+
+A Deed is not one motion. It runs in steps, and each has its own end:
+
+```text
+face      turn toward what was found       until it faces
+walk      go there                          until near, or met
+act       do the thing (hand over, and so on)  until it is done
+```
+
+`super-nekokun`'s own `Player.cs` shows this shape already, in taking
+something up: it turns to face the thing (`faceToObject`), then lifts,
+then holds. **Three steps, not one.**
+
+Where any step cannot end, the whole Deed ends **Failed**. The steps
+run in order, and none is skipped.
+
+### 5.3 Holding a Deed together, while it plays out
 
 `animo` already holds what a Deed needs: `Lock(duration, LockMode)`.
 
@@ -406,24 +656,68 @@ one of three ways:
 | Hard     | everything held                                                                                                                          |
 
 **Soft is what a Deed wants**: the Behavior holds steady while the
-deed plays out, but a true, sudden Need (fear, say) can still break
-in and drop it.
+deed plays out, and a sudden Need — fear, say — can still break in and
+drop it.
 
-`animo`'s own `LOCK_DURATION_WARN_THRESHOLD` is 30 seconds. **This
-is the ground under Modio's own limit on how long a Deed may run** —
-not a number picked out of the air.
+`animo`'s own `LOCK_DURATION_WARN_THRESHOLD` is 30 seconds. **This is
+the ground under how long a Deed may run** — not a number picked out
+of the air.
 
-### 5.3 A Deed may satisfy more than one Need
+Where a Deed ends, by any of the three ways, the lock is let go at
+once. **A Deed that has ended must never hold `animo` still.**
 
-`super-nekokun`'s own `Player.cs` shows one deed reaching three
-layers at once: the body (`transform.parent`), the character
+### 5.4 A Deed may satisfy more than one Need
+
+`super-nekokun`'s own `Player.cs` shows one deed reaching three layers
+at once: the body (`transform.parent`), the character
 (`doUpdate.holding`), and the game itself (`gameSystem.hasKey`).
 
 So a Deed's own close may call `Affect` more than once. Reaching a
 friend may quiet both "I am alone" and "I am cut off" together.
 **One arrival, two wants met.**
 
----
+This is not a small point. `company_seeking` holds `separation` at Stage 2
+and `loneliness` at Stage 3, and `Call` — standing still and calling
+out — cannot quiet `separation` on its own. **Were `Approach` to quiet
+only `loneliness`, `separation` would climb with no way down, and
+`Call` would win for ever.** Two `Affect` calls on one arrival is what
+closes that round.
+
+### 5.5 Failed is a move, not a fault
+
+**Failed is how a character turns away from what will not work.**
+
+| Then                              | And so                                        |
+| --------------------------------- | --------------------------------------------- |
+| Nothing of that kind is in sight  | Failed. The Need holds; `animo` asks again    |
+| A wall stands in the way (§3.7.1) | Failed. To Modio this reads as an empty field |
+| Every near thing is already met   | Failed — **and this is "south is done"**      |
+
+The last one is worth setting out in full. "South is done; try north"
+needs no new part at all:
+
+```text
+Explore begins, facing south
+  → seeking finds Ground, but every one is already met
+  → nothing to take           → Failed
+  → curiosity does not fall
+  → next tick, Explore begins again, facing another way
+  → something not yet met     → walk to it → Done
+```
+
+**Turning away comes out of Failed, and nothing else.** A Deed that
+gave up quietly, or stood in something easier, would break this: the
+character would seem to have explored, while `curiosity` fell for
+nothing.
+
+### 5.6 What a Deed never does
+
+| Never                       | Why                                                               |
+| --------------------------- | ----------------------------------------------------------------- |
+| Picks what to want          | `animo`'s work. A Deed only carries out what came back            |
+| Writes on Failed or Dropped | A want unmet must stay unmet, or `animo` is given a false account |
+| Stands in something easier  | Ending Failed is honest; seeming to succeed is not                |
+| Runs past its lock          | 30 seconds, and the lock is let go (§5.3)                         |
 
 ## 6. What Modio needs, and what stands today
 
@@ -588,14 +882,15 @@ trigger — the way that spec itself calls for.
 
 ## 9. Still open
 
-| # | Point                   | What is owed                                                                                                                                                       |
-| - | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1 | **The sensor**          | `germio`'s own TASK-014. **Nothing here can be built first.**                                                                                                      |
-| 2 | How fast memory fades   | Count the blocks in a real `stemic` level. Work out, by real sums, whether the table stays small.                                                                  |
-| 3 | Saying a line           | `Store.NotifyRequested` shows a line for the whole screen. A line over one character's head — as `super-nekokun`'s own `say()` gave — has no home in `germio` yet. |
-| 4 | Facing forward, in full | §7 shows one shape (`seek.before`). The whole set of forward-facing questions is not worked out.                                                                   |
-| 5 | Same answer, every run  | `animo` has `ScenarioRunner`, proving same input, same answer. Modio needs its own.                                                                                |
-| 6 | Zero-GC                 | `animo` proved it with a test running `Live()` 100,000 times. Modio must meet the same bar.                                                                        |
+| # | Point                    | What is owed                                                                                                                                                                                                                                                     |
+| - | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 | Three things in `germio` | `Rule.actor`, `Command.request_deed`, `Command.update_need` (TASK-016 to TASK-018 there). Nothing else is owed by `germio`: TASK-014 (a sensor) moved here, and TASK-015 (a mark on every piece) was dropped once `GetInstanceID()` was found to serve (§3.3.1). |
+| 2 | How places are drawn     | §4.3 sets out how a place is begun and where it ends, but no sums have been run on a real level. **How many places `Level_1` truly holds, walked end to end, is not yet counted.**                                                                               |
+| 3 | Saying a line            | `Store.NotifyRequested` shows a line for the whole screen. A line over one character's head — as `super-nekokun`'s own `say()` gave — has no home in `germio` yet. Without it, what a character has in mind cannot be seen, and cannot be checked by eye.        |
+| 4 | Facing forward, in full  | §4.7 and §7 show one shape only (`before`). The whole set — every question a character may put about what is to come — is not worked out.                                                                                                                        |
+| 5 | Same answer, every run   | `animo` has `ScenarioRunner`, proving same input, same answer. Modio needs its own. §3.6 shows the shape a test would take; nothing is built.                                                                                                                    |
+| 6 | Zero-GC                  | `animo` proved it with a test running `Live()` 100,000 times. Modio must meet the same bar. The memory table must be a ring held at a fixed size — **never `germio`'s own `List` with `RemoveAt(0)`, which shifts every row and grows the backing store.**       |
+| 7 | How much is let go of    | §4.6 takes both of `germio`'s own ways — by count, and by age. **The count itself is not settled.** `germio` uses 1000 for the whole game; Modio holds one table to a character, and what number serves there has not been worked out.                           |
 
 ---
 

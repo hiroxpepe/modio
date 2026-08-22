@@ -260,3 +260,8 @@ made to work.
 
 **enact** — To carry a want through, in the world, over time: the
 third of Modio's own three powers, beside Perceive and Remember.
+
+**virtual DOM** — A copy of a web page's own tree, held apart from the
+real one, so the two may be set against each other.
+
+**radar** — A screen mark showing what lies about, and how far off.
