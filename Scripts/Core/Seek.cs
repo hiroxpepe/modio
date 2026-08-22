@@ -30,11 +30,12 @@ namespace Modio.Core {
         // Constructor
 
         public Seek(string kind, float reach = REACH_BY_DEFAULT, float spread = SPREAD_BY_DEFAULT,
-            string not_in_memory = "", string keep_from = "") {
+            string not_in_memory = "", string not_given_to = "", string keep_from = "") {
             Kind = kind;
             Reach = reach;
             Spread = spread;
             NotInMemory = not_in_memory;
+            NotGivenTo = not_given_to;
             KeepFrom = keep_from;
         }
 
@@ -58,6 +59,16 @@ namespace Modio.Core {
         /// nothing of memory at all.
         /// </summary>
         public string NotInMemory { get; }
+
+        /// <summary>
+        /// Which memory mark to leave out, asked of another character rather
+        /// than of a thing: gave, shown, tended. Empty asks nothing.
+        ///
+        /// **A character has no "like it".** One is not of a sort with another,
+        /// so this question is always put by name — where a thing may be judged
+        /// like another thing (KeepFrom), a character may not.
+        /// </summary>
+        public string NotGivenTo { get; }
 
         /// <summary>
         /// Which memory mark to keep away from, in things of a sort with what is

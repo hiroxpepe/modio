@@ -87,6 +87,7 @@ namespace Modio.Core {
         /// </param>
         public static Choice Choose(IReadOnlyList<Found> found, Seek seek, Memory? memory) {
             bool facing_back = memory != null && seek.NotInMemory.Length > 0;
+            bool by_name = memory != null && seek.NotGivenTo.Length > 0;
             bool facing_forward = memory != null && seek.KeepFrom.Length > 0;
             float half_spread = seek.Spread / 2f;
 
@@ -104,6 +105,10 @@ namespace Modio.Core {
 
                 // Facing back: have I already had to do with that very one?
                 if (facing_back && memory!.Holds(deed: seek.NotInMemory, thing: one.ID)) { continue; }
+
+                // Asked of another character, and always by name: one is not of
+                // a sort with another, so there is no "like it" to ask after.
+                if (by_name && memory!.HoldsWith(deed: seek.NotGivenTo, other: one.ID)) { continue; }
 
                 // Facing forward: how did it go with ones like it? The same
                 // table, read the other way.

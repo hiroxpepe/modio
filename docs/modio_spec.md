@@ -748,7 +748,26 @@ So a character keeps away from a drop it has never stood on, because
 it stood on ones like it. **It does not know. It expects.** That is
 what a memory of living buys, and it buys it with no sum at all.
 
-#### 4.7.4 The three times, held together
+#### 4.7.4 Every question there is
+
+Counted against the 10 the two given personas hold, **there are
+three, and no fourth**:
+
+| Asked                                | Matched on               | Written       |
+| ------------------------------------ | ------------------------ | ------------- |
+| have I had to do with **that one**?  | the id itself            | `NotInMemory` |
+| have I done that **with them**?      | the other one's own name | `NotGivenTo`  |
+| how did it go with **ones like it**? | kind, reach, height      | `KeepFrom`    |
+
+`Rest` and `Call` ask nothing of the world at all; `GoHome` has its one
+place to be. The other seven each ask one of the three, or none.
+
+**A character has no "like it".** `place_curious_01` and
+`company_seeking_01` are two, not two of a kind. So a question about
+another is put by name, where a question about a thing may be put
+about its sort — and that is why there are three and not four.
+
+#### 4.7.5 The three times, held together
 
 | Time    | Held by             | How it is known                      |
 | ------- | ------------------- | ------------------------------------ |

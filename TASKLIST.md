@@ -8,7 +8,7 @@ change in as a commit.
 
 + [ ] TASK-001 [P-01]: Wait on germio TASK-015 to TASK-018, then fold the older plan in
 + [x] TASK-002 [P-01]: Set a fading rate against the count, not a fixed number
-+ [ ] TASK-003 [P-01]: Work out the whole set of forward-facing questions
++ [x] TASK-003 [P-01]: Work out the whole set of forward-facing questions
 + [ ] TASK-004 [P-01]: Find a home in germio for a line said over a head
 + [ ] TASK-005 [P-01]: Put the spec through a hard-questioning G review
 + [x] TASK-006 [P-02]: Build seeking, by type and reach, against memory
@@ -92,9 +92,30 @@ many new than too few.
 
 ### TASK-003
 
-`docs/modio_spec.md` §7 shows one forward-facing shape only
-(`seek.before`). The whole set — every question a character may ask
-about what is to come — is not yet worked out.
+**Done 2026-08-22**, with 8 tests. `seek.before` is long gone; what
+stands in its place is worked out here, counted against the 10 the two given
+personas hold.
+
+**There are three questions, and no fourth.**
+
+| Asked                                | By            | Matched on               |
+| ------------------------------------ | ------------- | ------------------------ |
+| have I had to do with **that one**?  | `NotInMemory` | the id itself            |
+| have I done that **with them**?      | `NotGivenTo`  | the other one's own name |
+| how did it go with **ones like it**? | `KeepFrom`    | kind, reach and height   |
+
+Counted deed by deed: `Rest` and `Call` ask nothing of the world at
+all; `GoHome` has its one place to be. The other seven each ask one of
+the three, or none.
+
+**A character has no "like it".** `place_curious_01` and
+`company_seeking_01` are two, not two of a kind — so a question about
+another is always put by name, where a question about a thing may be
+put about its sort. That is why there are three and not four.
+
+A test puts all three to one table at once: met, given to, and like a
+fall all fall away, and what is left is the one nothing is remembered
+of.
 
 ### TASK-004
 
