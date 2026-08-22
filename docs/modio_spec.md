@@ -217,6 +217,18 @@ Three other ways were weighed, and each was dropped:
 | A mark added to each piece | It would take a `MonoBehaviour`, and `germio`'s own `Common` runs three `FixedUpdate` chains. On 24 pieces that is 72 chains, every step of the motion work, for nothing.                             |
 | Where it stands            | Two ways of doing one job, one for things that move and one for things that do not. **One way, no exceptions.**                                                                                       |
 
+**Written out, an `id` takes a letter in front: `g_1042`.** Measured
+2026-08-21 against `germio`'s own `ExprLexer`: a value inside
+`history.count(kind=..., target_id=...)` must be an Identifier, and an
+Identifier is `[a-zA-Z_][a-zA-Z0-9_-]*` — **it may not start with a
+number.** `GetInstanceID()` gives back a plain number, so `1042` on its
+own would throw at parse time. `g_` in front makes it hold, and costs
+nothing.
+
+This also settles a whole row of edge cases: a number can hold no
+space, no dot, no round mark, so the written-out `id` can never break an
+expression it sits inside.
+
 `GetInstanceID()` is made new when a scene is read again — and that is
 right, not wrong. **A scene read again is a world built new: the
 old pieces are gone.** A memory of a piece that no longer stands has
@@ -1169,8 +1181,29 @@ after  : history.time_since(kind=met, target_id=g_0041) > 60
 **`ExprLexer`, `ExprParser` and `Evaluator` are untouched.** `$`
 belongs to no token kind today, so it runs into nothing else.
 
-**What it holds** is the `id` of §3.3.1 — Unity's own
-`GetInstanceID()`, written out as text.
+**What it holds** is the `id` of §3.3.1, written out with its letter
+in front: `g_1042`.
+
+**Where the mark is looked for, and where it is not:**
+
+| Place                                                        | Looked for | Read by                                  |
+| ------------------------------------------------------------ | ---------- | ---------------------------------------- |
+| `request_deed.condition`                                     | yes        | Evaluator                                |
+| `request_deed.until`, in its value                           | yes        | Modio                                    |
+| every text field inside `request_deed.command`, however deep | yes        | Executor                                 |
+| `Rule.condition` (outside a deed)                            | **no**     | — no deed is running                     |
+| `Rule.trigger`, `Rule.id`, `actor`                           | **no**     | — these name the rule, not what it found |
+| any number, any true-or-false                                | **no**     | — the mark is text only                  |
+
+**How the change is made:**
+
+| Rule                                   | Why                                                                                                       |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| The whole word `$target`, and no other | `$targets` and `$targe` are other words, and are left alone                                               |
+| Big and small letters count            | `$TARGET` is not the mark                                                                                 |
+| Every time it appears                  | `like=$target, target_id=$target` takes the id in both places                                             |
+| **Once, and never again**              | what is put in is never looked at a second time, so a value holding `$target` cannot run away with itself |
+| Where the deed found nothing           | **the deed ends Failed, and nothing is evaluated at all** — an empty value would make a broken line       |
 
 **`like=$target` is the forward-facing form.** Where
 `target_id=$target` asks after that one thing, `like=$target` asks
