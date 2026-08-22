@@ -725,14 +725,18 @@ Not to `animo`. **To the seek.**
 it. What Modio settles is **which thing to reach for**, and there the
 past speaks:
 
-```json
-"target": { "kind": "Ground", "reach": 15.0, "spread": 90.0 },
-"condition": "history.count(kind=edge, like=$target) == 0"
+```text
+seeking hands back : Ground, 13 off, 3.1 down
+Modio's own memory : Ground, 12 off, 3.0 down  →  edge
+                     Ground, 14 off, 2.8 down  →  edge
+                            ↓
+                     "ones like this went badly"  →  left out of the seek
 ```
 
-**`like` is the forward-facing word.** Where `target_id` asks after one
-thing, `like` asks after every row whose thing was of a kind, and at a
-reach, and at a height, near enough to this one to count.
+**This is settled inside Modio, before the deed ever starts.** It is
+not written in `germio.json` at all, and `germio`'s own Evaluator never
+sees it: the rows it would need — how far off, how far up or down — are
+Perceive's own, and live only here (§7.7).
 
 So a character keeps away from a drop it has never stood on, because
 it stood on ones like it. **It does not know. It expects.** That is
@@ -1208,19 +1212,27 @@ in front: `g_1042`.
 | **Once, and never again**              | what is put in is never looked at a second time, so a value holding `$target` cannot run away with itself |
 | Where the deed found nothing           | **the deed ends Failed, and nothing is evaluated at all** — an empty value would make a broken line       |
 
-**`like=$target` is the forward-facing form.** Where
-`target_id=$target` asks after that one thing, `like=$target` asks
-after every row whose thing was near enough to this one in `kind`, in
-reach, and in height, to count as the same sort (§4.7.1). It is
-`germio`'s own `history.*` call with one more word:
+**Facing forward is asked of Modio's own memory, never of `germio`'s.**
+Checked 2026-08-22: `germio`'s own `HistoryEntry` holds three things —
+`kind`, `target_id`, `timestamp` — while being of a sort is judged on
+what Perceive hands back: the kind, how far off, how far up or down
+(§4.7.1). **Neither distance nor height is written there, and neither
+belongs there.**
 
-```text
-history.count(kind=met,  target_id=$target) == 0     have I met this one
-history.count(kind=edge, like=$target)      == 0     did ones like it go badly
-```
+The deeper reason is §4.2: that `Store` holds **the world's** past, one
+for the whole game. `like` asks *"how did it go for **me**, with things
+of this sort"* — a first-person question, and so a question for the
+memory Modio keeps for each character.
 
-`germio`'s own `history.*` functions gain `like` beside `target_id`
-(its own TASK-045).
+| Asked of               | Question                     | Written                                  |
+| ---------------------- | ---------------------------- | ---------------------------------------- |
+| `germio`'s own history | did this happen in the world | `history.count(kind=..., target_id=...)` |
+| **Modio's own memory** | **how did ones like it go**  | **matched on kind, reach and height**    |
+
+So a deed's own `condition` may hold `$target` and be read by
+`germio`'s own Evaluator; the forward-facing question is settled by
+Modio before the deed ever starts, in choosing which found thing to
+take (§4.7.3).
 
 ### 7.8 Why a mark of `germio`'s own making is needed
 

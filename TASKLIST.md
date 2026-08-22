@@ -18,7 +18,8 @@ change in as a commit.
 + [ ] TASK-010 [P-04]: Build the Deed, ending Done, Failed, or Dropped
 + [ ] TASK-011 [P-04]: Hold a Deed together with animo Lock, in Soft mode
 + [ ] TASK-012 [P-04]: Build the DSL reader, and a check that runs before play
-+ [ ] TASK-013 [P-05]: Build the far look, reading rates and GetNeed
++ [ ] TASK-013 [P-05]: Build the far look, matching a found thing against like ones
++ [ ] TASK-017 [P-05]: Hold the reach and the height of every remembered meeting
 + [ ] TASK-014 [P-05]: Build a runner, proving same input, same answer
 + [ ] TASK-015 [P-06]: Join Modio to stemic, and check it by real play
 + [ ] TASK-016 [P-XX]: Put the rest of the docs into Basic English
@@ -171,3 +172,17 @@ remembers, and acts on both.
 
 `docs/modio_spec.md` is written to the family rule already. The rest
 of the docs, once written, must follow.
+
+### TASK-017
+
+Facing back matches on the `thing` — one id, one row. **Facing forward
+matches on what Perceive handed back about it**: the kind, how far off,
+how far up or down (`docs/modio_spec.md` §4.7.1).
+
+So a memory row must keep those three, or nothing can be judged of a
+sort with anything else.
+
+`germio`'s own `HistoryEntry` keeps none of them, and should not:
+checked 2026-08-22, it holds `kind`, `target_id` and `timestamp` alone,
+and it holds the **world's** past, not a character's own (§4.2).
+**This is Modio's to keep.**
