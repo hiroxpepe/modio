@@ -54,7 +54,7 @@ namespace Modio.Tools {
         /// <param name="delta_time">How long each tick is.</param>
         public Trace Run(Deed deed, float duration, float delta_time) {
             var trace = new Trace();
-            deed.Begin(has_target: _seen.Count > 0);
+            deed.Begin(taken: _seen.Count > 0 ? Choice.Of(found: _seen[0].Found) : Choice.None());
 
             float at = 0f;
             while (at < duration && deed.End == DeedEnd.Running) {

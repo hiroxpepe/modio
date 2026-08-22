@@ -17,8 +17,9 @@ namespace Modio.Core {
         ///////////////////////////////////////////////////////////////////////////////////////////////
         // Constructor
 
-        Choice(bool taken, string id, float angle, float distance, float height) {
+        Choice(bool taken, string kind, string id, float angle, float distance, float height) {
             Taken = taken;
+            Kind = kind;
             ID = id;
             Angle = angle;
             Distance = distance;
@@ -30,6 +31,12 @@ namespace Modio.Core {
 
         /// <summary>Whether anything at all was taken.</summary>
         public bool Taken { get; }
+
+        /// <summary>
+        /// What it is. Kept because a row keeps it too, and a row that keeps it
+        /// may be faced the other way (4.7).
+        /// </summary>
+        public string Kind { get; }
 
         /// <summary>Which one was taken.</summary>
         public string ID { get; }
@@ -48,13 +55,14 @@ namespace Modio.Core {
 
         /// <summary>Gives back a choice holding one thing found.</summary>
         public static Choice Of(Found found) {
-            return new Choice(taken: true, id: found.ID, angle: found.Angle,
+            return new Choice(taken: true, kind: found.Kind, id: found.ID, angle: found.Angle,
                 distance: found.Distance, height: found.Height);
         }
 
         /// <summary>Gives back a choice holding nothing at all.</summary>
         public static Choice None() {
-            return new Choice(taken: false, id: string.Empty, angle: 0f, distance: 0f, height: 0f);
+            return new Choice(taken: false, kind: string.Empty, id: string.Empty,
+                angle: 0f, distance: 0f, height: 0f);
         }
     }
 

@@ -1498,18 +1498,30 @@ And these belong elsewhere, by design:
 
 ## 9. Still open
 
-| #  | Point                     | What is owed                                                                                                                                                                                                                                                        |
-| -- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1  | Three things in `germio`  | `Rule.actor`, `Command.request_deed`, `Command.update_need` (TASK-016 to TASK-018 there). Nothing else is owed by `germio`: TASK-014 (a sensor) moved here, and TASK-015 (a mark on every piece) was dropped once `GetInstanceID()` was found to serve (§3.3.1).    |
-| 2  | How places are drawn      | §4.3 sets out how a place is begun and where it ends, but no sums have been run on a real level. **How many places `Level_1` truly holds, walked end to end, is not yet counted.**                                                                                  |
-| 3  | Saying a line             | `Store.NotifyRequested` shows a line for the whole screen. A line over one character's head — as `super-nekokun`'s own `say()` gave — has no home in `germio` yet. Without it, what a character has in mind cannot be seen, and cannot be checked by eye.           |
-| 4  | Facing forward, in full   | §4.7 and §7 show one shape only (`before`). The whole set — every question a character may put about what is to come — is not worked out.                                                                                                                           |
-| 5  | Same answer, every run    | `animo` has `ScenarioRunner`, proving same input, same answer. Modio needs its own. §3.6 shows the shape a test would take; nothing is built.                                                                                                                       |
-| 6  | Zero-GC                   | `animo` proved it with a test running `Live()` 100,000 times. Modio must meet the same bar. The memory table must be a ring held at a fixed size — **never `germio`'s own `List` with `RemoveAt(0)`, which shifts every row and grows the backing store.**          |
-| 7  | The cost at 64 characters | Every character runs, seen or not (Master's own word). Worked out: 3,200 wide checks a second, near 960 thrown lines, 37 KB of memory (§3.7). **Not measured on a real phone.** Should it bite, holding still what cannot be seen is the first thing to weigh.      |
-| 8  | Sound                     | `germio` holds `SoundSystem`, and `signo`/`quyno` stand behind it. **Nothing here calls any of them.** A deed that hands a thing over makes no sound at all. To be taken up later (Master's own word, 2026-08-21).                                                  |
-| 9  | Reading a level's rules   | Rules for the world and rules for each character sit side by side under one `Node`. With many characters, which rule belongs to which character grows hard to see by eye. **A way to list them by `actor` is owed** — `germio`'s own Validator is the place for it. |
-| 10 | How much is let go of     | §4.6 takes both of `germio`'s own ways — by count, and by age. **The count itself is not settled.** `germio` uses 1000 for the whole game; Modio holds one table to a character, and what number serves there has not been worked out.                              |
+Checked against the code, 2026-08-22.
+
+### 9.1 Settled since this spec was written
+
+| Was open                 | How it came out                                                                                      |
+| ------------------------ | ---------------------------------------------------------------------------------------------------- |
+| Three things in `germio` | **Done.** `Rule.actor`, `request_deed`, `update_need`, and 4 more on `Target` — all with tests there |
+| Facing forward, in full  | **Done.** Three questions, and no fourth (§4.7.4)                                                    |
+| Same answer, every run   | **Done.** `Scripts/Tools/` holds `Seen`, `Trace`, `Runner`                                           |
+| Zero-GC                  | **Done.** The table is a ring at a fixed size; tests count the bytes and find 0                      |
+| How much is let go of    | **Done.** Half of what stands in the world (`Memory.RoomFor`), and by depth (§4.4)                   |
+| Saying a line            | **Half done.** The sums sit in `germio`'s own `SpeechSize`; the drawing is its own TASK-059          |
+
+### 9.2 Still open
+
+| # | Point                              | What is owed                                                                                                                                                                                                               |
+| - | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 | `Runtime/`                         | Nothing in `Runtime/` is built at all. Unity's own `Physics`, the tie to `animo`'s own `Engine`, and the tie to `germio`'s own two events all wait there. **This is the whole of what stands between here and real play.** |
+| 2 | How places are drawn               | §4.3 sets out how a place is begun and where it ends, but no sums have been run on a real level.                                                                                                                           |
+| 3 | What a Deed holds of what it found | A `Deed` knows its motion, its step and its end — **not the id of what it reached for.** Something must carry that from the seek to the row written at the end.                                                            |
+| 4 | The cost at 64 characters          | Worked out: 3,200 wide checks a second, near 960 thrown lines, 37 KB of memory (§3.7). **Not measured on a real phone.**                                                                                                   |
+| 5 | How long a deed truly takes        | 30 seconds is the most one may run (§5.3), and nothing says how long one truly takes. Every persona number resting on that is a guess until it is measured.                                                                |
+| 6 | Sound                              | `germio` holds `SoundSystem`, and `signo`/`quyno` stand behind it. **Nothing here calls any of them.** To be taken up later (Master's own word).                                                                           |
+| 7 | Reading a level's rules            | `germio`'s own `Grapher.RulesByActor` sorts them, but nothing calls it yet: a reader — a tool, a page, an editor — is owed.                                                                                                |
 
 ---
 

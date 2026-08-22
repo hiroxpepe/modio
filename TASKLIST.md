@@ -21,6 +21,7 @@ change in as a commit.
 + [x] TASK-013 [P-05]: Build the far look, matching a found thing against like ones
 + [x] TASK-017 [P-05]: Hold the reach and the height of every remembered meeting
 + [x] TASK-014 [P-05]: Build a runner, proving same input, same answer
++ [x] TASK-019 [P-04]: Carry what was found, from the seek to the row
 + [ ] TASK-015 [P-06]: Join Modio to stemic, and check it by real play
 + [x] TASK-018 [P-XX]: Put the questions in the target, not in a condition
 + [ ] TASK-016 [P-XX]: Put the rest of the docs into Basic English
@@ -452,3 +453,23 @@ the 60 second mark" — another thing altogether.
 `Memory.Since(deed, thing, now)` is the one that gives how long since,
 and `Seek.NewAgainAfter` is how a deed asks it. **The row is never
 touched**: age is weighed each time the question is put.
+
+### TASK-019
+
+**Done 2026-08-22**, with 9 tests.
+
+A `Deed` knew its motion, its step and its end — **and not the id of
+what it reached for.** So a deed that landed had nothing to write down:
+a row names what was done to (§4.1), and there was nothing to name.
+
+`Deed.Holding` now carries what seeking found, from `Begin` through to
+the row that goes down at the end. It carries the kind, the reach and
+the height beside the id, since a row keeps those too, and they are
+what let the table be faced the other way (§4.7).
+
+**The whole round is held by a test**: what seeking found is what the
+row names, and both ways of asking after it — by name, and by what it
+was like — find it there.
+
+A deed that fails still knows what it reached for. **It simply never
+got there**, and Done is the one gate into memory.

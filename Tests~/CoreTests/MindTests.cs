@@ -151,7 +151,7 @@ namespace Modio.Tests.Core {
 
             var deed = new Deed(motion: "walk", act: "",
                 until: Until.Near(within: 2f), lock_for: 30f);
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             deed.Tick(delta_time: 0.1f, facing: true, distance: 12f, acted: false);
             deed.Tick(delta_time: 0.1f, facing: true, distance: 1.5f, acted: false);
 
@@ -169,7 +169,7 @@ namespace Modio.Tests.Core {
 
             var deed = new Deed(motion: "walk", act: "",
                 until: Until.Near(within: 2f), lock_for: 30f);
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             deed.Lost();
 
             if (deed.MayWrite) { hand.Landed(need: "curiosity", delta: -25f); }
@@ -187,7 +187,7 @@ namespace Modio.Tests.Core {
 
             var deed = new Deed(motion: "walk", act: "",
                 until: Until.Near(within: 2f), lock_for: 30f);
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             deed.Tick(delta_time: 0.1f, facing: true, distance: 12f, acted: false);
 
             mind.Behavior = "Flee";

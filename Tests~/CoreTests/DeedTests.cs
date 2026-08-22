@@ -46,7 +46,7 @@ namespace Modio.Tests.Core {
         [Test, Description("A deed with a target begins by turning to face it")]
         public void New_WithTarget_BeginsByFacing() {
             Deed deed = walkTo();
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
 
             Assert.That(deed.Step, Is.EqualTo(DeedStep.Face));
         }
@@ -55,7 +55,7 @@ namespace Modio.Tests.Core {
         public void New_WithNoTarget_BeginsMoving() {
             Deed deed = new Deed(motion: "idle", act: "",
                 until: Until.TimeUp(seconds: 4.0f), lock_for: 30f);
-            deed.Begin(has_target: false);
+            deed.Begin(taken: Choice.None());
 
             Assert.That(deed.Step, Is.EqualTo(DeedStep.Move),
                 "Rest holds no target, so there is nothing to turn toward.");
@@ -67,7 +67,7 @@ namespace Modio.Tests.Core {
         [Test, Description("Once it faces, it moves")]
         public void Tick_OnceFacing_Moves() {
             Deed deed = walkTo();
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
 
             deed.Tick(delta_time: 0.1f, facing: true, distance: 12f, acted: false);
 
@@ -77,7 +77,7 @@ namespace Modio.Tests.Core {
         [Test, Description("While it is still turning, it does not move")]
         public void Tick_StillTurning_DoesNotMove() {
             Deed deed = walkTo();
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
 
             deed.Tick(delta_time: 0.1f, facing: false, distance: 12f, acted: false);
 
@@ -90,7 +90,7 @@ namespace Modio.Tests.Core {
         [Test, Description("Once near enough, a deed with no act is Done")]
         public void Tick_NearEnough_NoAct_IsDone() {
             Deed deed = walkTo(near: 2.0f);
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             deed.Tick(delta_time: 0.1f, facing: true, distance: 12f, acted: false);
 
             deed.Tick(delta_time: 0.1f, facing: true, distance: 1.5f, acted: false);
@@ -101,7 +101,7 @@ namespace Modio.Tests.Core {
         [Test, Description("Once near enough, a deed with an act goes on to act")]
         public void Tick_NearEnough_WithAct_GoesOnToAct() {
             Deed deed = walkTo(near: 1.5f, act: "hand_over");
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             deed.Tick(delta_time: 0.1f, facing: true, distance: 12f, acted: false);
 
             deed.Tick(delta_time: 0.1f, facing: true, distance: 1.0f, acted: false);
@@ -113,7 +113,7 @@ namespace Modio.Tests.Core {
         [Test, Description("Once the act is carried out, the deed is Done")]
         public void Tick_ActCarriedOut_IsDone() {
             Deed deed = walkTo(near: 1.5f, act: "hand_over");
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             deed.Tick(delta_time: 0.1f, facing: true, distance: 12f, acted: false);
             deed.Tick(delta_time: 0.1f, facing: true, distance: 1.0f, acted: false);
 
@@ -126,7 +126,7 @@ namespace Modio.Tests.Core {
         public void Tick_TimeUp_IsDone() {
             Deed deed = new Deed(motion: "idle", act: "",
                 until: Until.TimeUp(seconds: 4.0f), lock_for: 30f);
-            deed.Begin(has_target: false);
+            deed.Begin(taken: Choice.None());
 
             for (int i = 0; i < 41; i++) {
                 deed.Tick(delta_time: 0.1f, facing: true, distance: 0f, acted: false);
@@ -139,7 +139,7 @@ namespace Modio.Tests.Core {
         public void Tick_TimeNotUp_IsStillRunning() {
             Deed deed = new Deed(motion: "idle", act: "",
                 until: Until.TimeUp(seconds: 4.0f), lock_for: 30f);
-            deed.Begin(has_target: false);
+            deed.Begin(taken: Choice.None());
 
             for (int i = 0; i < 20; i++) {
                 deed.Tick(delta_time: 0.1f, facing: true, distance: 0f, acted: false);
@@ -154,7 +154,7 @@ namespace Modio.Tests.Core {
         [Test, Description("A deed that runs past its lock ends Failed")]
         public void Tick_PastItsLock_IsFailed() {
             Deed deed = walkTo();
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
 
             for (int i = 0; i < 320; i++) {
                 deed.Tick(delta_time: 0.1f, facing: true, distance: 12f, acted: false);
@@ -167,7 +167,7 @@ namespace Modio.Tests.Core {
         [Test, Description("A deed whose target is gone ends Failed")]
         public void Lost_IsFailed() {
             Deed deed = walkTo();
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             deed.Tick(delta_time: 0.1f, facing: true, distance: 12f, acted: false);
 
             deed.Lost();
@@ -179,7 +179,7 @@ namespace Modio.Tests.Core {
         public void Tick_WhileKind_EndsFailed() {
             Deed deed = new Deed(motion: "idle", act: "",
                 until: Until.While(state: "other_near"), lock_for: 30f);
-            deed.Begin(has_target: false);
+            deed.Begin(taken: Choice.None());
 
             for (int i = 0; i < 320; i++) {
                 deed.Tick(delta_time: 0.1f, facing: true, distance: 0f, acted: false);
@@ -195,7 +195,7 @@ namespace Modio.Tests.Core {
         [Test, Description("A deed let go part way is Dropped")]
         public void Drop_IsDropped() {
             Deed deed = walkTo();
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             deed.Tick(delta_time: 0.1f, facing: true, distance: 12f, acted: false);
 
             deed.Drop();
@@ -206,7 +206,7 @@ namespace Modio.Tests.Core {
         [Test, Description("Dropped is not Failed: they are told apart")]
         public void Drop_IsNotFailed() {
             Deed deed = walkTo();
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
 
             deed.Drop();
 
@@ -220,16 +220,16 @@ namespace Modio.Tests.Core {
         [Test, Description("Only a deed that is Done may be written down")]
         public void MayWrite_OnlyWhenDone() {
             Deed done = walkTo(near: 2.0f);
-            done.Begin(has_target: true);
+            done.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             done.Tick(delta_time: 0.1f, facing: true, distance: 12f, acted: false);
             done.Tick(delta_time: 0.1f, facing: true, distance: 1.5f, acted: false);
 
             Deed failed = walkTo();
-            failed.Begin(has_target: true);
+            failed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             failed.Lost();
 
             Deed dropped = walkTo();
-            dropped.Begin(has_target: true);
+            dropped.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             dropped.Drop();
 
             Assert.That(done.MayWrite, Is.True);
@@ -243,7 +243,7 @@ namespace Modio.Tests.Core {
         [Test, Description("A deed already Done does not go back to running")]
         public void Tick_AfterDone_StaysDone() {
             Deed deed = walkTo(near: 2.0f);
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             deed.Tick(delta_time: 0.1f, facing: true, distance: 12f, acted: false);
             deed.Tick(delta_time: 0.1f, facing: true, distance: 1.5f, acted: false);
 
@@ -255,7 +255,7 @@ namespace Modio.Tests.Core {
         [Test, Description("A deed already Failed is not made Done by anything after")]
         public void Tick_AfterFailed_StaysFailed() {
             Deed deed = walkTo(near: 2.0f);
-            deed.Begin(has_target: true);
+            deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             deed.Lost();
 
             deed.Tick(delta_time: 0.1f, facing: true, distance: 1.0f, acted: false);
@@ -270,7 +270,7 @@ namespace Modio.Tests.Core {
         public void Tick_MakesNothingNew() {
             Deed warm_deed = new Deed(motion: "walk", act: "",
                 until: Until.Near(within: 0.001f), lock_for: 1e9f);
-            warm_deed.Begin(has_target: true);
+            warm_deed.Begin(taken: Choice.Of(found: new Found(kind: "Ground", id: "g_1", angle: 0f, distance: 12f, height: 0f)));
             for (int i = 0; i < 2000; i++) {
                 warm_deed.Tick(delta_time: 0.001f, facing: true, distance: 12f, acted: false);
             }

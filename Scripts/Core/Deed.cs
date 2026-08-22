@@ -84,6 +84,7 @@ namespace Modio.Core {
             _run_for = 0f;
             Step = DeedStep.Face;
             End = DeedEnd.Running;
+            Holding = Choice.None();
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,6 +92,16 @@ namespace Modio.Core {
 
         /// <summary>How the body moves, while getting there.</summary>
         public string Motion { get; }
+
+        /// <summary>
+        /// What seeking found, and what this deed is reaching for.
+        ///
+        /// **A deed that lands writes a row, and a row names what was done to.**
+        /// So this is carried from the moment seeking hands it over to the
+        /// moment the row goes down — with the kind, the reach and the height
+        /// beside it, which are what let the table be faced the other way.
+        /// </summary>
+        public Choice Holding { get; private set; }
 
         /// <summary>Which step is running.</summary>
         public DeedStep Step { get; private set; }
@@ -108,11 +119,14 @@ namespace Modio.Core {
         // public Methods [verb]
 
         /// <summary>
-        /// Starts the deed. A deed with a target turns to face it first; one
-        /// without has nothing to turn toward, and moves straight away.
+        /// Starts the deed, taking hold of what seeking found. A deed holding
+        /// something turns to face it first; one holding nothing has nothing to
+        /// turn toward, and moves straight away.
         /// </summary>
-        public void Begin(bool has_target) {
-            Step = has_target ? DeedStep.Face : DeedStep.Move;
+        /// <param name="taken">What seeking found. None where a deed seeks nothing.</param>
+        public void Begin(Choice taken) {
+            Holding = taken;
+            Step = taken.Taken ? DeedStep.Face : DeedStep.Move;
         }
 
         /// <summary>
