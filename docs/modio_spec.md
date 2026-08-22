@@ -774,8 +774,11 @@ one of three ways, and only one of them writes anything at all:
 + **Done** — the Deed reached its end. The Need falls; the row is kept.
 + **Failed** — nothing was found, what was found left, or the time ran
   out. The Need does not fall, so `animo` asks again next tick.
-+ **Dropped** — `animo` gave a different Behavior part way. The Deed
-  folds; the next one starts.
++ **Dropped** — the deed was let go part way. Two things do this:
+  `animo` giving a different Behavior, or `germio` moving to another
+  Node. **A Node holds its own rules, so a Node change takes away the
+  very rule the deed was carrying out.** Either way the deed folds,
+  nothing is written, and the next one starts.
 
 **Done is the one gate into memory.** Every row in the table (§4.1)
 was written by a Deed that reached its end. Nothing else may write
