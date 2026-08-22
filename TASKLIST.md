@@ -17,10 +17,10 @@ change in as a commit.
 + [x] TASK-009 [P-03]: Prove no garbage is made on the hot path
 + [x] TASK-010 [P-04]: Build the Deed, ending Done, Failed, or Dropped
 + [x] TASK-011 [P-04]: Hold a Deed together with animo Lock, in Soft mode
-+ [ ] TASK-012 [P-04]: Build the DSL reader, and a check that runs before play
++ [xx] TASK-012 [P-04]: Build the DSL reader — dropped, there is no modio.json
 + [ ] TASK-013 [P-05]: Build the far look, matching a found thing against like ones
 + [ ] TASK-017 [P-05]: Hold the reach and the height of every remembered meeting
-+ [ ] TASK-014 [P-05]: Build a runner, proving same input, same answer
++ [x] TASK-014 [P-05]: Build a runner, proving same input, same answer
 + [ ] TASK-015 [P-06]: Join Modio to stemic, and check it by real play
 + [ ] TASK-016 [P-XX]: Put the rest of the docs into Basic English
 
@@ -262,8 +262,18 @@ and quiets nothing, and one dropped because the mind moved on.
 
 ### TASK-012
 
-Build the reader for `modio.json`, plus a check that catches a bad
-file before play, the way `animo`'s own Validator does.
+**Dropped 2026-08-22.** This asked for a reader for `modio.json`, and
+a check to catch a bad one before play.
+
+**There is no `modio.json`.** A DSL of Modio's own was weighed and let
+go part way through the design: a writer would have had to hold two
+files in mind at once, and two ways of saying the same thing. A deed is
+written in `germio.json`, with `actor`, `request_deed` and
+`update_need` (§7).
+
+**The checking went with it.** `germio`'s own Validator gained 9
+checks for exactly this — V028 to V034 and V036 — and they run before
+play, as every check there does. Nothing is owed here.
 
 ### TASK-013
 
@@ -274,8 +284,28 @@ guessed.**
 
 ### TASK-014
 
-`animo` has `ScenarioRunner`, proving same input, same answer. Modio
-needs its own, or nothing here can be checked ahead of play.
+**Done 2026-08-22**, with 9 tests: `Scripts/Tools/Seen.cs`,
+`Scripts/Tools/Trace.cs` and `Scripts/Tools/Runner.cs`.
+
+A world is written out by hand — what stood where, and when — and fed
+in tick by tick. **No Unity, and no waiting**: 400 ticks of 0.1
+seconds each is 40 seconds of play, run through in a moment.
+
+| What     | Holds                                      |
+| -------- | ------------------------------------------ |
+| `Seen`   | one thing, seen at one time                |
+| `Trace`  | every tick of a run, and how it ended      |
+| `Runner` | carries a deed through a written-out world |
+
+Two runs of one world give back the very same answer, tick for tick,
+and a test holds them side by side to say so.
+
+`Trace.Write()` puts a run out as plain lines, so **a person may read
+one through with their own eyes**.
+
+This mirrors `animo`'s own runner: the shape is the same because the
+need is the same. **The code is Modio's own**, and neither build leans
+on the other.
 
 ### TASK-015
 

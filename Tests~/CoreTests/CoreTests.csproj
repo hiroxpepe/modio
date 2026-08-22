@@ -29,6 +29,9 @@
     <Compile Include="..\..\Scripts\Core\Deed.cs" />
     <Compile Include="..\..\Scripts\Core\IMind.cs" />
     <Compile Include="..\..\Scripts\Core\Hand.cs" />
+    <Compile Include="..\..\Scripts\Tools\Seen.cs" />
+    <Compile Include="..\..\Scripts\Tools\Trace.cs" />
+    <Compile Include="..\..\Scripts\Tools\Runner.cs" />
           </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +41,7 @@
     <Compile Include="MemoryDepthTests.cs" />
     <Compile Include="DeedTests.cs" />
     <Compile Include="MindTests.cs" />
+    <Compile Include="RunnerTests.cs" />
   </ItemGroup>
 
 </Project>

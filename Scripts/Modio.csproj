@@ -25,6 +25,9 @@
     <Compile Include="Core\Deed.cs" />
     <Compile Include="Core\IMind.cs" />
     <Compile Include="Core\Hand.cs" />
+    <Compile Include="Tools\Seen.cs" />
+    <Compile Include="Tools\Trace.cs" />
+    <Compile Include="Tools\Runner.cs" />
   </ItemGroup>
 
 </Project>
