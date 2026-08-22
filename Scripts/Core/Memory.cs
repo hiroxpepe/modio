@@ -31,6 +31,25 @@ namespace Modio.Core {
         /// <summary>Given back where a deed was never done at all.</summary>
         public const float NEVER = -1f;
 
+        /// <summary>
+        /// How near in reach two things must stand to count as of a sort.
+        ///
+        /// Taken off stemic's own build: a Ground piece there is 10 by 10, so 3
+        /// is under a third of one — near enough that a character would call two
+        /// such things "about as far off", and far enough that 12 and 25 are
+        /// not, since walking to the second takes twice as long.
+        /// </summary>
+        public const float SORT_BY_REACH = 3.0f;
+
+        /// <summary>
+        /// How near in height two things must sit to count as of a sort.
+        ///
+        /// A Ground piece in stemic stands 0.5 high, so 1.0 is two of them —
+        /// about the most a character may drop and walk on. Below that mark a
+        /// fall is a step down; above it, it is a fall.
+        /// </summary>
+        public const float SORT_BY_HEIGHT = 1.0f;
+
         ///////////////////////////////////////////////////////////////////////////////////////////////
         // Fields
 
@@ -65,10 +84,15 @@ namespace Modio.Core {
         /// <summary>
         /// Writes one row. Where the ring is full, the row longest past goes.
         /// </summary>
-        public void Write(float at, string place, string deed, string thing, string other) {
+        /// <param name="kind">What the thing was. Empty where it was another character.</param>
+        /// <param name="reach">How far off it stood.</param>
+        /// <param name="height">How far up or down it sat.</param>
+        public void Write(float at, string place, string deed, string thing, string other,
+            string kind = "", float reach = 0f, float height = 0f) {
             if (_count < _rows.Length) {
                 int put = (_first + _count) % _rows.Length;
-                _rows[put] = new Row(at: at, place: place, deed: deed, thing: thing, other: other);
+                _rows[put] = new Row(at: at, place: place, deed: deed, thing: thing,
+                    other: other, kind: kind, reach: reach, height: height);
                 _count++;
                 return;
             }
@@ -92,8 +116,8 @@ namespace Modio.Core {
             for (int i = drop; i < _count - 1; i++) {
                 _rows[(_first + i) % _rows.Length] = _rows[(_first + i + 1) % _rows.Length];
             }
-            _rows[(_first + _count - 1) % _rows.Length] =
-                new Row(at: at, place: place, deed: deed, thing: thing, other: other);
+            _rows[(_first + _count - 1) % _rows.Length] = new Row(at: at, place: place,
+                deed: deed, thing: thing, other: other, kind: kind, reach: reach, height: height);
         }
 
         /// <summary>Gives back one row, counting from the one longest past.</summary>
@@ -115,6 +139,37 @@ namespace Modio.Core {
             for (int i = 0; i < _count; i++) {
                 Row row = _rows[(_first + i) % _rows.Length];
                 if (row.Deed == deed && row.Other == other) { return true; }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Tells whether this was ever done to anything of a sort with the one
+        /// named — the same kind, standing about as far off, sitting about as
+        /// far up or down.
+        ///
+        /// **This is the same table, faced the other way.** Asking after a thing
+        /// says what has been; asking after ones like it says what is likely to
+        /// come. A character keeps away from a drop it has never stood on,
+        /// because it stood on ones like it. It does not know. It expects.
+        ///
+        /// See docs/modio_spec.md 4.7.
+        /// </summary>
+        public bool HoldsLike(string deed, string kind, float reach, float height) {
+            for (int i = 0; i < _count; i++) {
+                Row row = _rows[(_first + i) % _rows.Length];
+                if (row.Deed != deed) { continue; }
+                if (row.Kind != kind) { continue; }
+
+                float by_reach = row.Reach - reach;
+                if (by_reach < 0f) { by_reach = -by_reach; }
+                if (by_reach > SORT_BY_REACH) { continue; }
+
+                float by_height = row.Height - height;
+                if (by_height < 0f) { by_height = -by_height; }
+                if (by_height > SORT_BY_HEIGHT) { continue; }
+
+                return true;
             }
             return false;
         }

@@ -18,8 +18,8 @@ change in as a commit.
 + [x] TASK-010 [P-04]: Build the Deed, ending Done, Failed, or Dropped
 + [x] TASK-011 [P-04]: Hold a Deed together with animo Lock, in Soft mode
 + [xx] TASK-012 [P-04]: Build the DSL reader — dropped, there is no modio.json
-+ [ ] TASK-013 [P-05]: Build the far look, matching a found thing against like ones
-+ [ ] TASK-017 [P-05]: Hold the reach and the height of every remembered meeting
++ [x] TASK-013 [P-05]: Build the far look, matching a found thing against like ones
++ [x] TASK-017 [P-05]: Hold the reach and the height of every remembered meeting
 + [x] TASK-014 [P-05]: Build a runner, proving same input, same answer
 + [ ] TASK-015 [P-06]: Join Modio to stemic, and check it by real play
 + [ ] TASK-016 [P-XX]: Put the rest of the docs into Basic English
@@ -328,14 +328,23 @@ of the docs, once written, must follow.
 
 ### TASK-017
 
-Facing back matches on the `thing` — one id, one row. **Facing forward
-matches on what Perceive handed back about it**: the kind, how far off,
-how far up or down (`docs/modio_spec.md` §4.7.1).
+**Done 2026-08-22**, with 13 tests.
 
-So a memory row must keep those three, or nothing can be judged of a
-sort with anything else.
+A row now keeps three things beside the four posts: **what the thing
+was, how far off it stood, how far up or down it sat.** These are what
+Perceive handed back, and they are what lets the same table be faced
+the other way.
 
-`germio`'s own `HistoryEntry` keeps none of them, and should not:
-checked 2026-08-22, it holds `kind`, `target_id` and `timestamp` alone,
-and it holds the **world's** past, not a character's own (§4.2).
-**This is Modio's to keep.**
+`Memory.HoldsLike(deed, kind, reach, height)` asks after every row of a
+sort with the one named. How near counts as of a sort was settled off
+`stemic`'s own build:
+
+| Bound            | Value | Why                                                                                             |
+| ---------------- | ----- | ----------------------------------------------------------------------------------------------- |
+| `SORT_BY_REACH`  | 3.0   | a Ground piece there is 10 by 10, so 3 is under a third of one                                  |
+| `SORT_BY_HEIGHT` | 1.0   | a Ground piece stands 0.5 high, so 1.0 is two — about the most a character may drop and walk on |
+
+Below the height bound a fall is a step down; above it, it is a fall.
+
+`germio`'s own `HistoryEntry` keeps none of the three, and should not:
+it holds the **world's** past, not a character's own (§4.2).

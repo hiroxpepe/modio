@@ -17,6 +17,11 @@ namespace Modio.Core {
     ///
     /// A row is written only where a deed ends Done.
     ///
+    /// Three more are kept beside the four posts — what the thing was, how far
+    /// off, how far up or down — and they are not another post. **They are what
+    /// lets the same table be faced the other way** (4.7): facing back matches
+    /// on the thing itself, and facing forward on what it was like.
+    ///
     /// See docs/modio_spec.md 4.1.
     /// </summary>
     /// <author>h.adachi (STUDIO MeowToon)</author>
@@ -24,12 +29,16 @@ namespace Modio.Core {
         ///////////////////////////////////////////////////////////////////////////////////////////////
         // Constructor
 
-        public Row(float at, string place, string deed, string thing, string other) {
+        public Row(float at, string place, string deed, string thing, string other,
+            string kind, float reach, float height) {
             At = at;
             Place = place;
             Deed = deed;
             Thing = thing;
             Other = other;
+            Kind = kind;
+            Reach = reach;
+            Height = height;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,5 +58,18 @@ namespace Modio.Core {
 
         /// <summary>Who it was done with. May be empty.</summary>
         public string Other { get; }
+
+        /// <summary>
+        /// What the thing was, as Perceive handed it back. Empty where the deed
+        /// was done to another character, which has no reach or height worth
+        /// keeping. Facing forward matches on this and the two below.
+        /// </summary>
+        public string Kind { get; }
+
+        /// <summary>How far off it stood, when the deed was done.</summary>
+        public float Reach { get; }
+
+        /// <summary>How far up or down it sat, when the deed was done.</summary>
+        public float Height { get; }
     }
 }

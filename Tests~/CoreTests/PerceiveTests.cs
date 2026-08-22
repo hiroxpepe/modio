@@ -30,6 +30,14 @@ namespace Modio.Tests.Core {
             return new Found(kind: "Ground", id: id, angle: angle, distance: distance, height: height);
         }
 
+        static Memory remembering(params string[] ids) {
+            var memory = new Memory(actor: "npc_01", holds: 16);
+            foreach (string id in ids) {
+                memory.Write(at: 1f, place: "p_1", deed: "met", thing: id, other: "");
+            }
+            return memory;
+        }
+
         static Found human(string id, float angle, float distance) {
             return new Found(kind: "Human", id: id, angle: angle, distance: distance, height: 0f);
         }
@@ -118,7 +126,7 @@ namespace Modio.Tests.Core {
         public void Choose_AlreadyInMemory_IsPassedOver() {
             var found = new List<Found> { ground(id: "g_1042", angle: 20f, distance: 8.5f) };
             var seek = new Seek(kind: "Ground", not_in_memory: "met");
-            var memory = new List<string> { "g_1042" };
+            var memory = remembering("g_1042");
 
             Choice choice = Perceive.Choose(found: found, seek: seek, memory: memory);
 
@@ -133,7 +141,7 @@ namespace Modio.Tests.Core {
                 ground(id: "g_1055", angle: -45f, distance: 12.0f)
             };
             var seek = new Seek(kind: "Ground", not_in_memory: "met");
-            var memory = new List<string> { "g_1042" };
+            var memory = remembering("g_1042");
 
             Choice choice = Perceive.Choose(found: found, seek: seek, memory: memory);
 
@@ -145,7 +153,7 @@ namespace Modio.Tests.Core {
         public void Choose_NoMemoryAsked_TakesEvenAKnownOne() {
             var found = new List<Found> { ground(id: "g_1042", angle: 20f, distance: 8.5f) };
             var seek = new Seek(kind: "Ground");
-            var memory = new List<string> { "g_1042" };
+            var memory = remembering("g_1042");
 
             Choice choice = Perceive.Choose(found: found, seek: seek, memory: memory);
 
@@ -160,7 +168,7 @@ namespace Modio.Tests.Core {
                 ground(id: "g_1055", angle: -45f, distance: 12.0f)
             };
             var seek = new Seek(kind: "Ground", not_in_memory: "met");
-            var memory = new List<string> { "g_1042", "g_1055" };
+            var memory = remembering("g_1042", "g_1055");
 
             Choice choice = Perceive.Choose(found: found, seek: seek, memory: memory);
 

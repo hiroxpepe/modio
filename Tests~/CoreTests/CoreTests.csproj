@@ -42,6 +42,8 @@
     <Compile Include="DeedTests.cs" />
     <Compile Include="MindTests.cs" />
     <Compile Include="RunnerTests.cs" />
+    <Compile Include="MemoryLikeTests.cs" />
+    <Compile Include="PerceiveLikeTests.cs" />
   </ItemGroup>
 
 </Project>

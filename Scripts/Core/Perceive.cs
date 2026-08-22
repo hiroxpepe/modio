@@ -83,11 +83,11 @@ namespace Modio.Core {
         /// <param name="found">What seeking found. Left as it was.</param>
         /// <param name="seek">What the deed is looking for.</param>
         /// <param name="memory">
-        /// The ids memory holds under the mark the seek names. Null asks nothing
-        /// of memory.
+        /// What this character remembers. Null asks nothing of memory at all.
         /// </param>
-        public static Choice Choose(IReadOnlyList<Found> found, Seek seek, IReadOnlyList<string>? memory) {
-            bool weigh_memory = memory != null && seek.NotInMemory.Length > 0;
+        public static Choice Choose(IReadOnlyList<Found> found, Seek seek, Memory? memory) {
+            bool facing_back = memory != null && seek.NotInMemory.Length > 0;
+            bool facing_forward = memory != null && seek.KeepFrom.Length > 0;
             float half_spread = seek.Spread / 2f;
 
             bool taken = false;
@@ -102,7 +102,13 @@ namespace Modio.Core {
                 float round = one.Angle < 0f ? -one.Angle : one.Angle;
                 if (round > half_spread) { continue; }
 
-                if (weigh_memory && holds(memory: memory!, id: one.ID)) { continue; }
+                // Facing back: have I already had to do with that very one?
+                if (facing_back && memory!.Holds(deed: seek.NotInMemory, thing: one.ID)) { continue; }
+
+                // Facing forward: how did it go with ones like it? The same
+                // table, read the other way.
+                if (facing_forward && memory!.HoldsLike(deed: seek.KeepFrom, kind: one.Kind,
+                    reach: one.Distance, height: one.Height)) { continue; }
 
                 // Nearest first. Where two stand at the very same distance, the
                 // one given first wins — so the same list always gives back the
@@ -116,14 +122,5 @@ namespace Modio.Core {
             return taken ? Choice.Of(found: nearest) : Choice.None();
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////
-        // private static Methods [verb]
-
-        static bool holds(IReadOnlyList<string> memory, string id) {
-            for (int i = 0; i < memory.Count; i++) {
-                if (memory[i] == id) { return true; }
-            }
-            return false;
-        }
     }
 }

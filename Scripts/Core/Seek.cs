@@ -30,11 +30,12 @@ namespace Modio.Core {
         // Constructor
 
         public Seek(string kind, float reach = REACH_BY_DEFAULT, float spread = SPREAD_BY_DEFAULT,
-            string not_in_memory = "") {
+            string not_in_memory = "", string keep_from = "") {
             Kind = kind;
             Reach = reach;
             Spread = spread;
             NotInMemory = not_in_memory;
+            KeepFrom = keep_from;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,5 +58,14 @@ namespace Modio.Core {
         /// nothing of memory at all.
         /// </summary>
         public string NotInMemory { get; }
+
+        /// <summary>
+        /// Which memory mark to keep away from, in things of a sort with what is
+        /// found: met, gave, shown, edge. Empty asks nothing of what is to come.
+        ///
+        /// **This is the forward-facing question** (4.7): where NotInMemory asks
+        /// after that one thing, this asks after every row of a sort with it.
+        /// </summary>
+        public string KeepFrom { get; }
     }
 }
