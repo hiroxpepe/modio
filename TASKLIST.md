@@ -11,11 +11,11 @@ change in as a commit.
 + [ ] TASK-003 [P-01]: Work out the whole set of forward-facing questions
 + [ ] TASK-004 [P-01]: Find a home in germio for a line said over a head
 + [ ] TASK-005 [P-01]: Put the spec through a hard-questioning G review
-+ [ ] TASK-006 [P-02]: Build seeking, by type and reach, against memory
-+ [ ] TASK-007 [P-03]: Build the memory table, and the three depths of meeting
++ [x] TASK-006 [P-02]: Build seeking, by type and reach, against memory
++ [x] TASK-007 [P-03]: Build the memory table, and the three depths of meeting
 + [ ] TASK-008 [P-03]: Build fading, to the rate TASK-002 settles
-+ [ ] TASK-009 [P-03]: Prove no garbage is made on the hot path
-+ [ ] TASK-010 [P-04]: Build the Deed, ending Done, Failed, or Dropped
++ [x] TASK-009 [P-03]: Prove no garbage is made on the hot path
++ [x] TASK-010 [P-04]: Build the Deed, ending Done, Failed, or Dropped
 + [ ] TASK-011 [P-04]: Hold a Deed together with animo Lock, in Soft mode
 + [ ] TASK-012 [P-04]: Build the DSL reader, and a check that runs before play
 + [ ] TASK-013 [P-05]: Build the far look, matching a found thing against like ones
@@ -93,10 +93,41 @@ review. This one does not yet.
 
 ### TASK-006
 
-Build seeking in two parts, held apart: `Runtime/` calls Unity's own
-`Physics` straight and hands back a plain list (angle, distance,
-name); `Scripts/` judges that list against memory, with no Unity in
-sight.
+**Done 2026-08-22**, with 13 tests.
+
+`Scripts/Core/` now holds four small things, and no Unity at all:
+
+| What       | Holds                                                      |
+| ---------- | ---------------------------------------------------------- |
+| `Found`    | one thing seeking found: kind, id, angle, distance, height |
+| `Self`     | which way the character faces, against the world           |
+| `Seek`     | what a deed looks for: kind, reach, spread, memory mark    |
+| `Perceive` | weighs the list against memory, and takes one              |
+
+**`Perceive.Choose` takes the nearest thing that answers to the seek
+and is not held in memory**, and leaves the list it was given as it
+was — Runtime fills the same list again each tick, so sorting it in
+place would cost, and would surprise whoever holds it.
+
+Where two stand at the very same distance, the one given first wins:
+**the same list must always give back the same choice.**
+
+Where nothing answers, nothing is taken, and the deed that asked will
+end Failed. **This is how "south is done" comes about** (§5.5).
+
+**The two stages are gated here too**, in `StageGate`. Seeking runs a
+wide cheap check every tick, and throws a straight line only where the
+cheap one finds something — **throwing a line is what costs**. Which
+hits are worth one is a plain judgement, and it is made away from
+Unity, where it is cheap.
+
+Checked by real sums: `stemic`'s own `Level_1` holds 24 pieces of 8
+kinds. Throwing a line at all 24, for each of 64 characters, every
+tick, would come to **1,536 lines a tick for nothing**.
+
+What is left for P-02: `Runtime/`, which asks Unity's own `Physics`
+and fills these lists. **That part cannot be checked by `dotnet
+test`** — check it by eye, in a running game.
 
 Pick things **by name** (`germio`'s own `Env.cs` type marks, read
 through `Like()`), never by layer: `stemic` holds only Unity's own
@@ -110,9 +141,35 @@ arrival.
 
 ### TASK-007
 
-Build the memory table (`when`/`what`/`object`/`with`), and the three
-depths of meeting (`seen`, `met`, `held`), each fading at its own
-rate.
+**The table is built, 2026-08-22**, with 21 tests: `Scripts/Core/Row.cs`
+and `Scripts/Core/Memory.cs`.
+
+Four posts, six columns (§4.1): `actor` belongs to the whole table, and
+each row holds `at`, `place`, `deed`, `thing`, `other`.
+
+It answers three questions:
+
+| Asked                     | Gives back                           |
+| ------------------------- | ------------------------------------ |
+| `Holds(deed, thing)`      | have I ever done that, to that one   |
+| `HoldsWith(deed, other)`  | have I ever done that, with that one |
+| `Since(deed, thing, now)` | how long since, or NEVER             |
+
+**The three depths are in too**, in `Scripts/Core/Depth.cs`:
+
+| Depth  | Deeds                                  | When a row must go |
+| ------ | -------------------------------------- | ------------------ |
+| `SEEN` | `seen`, and any deed with no depth set | goes first         |
+| `MET`  | `met`                                  | goes next          |
+| `HELD` | `held`, `gave`, `shown`, `edge`        | goes last          |
+
+Where the ring is full, **the least deep row goes, and of two as deep,
+the one longest past.** So a thing taken up stays with a character
+however much it has since laid eyes on, and `edge` — where a fall is —
+stays with the deepest, because forgetting it costs dear.
+
+Seen rows still go, and that is what keeps a want for new places
+alive: once a place is let go of, it is new again.
 
 ### TASK-008
 
@@ -124,11 +181,57 @@ table stays small, and a place met long ago becomes new again.
 `animo` proved zero garbage with a test running `Live()` 100,000
 times. Modio must meet the same bar.
 
+**Done 2026-08-22.** The table is a ring of a fixed size: writing past
+what it holds moves one mark and writes over the row longest past,
+making nothing new at all. Two tests hold it there, each running
+10,000 times and asking `GC.GetTotalAllocatedBytes` for the difference
+— which must be **0**.
+
+`germio`'s own history uses a `List` with `RemoveAt(0)`, which shifts
+every row and grows its backing store. **That was not copied.**
+
+**One thing taken in, in the doing.** The first form of this test used
+`GC.GetTotalAllocatedBytes`, which counts the whole process, and it
+passed alone but failed in a full run — 123,464 bytes out of nowhere.
+That was the runtime's own work, not this code's: compiling the
+method, then compiling it again once it turned out to be hot. The test
+now warms the path first, and counts on its own thread alone
+(`GC.GetAllocatedBytesForCurrentThread`). **Run three times over, it
+gives the same answer each time.**
+
 ### TASK-010
 
-Build `Deed`: one Behavior in, carried through over time, ending one
-of three ways. Only **Done** writes anything at all. Write the failing
-test first, and see it fail, before any code.
+**Done 2026-08-22**, with 19 tests: `Scripts/Core/Deed.cs` and
+`Scripts/Core/Until.cs`.
+
+Up to three steps run, in order — **and only the middle one is
+watched**:
+
+| Step   | Runs when         | Ends when                 |
+| ------ | ----------------- | ------------------------- |
+| `Face` | there is a target | it faces — of itself      |
+| `Move` | always            | `Until` says so           |
+| `Act`  | there is an act   | the act's own clock is up |
+
+Three ends, and **only Done writes anything at all**:
+
+| End       | Comes about                                              |
+| --------- | -------------------------------------------------------- |
+| `Done`    | it reached its end                                       |
+| `Failed`  | nothing found, what was found left, or the lock gave out |
+| `Dropped` | another Behavior came, or the Node changed               |
+
+`MayWrite` is true for Done alone. **Done is the one gate into
+memory.**
+
+**Nothing here calls Unity.** What the body is doing — whether it
+faces yet, how far off the target stands, whether the act was carried
+out — is handed in each tick. So a whole deed, lock and all, runs
+through in a test in a moment, with no waiting: 320 ticks of 0.1 seconds
+each is half a minute of play.
+
+`{ "while": ... }` ends Failed, never Done, and a test holds it there:
+a call is not an answer.
 
 ### TASK-011
 

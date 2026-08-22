@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <AssemblyName>Modio</AssemblyName>
+    <RootNamespace>Modio</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Core\Found.cs" />
+    <Compile Include="Core\Self.cs" />
+    <Compile Include="Core\Seek.cs" />
+    <Compile Include="Core\Perceive.cs" />
+    <Compile Include="Core\Near.cs" />
+    <Compile Include="Core\StageGate.cs" />
+    <Compile Include="Core\Row.cs" />
+    <Compile Include="Core\Depth.cs" />
+    <Compile Include="Core\Memory.cs" />
+    <Compile Include="Core\Until.cs" />
+    <Compile Include="Core\Deed.cs" />
+  </ItemGroup>
+
+</Project>
