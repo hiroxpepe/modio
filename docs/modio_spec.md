@@ -630,6 +630,12 @@ Modio takes both.**
 **By count.** `Store` holds `history.max_entries`, set to 1000, and
 drops the row longest past, once over that. So the table cannot grow with no end.
 
+**How many rows Modio holds is set against the world**, not written in:
+`Memory.RoomFor(things)` gives back half of what stands there. Half is
+left new, always, so a character can neither run out of somewhere to go
+nor turn straight back to where it came from — on a level of 4 or a
+level of 48 alike.
+
 An earlier draft here set a fading time instead — a row gone after so
 many seconds. **Counted on a real level, that broke.** `Level_1` holds
 12 blocks; fade at 120 seconds and every one of them still sits in

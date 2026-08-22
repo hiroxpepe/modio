@@ -79,6 +79,32 @@ namespace Modio.Core {
         public int Count => _count;
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
+        // public static Methods [verb]
+
+        /// <summary>
+        /// Tells how many rows a memory should hold, for a world holding so many
+        /// things worth meeting.
+        ///
+        /// **A written-in number breaks.** Counted on `stemic`'s own `Level_1`,
+        /// which holds 12 blocks: a memory holding every one leaves nothing new,
+        /// and the want for new places dies flat out. A memory holding 4 leaves 8
+        /// new, which is well enough — but move to a level of 48 and 4 is next to
+        /// nothing. **The right size turns on how many things there are.**
+        ///
+        /// So: hold half, and leave half new. Half stays new however long a
+        /// character walks, so it can neither run out of somewhere to go nor turn
+        /// straight back to where it came from.
+        ///
+        /// Where the count is odd, the odd one is left new: better a place too
+        /// many new than too few.
+        /// </summary>
+        /// <param name="things">How many things in this world are worth meeting.</param>
+        public static int RoomFor(int things) {
+            int room = things / 2;
+            return room < 1 ? 1 : room;
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
         // public Methods [verb]
 
         /// <summary>

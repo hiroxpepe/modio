@@ -7,13 +7,13 @@ change in as a commit.
 <!-- format: v1 | fields: status, id, title, phase -->
 
 + [ ] TASK-001 [P-01]: Wait on germio TASK-015 to TASK-018, then fold the older plan in
-+ [ ] TASK-002 [P-01]: Set a fading rate against the count, not a fixed number
++ [x] TASK-002 [P-01]: Set a fading rate against the count, not a fixed number
 + [ ] TASK-003 [P-01]: Work out the whole set of forward-facing questions
 + [ ] TASK-004 [P-01]: Find a home in germio for a line said over a head
 + [ ] TASK-005 [P-01]: Put the spec through a hard-questioning G review
 + [x] TASK-006 [P-02]: Build seeking, by type and reach, against memory
 + [x] TASK-007 [P-03]: Build the memory table, and the three depths of meeting
-+ [ ] TASK-008 [P-03]: Build fading, to the rate TASK-002 settles
++ [x] TASK-008 [P-03]: Build fading, to the rate TASK-002 settles
 + [x] TASK-009 [P-03]: Prove no garbage is made on the hot path
 + [x] TASK-010 [P-04]: Build the Deed, ending Done, Failed, or Dropped
 + [x] TASK-011 [P-04]: Hold a Deed together with animo Lock, in Soft mode
@@ -70,8 +70,25 @@ Counted, 2026-08-21: `stemic`'s own `Level_1` holds 12 blocks.
 **At 120 seconds the want for new places dies flat out.** 30 to 60
 seconds works on this level — but the right rate turns on how many
 things there are, so any fixed number will break on another level.
-What is owed is a rate set against the count (hold no more than half
-of what is there, say), not a number written in.
+
+**Settled 2026-08-22: hold half, leave half new.**
+`Memory.RoomFor(things)` gives back half the count, and never less
+than 1.
+
+| Things there | Held | Left new |
+| ------------ | ---- | -------- |
+| 4            | 2    | 2        |
+| 12           | 6    | 6        |
+| 48           | 24   | 24       |
+
+Half stays new **however long a character walks**, so it can neither
+run out of somewhere to go nor turn straight back to where it came
+from. A test walks a level of 12 over 10 times and finds 6 still new
+at the end; another explores 50 times over and is never once left with
+nowhere to go.
+
+Where the count is odd, the odd one is left new: better a place too
+many new than too few.
 
 ### TASK-003
 
@@ -173,8 +190,15 @@ alive: once a place is let go of, it is new again.
 
 ### TASK-008
 
-Build fading, at the rate TASK-002 settles. Two things must hold: the
-table stays small, and a place met long ago becomes new again.
+**Done 2026-08-22**, with 8 tests: `Memory.RoomFor(things)`.
+
+Letting go is by count and by depth together (§4.4, §4.6), and how
+many rows a memory holds at all is now set against the world it stands
+in — see TASK-002 above.
+
+No time was written in anywhere. **A row is let go of because another
+came, not because a clock ran out**, and that is what keeps the rate
+right on a level of 4 and a level of 48 alike.
 
 ### TASK-009
 
