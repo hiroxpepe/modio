@@ -1,5 +1,5 @@
 {
-  "name": "com.studiomeowtoon.modio",
+  "name": "com.meowtoon.modio",
   "version": "0.0.1-design",
   "displayName": "Modio",
   "description": "Tulving-driven memory and seeing ahead for Unity (the HOW layer between Animo and Germio).",
@@ -9,8 +9,8 @@
     "url": "https://github.com/hiroxpepe"
   },
   "dependencies": {
-    "com.studiomeowtoon.germio": "0.1.0",
-    "com.studiomeowtoon.animo": "0.1.5"
+    "com.meowtoon.germio": "0.1.0",
+    "com.meowtoon.animo": "0.1.5"
   },
   "keywords": [
     "ai",
