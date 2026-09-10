@@ -932,6 +932,32 @@ been checked against a real, given `stemic` Persona file yet.
 | The `$target` mark, used inside `record_event`'s own `target_id` | Copied whole from one real, given fixture (`deed_rule.json`); whether `germio`'s own true parser resolves it correctly in every real spot it appears here is never once run |
 | All fifteen, as a whole | Checked only on paper — never truly loaded into a real `Modio`/`germio` engine and run; a real, given static check, never a real, given proof it plays |
 
+**One real, given piece of this whole claim now stands checked live,
+not on paper alone — and checked twice, the second real run closing a
+real gap the first one left open.** The first real run skipped
+`Modio`'s own true `Seek`/`StageGate` step outright, feeding `Deed` a
+hand-made `Found` directly — so a second, given run was made,
+`StageGate.Worth` truly called against three real, given candidates
+(a `Wall`, wrong kind; a `Player` past real reach; a `Player` truly
+inside both reach and kind), and only the one real match came back:
+
+```text
+StageGate.Worth(near=[Wall,Player(dist=12),Player(dist=5)], seek) -> [Player(dist=5)]
+Hand.Begin -> PlainMind.Lock(soft=True)
+Deed.Tick(distance=5) -> Deed.End = Running
+Deed.Tick(distance=1.5) -> Deed.End = Done
+Hand.Landed -> PlainMind.Affect(hunger, -30)
+```
+
+**This checks `Modio`'s own real whole loop — Seek, Deed, and Hand
+together — not `Deed`/`Hand` alone.**
+`germio`'s own true half — parsing this whole JSON shape, reading
+`condition`, and truly building a real `Modio.Deed` from it — was
+never once run: `germio`'s own Scripts hold no real `.csproj` at
+all, a real Unity-only `.asmdef` in its place, so no real run
+against real `Unity` tooling is possible here. The other fourteen
+patterns stay exactly where they stood: checked only on paper.
+
 ### TASK-021
 
 **Found true, checked live: `animo`'s own `Engine.cs` already holds
