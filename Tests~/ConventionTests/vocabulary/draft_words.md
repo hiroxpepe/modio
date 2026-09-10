@@ -584,3 +584,18 @@ form — a short form is put right in the code, and not kept here.
 + parser
 + parsing parse
 + fourteen
++ implicit
++ arity
++ optional
++ implicitly
++ signatures signature
++ elimination
++ symmetry
++ standalone
++ referencing reference
++ buildable
++ drafted draft
++ gameplay
++ precedent
++ duplicated duplicate
++ translation

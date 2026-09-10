@@ -973,12 +973,69 @@ meeting yet:**
 
 | Real gap | What it means |
 | --- | --- |
-| `Lock`'s own second real argument | `IMind` asks for `bool soft`; `animo`'s own `Engine.Lock` takes a real `LockMode` enum (`Hard`/`Soft`) instead — a real, given type mismatch, never a matching signature |
+| `Lock`'s own second real argument | `IMind` asks for `bool soft`; `animo`'s own `Engine.Lock` takes a real `LockMode` enum (`Hard`/`Soft`) instead — a real, given type mismatch, checked precisely: C# never lets an implicit interface match happen here at all |
+| `Affect`'s own true arity | `IMind` asks for exactly two real arguments (`need`, `delta`); `animo`'s own `Engine.Affect` holds a third, given optional one (`force_reset = false`) — C# still never lets this stand in for `IMind.Affect` implicitly, optional or not |
 | `Modio`'s own missing `.asmdef` | `animo` holds four real, given Unity assembly files; `Modio` holds none at all — a real, given Unity project can never reference `Modio` as things stand |
 
-**A real, given road, once this whole task is truly picked up:** a
-thin, given adapter (`class` wrapping `animo.Engine`, translating
-`LockMode.Soft`/`Hard` to a plain `bool`) would let `animo`'s own real
-Engine stand in for `Modio.Core.IMind` outright — plus a new, given
-`Modio.asmdef`, so a real Unity project (`stemic`) can hold `Modio` at
-all. Neither piece exists yet.
+**A thin, given adapter closes the first two real gaps — real, given
+design, checked live against both real signatures:**
+
+```text
+EngineMind (wraps a real, given animo.Core.Engine, implements Modio.Core.IMind)
+    Behavior => engine.Behavior                          (a plain, given pass-through)
+    Lock(duration, soft) => engine.Lock(duration,
+        soft ? LockMode.Soft : LockMode.Hard)             (true type translation)
+    Affect(need, delta) => engine.Affect(need, delta)      (force_reset left at its own true default)
+```
+
+**Where this whole adapter must live, found true by real, given
+elimination:** never inside `Modio` itself (`IMind.cs`'s own true
+words: "Modio does not name animo here" — naming `animo.Core.Engine`
+there would break that whole rule outright). Never inside `animo`'s
+own `Core` either — checked live, `animo`'s own docs never once name
+`Modio`, the same true independence `Modio` itself holds toward
+`animo`; a real `ProjectReference` to `Modio.csproj` from inside
+`Animo.csproj` would break that same true symmetry. `germio` would be
+the one, true, natural home (it already reads a Rule's own `actor`
+— an `animo` Persona name — beside its own `request_deed` — `Modio`'s
+own true domain — in the very same real JSON object) — but `germio`
+holds no real `.csproj` at all, a Unity-only `.asmdef` in its place,
+so no real `dotnet test` run is possible there in this whole
+environment. **Given this, a new, small, standalone project — real,
+given `.csproj`, referencing both `Animo.csproj` and `Modio.csproj`,
+holding nothing else — is the one true, buildable home available
+here, until `germio` itself gains a real `.csproj` of its own.**
+
+**A real, given wrong turn, caught and reversed this same session,
+kept here whole as a true warning:** the first real design drafted a
+`Need`-name check *inside* `EngineMind` itself — throwing loud at
+construction if a `Rule`'s own `update_need` named a `Need` `animo`'s
+own `Persona` never registered. **This was itself a real, given
+mistake, caught live**: `animo.Engine`'s own `Need` set is not fixed
+in the engine's own true code at all — it comes whole from a real,
+given `Persona.needs.values` (`Dictionary<string, float>`, checked
+live in `Scripts/Model/Data.cs`), built once at construction
+(`Engine.cs`'s own real `_need_index`, "Built once in PHASE B") and
+never changed again after. **Checking this once, deep inside a
+single adapter instance, at runtime, repeats this whole session's
+own found mistake (TASK-053's own true lesson) in reverse** — a real,
+given check that only fires once real gameplay is already running is
+far too late; the true, right home for this whole check is
+build-time, across every real `Rule` file and every real `Persona`
+file a given game (`stemic`) ships together, all at once, the same
+true way `validate_tasklist.js`/`validate_score_format.js` already
+run in this whole family. **`germio`'s own true `Validator.cs`
+already holds the one, true, matching precedent for this: `V036`
+("an actor no persona answers to"), fed a real, given
+`known_actors` collection from outside, checked against every
+real `Rule.actor` found.** A real, given `V037` — fed a real, given
+`known_needs` map (`agent_id -> its own true Need-name set`), checked
+against every real `update_need.key` a `Rule` holds — is the true,
+correct home for this whole check, never `EngineMind` itself. This
+whole `V037` piece is tracked as its own true, separate task, in
+`germio`'s own `TASKLIST.md`, never duplicated here.
+
+**Real, given scope, settled for this one task alone:** `EngineMind`
+itself stays a thin, given pass-through — `Behavior`/`Lock`/`Affect`
+translation only, no `Need`-name checking of its own at all, that
+whole real job handed whole to `germio`'s own future `V037`.
