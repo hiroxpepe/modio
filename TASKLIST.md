@@ -25,6 +25,8 @@ change in as a commit.
 + [ ] TASK-015 [P-06]: Join Modio to stemic, and check it by real play
 + [x] TASK-018 [P-XX]: Put the questions in the target, not in a condition
 + [ ] TASK-016 [P-XX]: Put the rest of the docs into Basic English
++ [ ] TASK-020 [P-XX]: Hold real, given classic console-era AI patterns, for seeking to check against
++ [ ] TASK-021 [P-XX]: Wire animo's own true Engine to Modio's own real IMind
 
 ## Detail
 
@@ -473,3 +475,484 @@ was like — find it there.
 
 A deed that fails still knows what it reached for. **It simply never
 got there**, and Done is the one gate into memory.
+
+### TASK-020
+
+**A real, given memo, held here for real testing to check against once
+`stemic` play begins (TASK-015).** Fifteen real, given AI patterns,
+each one drawn from a real, named classic console-era game, each written as
+one whole real Rule, the same true shape as `germio`'s own
+`deed_rule.json` fixture — `actor` names a real `animo` Persona,
+`request_deed` is `Modio`'s own true domain, and the inner `command`'s
+own `update_need` spends (or, once, raises) that same real Persona's
+own Need, closing the whole real loop in one, given JSON shape:
+
+**1. Ghost gives chase once seen (Pac-Man).**
+
+```json
+{
+    "id": "rule_chase",
+    "actor": "ghost_01",
+    "command": {
+        "request_deed": {
+            "target": {
+                "kind": "Player",
+                "reach": 8.0,
+                "spread": 360.0
+            },
+            "motion": "walk",
+            "until": {
+                "meets": "$target"
+            },
+            "command": {
+                "update_need": [
+                    {
+                        "key": "hunger",
+                        "delta": -30.0
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+**2. A hint given once, never twice (The Legend of Zelda).**
+
+```json
+{
+    "id": "rule_hint",
+    "actor": "oldman_01",
+    "command": {
+        "request_deed": {
+            "target": {
+                "kind": "Player",
+                "reach": 3.0
+            },
+            "condition": "history.count(kind=told, target_id=$target) == 0",
+            "act": "give_hint",
+            "command": {
+                "update_need": [
+                    {
+                        "key": "duty",
+                        "delta": -40.0
+                    }
+                ],
+                "record_event": {
+                    "kind": "told",
+                    "target_id": "$target"
+                }
+            }
+        }
+    }
+}
+```
+
+**3. A merchant's own true sale, once a real day (Dragon Quest).**
+
+```json
+{
+    "id": "rule_sale",
+    "actor": "merchant_01",
+    "command": {
+        "request_deed": {
+            "condition": "history.time_since(kind=discounted) > 86400",
+            "act": "sell_discount",
+            "command": {
+                "update_need": [
+                    {
+                        "key": "generosity",
+                        "delta": -20.0
+                    }
+                ],
+                "record_event": {
+                    "kind": "discounted"
+                }
+            }
+        }
+    }
+}
+```
+
+**4. A guard's own true alert (Metal Gear).**
+
+```json
+{
+    "id": "rule_alert",
+    "actor": "guard_01",
+    "command": {
+        "request_deed": {
+            "target": {
+                "kind": "Player",
+                "reach": 20.0,
+                "spread": 60.0
+            },
+            "act": "alert",
+            "command": {
+                "update_need": [
+                    {
+                        "key": "vigilance",
+                        "delta": -25.0
+                    }
+                ],
+                "set_flag": {
+                    "key": "spotted_player",
+                    "value": true
+                }
+            }
+        }
+    }
+}
+```
+
+**5. Turn at a wall, back and forth (Super Mario Bros.).**
+
+```json
+{
+    "id": "rule_patrol",
+    "actor": "goomba_01",
+    "command": {
+        "request_deed": {
+            "target": {
+                "kind": "Wall",
+                "reach": 1.0
+            },
+            "motion": "walk",
+            "until": {
+                "meets": "$target"
+            },
+            "act": "turn_around",
+            "command": {
+                "update_need": [
+                    {
+                        "key": "wander",
+                        "delta": -10.0
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+**6. Never step the same floor twice running (Ice Climber).**
+
+```json
+{
+    "id": "rule_wander",
+    "actor": "topi_01",
+    "command": {
+        "request_deed": {
+            "target": {
+                "kind": "Floor",
+                "reach": 5.0
+            },
+            "condition": "history.time_since(kind=stepped, target_id=$target) > 5",
+            "motion": "walk",
+            "command": {
+                "update_need": [
+                    {
+                        "key": "curiosity",
+                        "delta": -15.0
+                    }
+                ],
+                "record_event": {
+                    "kind": "stepped",
+                    "target_id": "$target"
+                }
+            }
+        }
+    }
+}
+```
+
+**7. Flee once `animo`'s own `fear` sits past its true threshold (Kirby).**
+
+```json
+{
+    "id": "rule_flee",
+    "actor": "enemy_01",
+    "command": {
+        "request_deed": {
+            "target": {
+                "kind": "Escape_Point",
+                "reach": 50.0
+            },
+            "motion": "run",
+            "command": {
+                "update_need": [
+                    {
+                        "key": "fear",
+                        "delta": -50.0
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+**8. A fixed turret, given a true line of sight (Contra).**
+
+```json
+{
+    "id": "rule_shoot",
+    "actor": "turret_01",
+    "command": {
+        "request_deed": {
+            "target": {
+                "kind": "Player",
+                "reach": 15.0,
+                "spread": 30.0
+            },
+            "act": "shoot",
+            "command": {
+                "update_need": [
+                    {
+                        "key": "aggression",
+                        "delta": -35.0
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+**9. Climb the one true ladder not yet climbed a real, given while (Donkey Kong).**
+
+```json
+{
+    "id": "rule_climb",
+    "actor": "kong_01",
+    "command": {
+        "request_deed": {
+            "target": {
+                "kind": "Ladder",
+                "reach": 10.0
+            },
+            "condition": "history.time_since(kind=climbed, target_id=$target) > 10",
+            "motion": "climb",
+            "command": {
+                "update_need": [
+                    {
+                        "key": "caution",
+                        "delta": -20.0
+                    }
+                ],
+                "record_event": {
+                    "kind": "climbed",
+                    "target_id": "$target"
+                }
+            }
+        }
+    }
+}
+```
+
+**10. A field monster's own true wander, never the same ground twice running (Dragon Quest).**
+
+```json
+{
+    "id": "rule_roam",
+    "actor": "slime_01",
+    "command": {
+        "request_deed": {
+            "target": {
+                "kind": "Ground"
+            },
+            "motion": "walk",
+            "condition": "history.time_since(kind=visited, target_id=$target) > 5",
+            "command": {
+                "update_need": [
+                    {
+                        "key": "territorial",
+                        "delta": -15.0
+                    }
+                ],
+                "record_event": {
+                    "kind": "visited",
+                    "target_id": "$target"
+                }
+            }
+        }
+    }
+}
+```
+
+**11. Never fought twice, `germio`'s own true `once` flag alone (Adventures of Lolo).**
+
+```json
+{
+    "id": "rule_guard",
+    "actor": "guardian_01",
+    "command": {
+        "request_deed": {
+            "act": "attack_pattern_A",
+            "command": {
+                "update_need": [
+                    {
+                        "key": "duty",
+                        "delta": -60.0
+                    }
+                ]
+            }
+        }
+    },
+    "once": true
+}
+```
+
+**12. An erratic, given approach, wide of reach (Castlevania).**
+
+```json
+{
+    "id": "rule_swoop",
+    "actor": "bat_01",
+    "command": {
+        "request_deed": {
+            "target": {
+                "kind": "Player",
+                "reach": 100.0,
+                "spread": 180.0
+            },
+            "motion": "fly",
+            "act": "erratic_approach",
+            "command": {
+                "update_need": [
+                    {
+                        "key": "hunger",
+                        "delta": -25.0
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+**13. Follow once a real, given trigger starts it, staying near (an escort event).**
+
+```json
+{
+    "id": "rule_escort",
+    "trigger": "sig_escort_started",
+    "actor": "companion_01",
+    "command": {
+        "request_deed": {
+            "target": {
+                "kind": "Player"
+            },
+            "motion": "walk",
+            "until": {
+                "near": 3.0
+            },
+            "command": {
+                "update_need": [
+                    {
+                        "key": "loneliness",
+                        "delta": -40.0
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+**14. A boss's own true pattern, switched past half health (Mega Man).**
+
+```json
+{
+    "id": "rule_enrage",
+    "actor": "boss_01",
+    "command": {
+        "request_deed": {
+            "condition": "self.hp_ratio < 0.5",
+            "act": "attack_pattern_phase2",
+            "command": {
+                "update_need": [
+                    {
+                        "key": "desperation",
+                        "delta": 40.0
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+**15. Laugh once, the one true round every shot missed (Duck Hunt).**
+
+```json
+{
+    "id": "rule_laugh",
+    "actor": "dog_01",
+    "command": {
+        "request_deed": {
+            "condition": "history.count(kind=laughed) == 0 && round.hits == 0",
+            "act": "laugh",
+            "command": {
+                "update_need": [
+                    {
+                        "key": "mockery",
+                        "delta": -30.0
+                    }
+                ],
+                "record_event": {
+                    "kind": "laughed"
+                }
+            }
+        }
+    }
+}
+```
+
+**The same true shape carries all fifteen**: `actor` is a real,
+given `animo` Persona's own name; `request_deed` alone is `Modio`'s
+own true domain (a real Seek, a real Deed); the inner `update_need`
+is `animo` again, spending or raising the very Need that, in real
+play, would have crossed its own true threshold to fire this whole
+real Rule in the first place.
+
+**A real, given catch, found live against `animo`'s own true
+`Engine.Affect`**: every one of these fifteen Need names (`hunger`,
+`duty`, `generosity`, and the rest) must be held, whole, in the
+real Persona data `stemic` gives that agent — `Engine.Affect` reads
+an unlisted Need name as a quiet no-op (a real, given warning
+logged, nothing else truly happens). None of these fifteen have
+been checked against a real, given `stemic` Persona file yet.
+
+**Three more real, given gaps, checked live, none yet closed:**
+
+| Real gap | What is still unknown |
+| --- | --- |
+| Every `Kind` value (`Ground`, `Floor`, `Ladder`, `Escape_Point`, `Wall`, and the rest) | `Seek.Kind` holds a bare, given string, no real fixed list at all — whether `stemic` truly names its own real objects this same way is never checked here |
+| The `$target` mark, used inside `record_event`'s own `target_id` | Copied whole from one real, given fixture (`deed_rule.json`); whether `germio`'s own true parser resolves it correctly in every real spot it appears here is never once run |
+| All fifteen, as a whole | Checked only on paper — never truly loaded into a real `Modio`/`germio` engine and run; a real, given static check, never a real, given proof it plays |
+
+### TASK-021
+
+**Found true, checked live: `animo`'s own `Engine.cs` already holds
+almost every real member `Modio`'s own `IMind` asks for — `Behavior`,
+`Lock`, `Affect` — real, given, working code, not a bare stub.**
+Checked against a real, given search: no `Modio.Core.IMind` is
+implemented anywhere in `animo`, `germio`, or `stemic` — only
+`Modio`'s own test-only `PlainMind` (`Tests~/CoreTests/MindTests.cs`)
+stands one in for real, given tests today.
+
+**Two real, given gaps, found live, keep the two whole from truly
+meeting yet:**
+
+| Real gap | What it means |
+| --- | --- |
+| `Lock`'s own second real argument | `IMind` asks for `bool soft`; `animo`'s own `Engine.Lock` takes a real `LockMode` enum (`Hard`/`Soft`) instead — a real, given type mismatch, never a matching signature |
+| `Modio`'s own missing `.asmdef` | `animo` holds four real, given Unity assembly files; `Modio` holds none at all — a real, given Unity project can never reference `Modio` as things stand |
+
+**A real, given road, once this whole task is truly picked up:** a
+thin, given adapter (`class` wrapping `animo.Engine`, translating
+`LockMode.Soft`/`Hard` to a plain `bool`) would let `animo`'s own real
+Engine stand in for `Modio.Core.IMind` outright — plus a new, given
+`Modio.asmdef`, so a real Unity project (`stemic`) can hold `Modio` at
+all. Neither piece exists yet.

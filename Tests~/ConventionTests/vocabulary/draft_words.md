@@ -562,3 +562,23 @@ form — a short form is put right in the code, and not kept here.
 + goods
 + vocabulary
 + keywords
++ memo
++ fifteen
++ merchant
++ turret
++ ladder
++ barrel
++ fought fight
++ beaten beat
++ erratic
++ escort
++ tasklist
++ puzzle
++ fixture
++ bare
++ stub
++ signature
++ outright
++ unlisted listed
++ op
++ parser
