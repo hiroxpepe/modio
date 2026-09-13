@@ -392,13 +392,20 @@ Put Modio into `stemic`, driving `place_curious` and
 `company_seeking`, and check by real play that each truly seeks,
 remembers, and acts on both.
 
-**Three things must stand first:**
+**Checked live, this same session: three of four things owed here
+now stand, not "not yet written" as this whole task once read:**
 
-| Owed by  | What                                                                                                                                                                |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `animo`  | the two personas, written out as a real `animo.json` file (its own TASK-013). They are worked out in full in `docs/persona_design_spec.md` §6, and not yet written. |
-| `germio` | `Rule.actor`, `request_deed`, `update_need` (its own TASK-016 to TASK-039)                                                                                          |
-| Modio    | everything in P-02 to P-05 here                                                                                                                                     |
+| Owed by | What | State |
+| --- | --- | --- |
+| `animo` | the two personas — checked live, `examples/poc_pair.json` names both `place_curious` and `company_seeking` outright (its own TASK-013, closed). | Done |
+| `germio` | `Rule.actor`, `request_deed`, `update_need` (its own TASK-016 to TASK-039). | Done — every one closed `[x]`, or dropped `[xx]` for a real, given reason. |
+| Modio | everything in P-02 to P-05 here. | Done |
+| Bridge | a real, given `IMind` wired to `animo.Engine` — no such wiring exists yet at all (see TASK-021 below). Without it, all three of the above stand apart, never joined. | Not started — the one true, real gap left |
+
+**So this whole task's own true block is not `animo`, `germio`, or
+Modio's own build — it is the missing bridge alone (TASK-021).
+Real play still needs a real Windows Unity open, but the bridge is
+buildable on this whole machine right now, `dotnet test` and all.**
 
 ### TASK-016
 
@@ -1039,3 +1046,19 @@ whole `V037` piece is tracked as its own true, separate task, in
 itself stays a thin, given pass-through — `Behavior`/`Lock`/`Affect`
 translation only, no `Need`-name checking of its own at all, that
 whole real job handed whole to `germio`'s own future `V037`.
+
+**Checked live, this same session, a real, given fact this whole
+task sits on top of: no game truly holds a `Need` at all yet.** A
+real `Need` name comes into being the one true moment someone writes
+it into a real `Persona`'s own `needs.values` map (a
+`Dictionary<string, float>`, checked live in `animo`'s own
+`Scripts/Model/Data.cs`) — checked live, this whole real shape lives
+only in `animo`'s own `examples/` folder today (`tanukichi.json`,
+`goblin_scout.json`, `shiori.json`, `poc_pair.json`), never once in
+`stemic`, `tropika`, or `flugi`'s own real data. `stemic`'s own real
+`germio.json` — the one true `Rule` file a real game ships — holds
+zero real `update_need` entries, checked live. **So the question
+"when does a Need name settle" never truly reaches a real, given
+game at all yet: `Persona` data, `germio` `Rule` use of it, `V037`'s
+own check, and `EngineMind` itself are all four still real, given
+work, not yet real, given practice.**
