@@ -602,3 +602,4 @@ form — a short form is put right in the code, and not kept here.
 + handoff
 + wholly whole
 + prefabs prefab
++ pickup pick

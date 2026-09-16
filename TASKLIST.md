@@ -27,6 +27,7 @@ change in as a commit.
 + [ ] TASK-016 [P-XX]: Put the rest of the docs into Basic English
 + [ ] TASK-020 [P-XX]: Hold real, given classic console-era AI patterns, for seeking to check against
 + [ ] TASK-021 [P-XX]: Wire animo's own true Engine to Modio's own real IMind
++ [ ] TASK-022 [P-XX]: Add a draft plan, a real Unity Tag for one named item
 
 ## Detail
 
@@ -1100,3 +1101,67 @@ zero real `update_need` entries, checked live. **So the question
 game at all yet: `Persona` data, `germio` `Rule` use of it, `V037`'s
 own check, and `EngineMind` itself are all four still real, given
 work, not yet real, given practice.**
+
+### TASK-022
+
+**Found true, checked live, this same session — a real, given gap:
+picking up one named item (a given key, not a plain given block) asks
+for more than `kind` alone. `kind`'s own true eleven marks (`germio`'s
+own `Env.cs`) tell what class of thing stands there, never which
+particular one — and `germio`'s own true rule, held here whole,
+never bends: one way, no exceptions.**
+
+**Two real, given paths were weighed, checked against real, given
+counted fact:**
+
++ The object's own real name — already tried, already dropped, kept
+  whole in `docs/modio_spec.md` §3.3.1: counted 2026-08-21,
+  `Level_1`'s own 24 pieces held three real, given names twice over.
+  Never one to a piece.
++ A field added by hand, read at runtime, given a whole new mark
+  through `Found` and `TargetMark` both — real, given work, but no
+  small one.
+
+**A third real, given path, drafted here, never yet checked live:**
+Unity's own real Tag. Set once, from the Inspector, on one given
+`GameObject` alone — no new mark added to `germio`'s own `Env.cs`, no
+new field carried through `Found`, no `MonoBehaviour` chain added
+either (`Common`'s own real cost, already weighed and dropped once,
+stays dropped). `Runtime` reads it with `GameObject.CompareTag`, a
+plain, given Unity call, the same true shape `Like()` already holds
+for `kind` — never the object's own real name, so the same real
+counting gap does not open again.
+
+**Real, given work still owed, none of it started:** a real check
+that `stemic`'s own given Tag list truly holds one entry per named
+item, never two given items sharing one; how `Found` (and
+`TargetMark` behind it) carries this Tag's own real text through to
+`update_inventory.key`, so a `Rule` may write `"$target"` and get
+back the item's own true name, not a plain `g_1042`; and whether this
+whole real shape holds once checked live, in a real Windows Unity
+open.
+
+**A real, given strength found this same session, weighed hard
+against, and not once broken:** where the object's own real name was
+dropped for holding two given pieces to one name, a Tag turns that
+same real fact around outright. More than one given key may share
+one real Tag (`GoldenKey`), so any one picked up opens the same real
+door — a whole real pattern (a locked gate needing only one key of a
+matching set) `kind` alone could never once tell apart.
+
+**Checked hard against, this whole real shape, three rounds run:**
+
++ "Pick up any one of three" reads as `condition:
+  "inventory.GoldenKey >= 1"` alone — `germio`'s own `Evaluator`
+  already reads such a line true (`EvaluatorTests.cs`).
++ Seeking more than one at once is no real, given trouble:
+  `Perceive.Choose` already takes an `IReadOnlyList<Found>`, never
+  one alone.
++ "Never pick up a spent key again" reads as `condition:
+  "inventory.GoldenKey == 0"` on the pickup `Rule` itself —
+  `EvaluatorTests.cs` already holds this same real line
+  (`inventory.nonexistent == 0`), checked true.
+
+No real crack was found in three rounds of hard checking. This whole
+real shape stands ready, once `Runtime` and the Tag-reading piece of
+it are truly built.
