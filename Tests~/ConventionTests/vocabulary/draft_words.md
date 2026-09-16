@@ -600,3 +600,5 @@ form — a short form is put right in the code, and not kept here.
 + duplicated duplicate
 + translation
 + handoff
++ wholly whole
++ prefabs prefab

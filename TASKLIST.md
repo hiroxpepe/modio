@@ -401,11 +401,17 @@ now stand, not "not yet written" as this whole task once read:**
 | `germio` | `Rule.actor`, `request_deed`, `update_need` (its own TASK-016 to TASK-039). | Done — every one closed `[x]`, or dropped `[xx]` for a real, given reason. |
 | Modio | everything in P-02 to P-05 here. | Done |
 | Bridge | a real, given `IMind` wired to `animo.Engine` — no such wiring exists yet at all (see TASK-021 below). Without it, all three of the above stand apart, never joined. | Not started — the one true, real gap left |
+| `Runtime/` | asking Unity's own real `Physics`, filling the seek list each tick (`docs/modio_spec.md` §3.7, TASK-006's own true "what is left"). | Not started — this whole task's own second real gap |
+| `stemic`, not code at all | two given models, an Animator Controller, both `germio` Rule sets, two given prefabs, placed in a real level, checked to play — its own TASK-018 to TASK-026, every one `[ ]` still. | Not started |
 
-**So this whole task's own true block is not `animo`, `germio`, or
-Modio's own build — it is the missing bridge alone (TASK-021).
-Real play still needs a real Windows Unity open, but the bridge is
-buildable on this whole machine right now, `dotnet test` and all.**
+**So this whole task's own true block is never `animo`, `germio`, or
+Modio's own build alone — three real, given gaps stand together:
+the `EngineMind` bridge (TASK-021, below), `Runtime/` (`Physics`
+itself, never yet built), and `stemic`'s own whole given set of
+real assets (TASK-018 to TASK-026, not one line of code among
+them). Real play still needs a real Windows Unity open for the
+last two, but `EngineMind` is buildable on this whole machine right
+now, `dotnet test` and all.**
 
 ### TASK-016
 
@@ -960,10 +966,27 @@ Hand.Landed -> PlainMind.Affect(hunger, -30)
 together — not `Deed`/`Hand` alone.**
 `germio`'s own true half — parsing this whole JSON shape, reading
 `condition`, and truly building a real `Modio.Deed` from it — was
-never once run: `germio`'s own Scripts hold no real `.csproj` at
-all, a real Unity-only `.asmdef` in its place, so no real run
-against real `Unity` tooling is possible here. The other fourteen
-patterns stay exactly where they stood: checked only on paper.
+never once run at the time this whole memo was written: `germio`'s
+own Scripts held no real `.csproj` at all then, a real Unity-only
+`.asmdef` in its place. **Checked live again, this same day: `germio`
+now holds a real `Tests~/CoreTests/CoreTests.csproj` (germio
+TASK-065), so a real run against `germio`'s own true parsing is no
+longer blocked this same way — it stands as real, given open work,
+never a wall any more.** The other fourteen patterns stay exactly
+where they stood: checked only on paper.
+
+**A real, given piece still missing outright, found this same day,
+never once named here before:** the check above fed `StageGate.Worth`
+a hand-made, given list of three candidates directly — `Runtime/`
+itself (TASK-006's own true "what is left for P-02": asking Unity's
+own real `Physics` and filling that same list, tick by tick) has
+never once been built. `docs/modio_spec.md` §3.7 already gives its
+whole real shape (a wide, cheap check every tick, a straight line
+thrown only where that finds something, real sums checked against
+`stemic`'s own `Level_1`) — but not one line of it stands as real,
+given code yet. Without `Runtime/`, `Modio`'s own whole loop can only
+ever be checked against a hand-made list, never a real, given running
+game.
 
 ### TASK-021
 
@@ -995,23 +1018,38 @@ EngineMind (wraps a real, given animo.Core.Engine, implements Modio.Core.IMind)
     Affect(need, delta) => engine.Affect(need, delta)      (force_reset left at its own true default)
 ```
 
-**Where this whole adapter must live, found true by real, given
-elimination:** never inside `Modio` itself (`IMind.cs`'s own true
-words: "Modio does not name animo here" — naming `animo.Core.Engine`
-there would break that whole rule outright). Never inside `animo`'s
-own `Core` either — checked live, `animo`'s own docs never once name
-`Modio`, the same true independence `Modio` itself holds toward
-`animo`; a real `ProjectReference` to `Modio.csproj` from inside
-`Animo.csproj` would break that same true symmetry. `germio` would be
-the one, true, natural home (it already reads a Rule's own `actor`
-— an `animo` Persona name — beside its own `request_deed` — `Modio`'s
-own true domain — in the very same real JSON object) — but `germio`
-holds no real `.csproj` at all, a Unity-only `.asmdef` in its place,
-so no real `dotnet test` run is possible there in this whole
-environment. **Given this, a new, small, standalone project — real,
-given `.csproj`, referencing both `Animo.csproj` and `Modio.csproj`,
-holding nothing else — is the one true, buildable home available
-here, until `germio` itself gains a real `.csproj` of its own.**
+**Where this whole adapter must live — found true by real, given
+elimination, then found again, reversed, this same day:** never
+inside `Modio` itself. `IMind.cs`'s own true words — "Modio does not
+name animo here", "modio stays free of a build it need not know" —
+name `Modio.csproj` itself, its own true build output, never the
+whole `modio` repository as a real, given place. Never inside
+`animo`'s own `Core` either — checked live, `Animo.csproj` never
+once names `Modio`, the same true independence `Modio` itself holds
+toward `animo`; a real `ProjectReference` to `Modio.csproj` from
+inside `Animo.csproj` would break that same true symmetry.
+
+`germio` was once thought the one, true, natural home (it already
+reads a Rule's own `actor` — an `animo` Persona name — beside its
+own `request_deed` — `Modio`'s own true domain — in the very same
+real JSON object), ruled out at the time since `germio` held no real
+`.csproj` at all. **Checked live again, this same day: `germio` now
+holds a real `Tests~/CoreTests/CoreTests.csproj` of its own (germio
+TASK-065) — but a bridge naming both `Animo.csproj` and
+`Modio.csproj` from inside it would still break `germio`'s own true
+independence toward `animo`, the same real rule `germio-editor`
+(a wholly separate JS project, checked live, naming neither `animo`
+nor `Modio` at all) already holds true. `germio` stays ruled out.**
+
+**The one, true, correct home, found this same day: a small, new
+`.csproj` inside `modio`'s own repository, standing beside
+`Scripts/Modio.csproj` — never inside it, never touching it —
+naming both `Animo.csproj` and `Modio.csproj` from its own true
+outside. `modio`'s own `.gitignore` names no `*.csproj` rule at all,
+unlike `germio`'s own, so a real, given new file here needs no extra
+line to stand tracked. This holds the same true shape
+`germio-editor` already proves: one repository, more than one real,
+given project, each free to know what the others do not.**
 
 **A real, given wrong turn, caught and reversed this same session,
 kept here whole as a true warning:** the first real design drafted a
