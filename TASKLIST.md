@@ -202,6 +202,20 @@ What is left for P-02: `Runtime/`, which asks Unity's own `Physics`
 and fills these lists. **That part cannot be checked by `dotnet
 test`** — check it by eye, in a running game.
 
+**A real, given question found, this same session, never yet
+settled, held here as a matter still to weigh:** how `Runtime`
+itself should read what stands ahead — a real, given field of view,
+built from `reach` and `spread` together (a cone shape, not a plain
+sphere alone), rather than a wide sphere check first, with `spread`
+weighed against each found thing only after. `Physics.OverlapSphere`
+itself, checked live against Unity's own real docs, returns every
+collider inside a sphere, height included — a real, true 3D check,
+never a flat one. Whether `Runtime` should call it once for a wide,
+cheap first pass, then weigh `spread` by a plain angle check
+(`Vector3.Angle`) against each thing found, or some other real,
+given shape entirely, stands open — a real, given design question,
+not yet settled, not yet built.
+
 Pick things **by name** (`germio`'s own `Env.cs` type marks, read
 through `Like()`), never by layer: `stemic` holds only Unity's own
 five stock layers, with no Block, Ground or Player layer at all.
