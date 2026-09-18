@@ -216,9 +216,53 @@ cheap first pass, then weigh `spread` by a plain angle check
 given shape entirely, stands open — a real, given design question,
 not yet settled, not yet built.
 
+**Settled, this same session: which way the cone itself points.**
+`Runtime` reads the found thing's own real `transform.forward` —
+never a fixed value held from the moment a prefab was made, since
+`germio`'s own `Human.cs` already turns it true, moment to moment,
+as a real character truly moves (`Quaternion.Slerp` against the way
+it walks). Once `place_curious` and `company_seeking` turn the same
+true way, `Runtime` reads their own real, given facing straight off
+`transform.forward`, with no call at all to `animo`'s own `IMind`
+(which holds no `heading` field of its own — checked live).
+
 Pick things **by name** (`germio`'s own `Env.cs` type marks, read
 through `Like()`), never by layer: `stemic` holds only Unity's own
 five stock layers, with no Block, Ground or Player layer at all.
+
+**Checked live, this same session, a true 3D model (Three.js),
+given a real pass at last — a whole shape, never one piece alone.**
+Two parts, built and kept apart on purpose:
+
++ **The dome.** A curved patch lying on the sphere throughout, never
+  once leaving it. Given `halfYaw`, `halfPitch` (half of the whole
+  horizontal/vertical spread), and a ring index `ri` from `0` to
+  `nRing`, `rScale = ri / nRing`:
+  `yaw = rScale * halfYaw * cos(theta)`,
+  `pitch = rScale * halfPitch * sin(theta)`,
+  `dir = (sin(yaw)*cos(pitch), sin(pitch), cos(yaw)*cos(pitch))`
+  (a true unit vector, checked live — its own length is always `1`),
+  `point = dir * reach`. Every point at every `ri` sits exactly on
+  the sphere; only the angle itself shrinks toward the middle. This
+  gives a true ellipse, checked hard against three real, given
+  wrong turns first (a flat plane that stuck out past `reach`; a
+  normalized plane that bent the true ellipse out of shape) before
+  this one held.
++ **The straight walls.** A real, given triangle fan from the
+  character's own true position (the origin) straight to the dome's
+  own outer rim (`ri = nRing`) alone — never the shrunk middle
+  point. A first, given try wired the fan to the wrong ring (the
+  shrunk one), leaving a thin, real spike instead of a true wedge;
+  wiring it to the true outer rim fixed it outright. Viewed from
+  the side or from above, every wall reads as one straight line, the
+  same real shape a plain cone would give.
+
+**A real, given single `spread` value (`Vector3.Angle`) can never
+give this ellipse at all — checked hard, three real rounds run,
+`Vector3.Angle` returns one true angle alone, always a full, given
+circle. A true ellipse asks for `halfYaw` and `halfPitch` apart, two
+real fields where `Seek` (and `germio`'s own `Target`) hold one
+today.**
 
 Give back **every** thing found, near to far — one thing back leaves
 no second try where the first sits in memory already.

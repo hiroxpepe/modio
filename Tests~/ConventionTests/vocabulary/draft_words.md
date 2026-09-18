@@ -606,3 +606,15 @@ form — a short form is put right in the code, and not kept here.
 + cone
 + sphere
 + collider colliders
++ js
++ dome
++ patch
++ horizontal
++ vertical
++ vector
++ shrinks shrink
++ ellipse
++ triangle
++ rim
++ shrunk shrink
++ wedge
