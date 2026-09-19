@@ -257,6 +257,16 @@ Two jobs need it:
 This does not widen §3.3. Those five fields tell of a **thing found**;
 `heading` tells of **the character**. Two reports, not one.
 
+**Where `heading` comes from, settled 2026-09-18.** `Runtime` reads it
+straight off the character's own `transform.forward`, in Unity. This
+is not a fixed value set when the prefab was made: `germio`'s own
+`Human.cs` already turns the body toward the way it walks, tick by
+tick (`Quaternion.Slerp`), so `transform.forward` is where the
+character is truly facing, right now. `animo` plays no part here —
+its `IMind` (§6.2) holds no heading at all, and was checked for one.
+The same `transform.forward` is the line the `Sight` wedge points along
+(§3.7.3); the two are one value, read once.
+
 ### 3.4 The world is read the way `germio` names it
 
 `germio`'s own `Env.cs` holds the marks a thing is known by:
@@ -342,10 +352,10 @@ a thing that moved would read as one thing gone and another made.
 
 ### 3.6 Two parts, held apart
 
-| Part       | Does                                                                | Knows Unity? |
-| ---------- | ------------------------------------------------------------------- | ------------ |
-| `Runtime/` | asks Unity's own `Physics`, and turns each hit into the five fields | yes          |
-| `Scripts/` | takes that list, weighs it against memory, and picks one            | **no**       |
+| Part       | Does                                                                                                       | Knows Unity? |
+| ---------- | ---------------------------------------------------------------------------------------------------------- | ------------ |
+| `Runtime/` | reads `Sight` and `transform.forward`, asks Unity's own `Physics`, and turns each hit into the five fields | yes          |
+| `Scripts/` | takes that list, weighs it against memory, and picks one                                                   | **no**       |
 
 This is the shape `signo` already holds, with its own `Scripts` apart
 from `Audition~`, and `quyno` with its own `Core` apart from
@@ -402,15 +412,37 @@ then:    id=1055 is picked
 
 No Physics. No Transform. Same answer, every run.
 
+#### 3.6.2 What is to stand in `Runtime/`
+
+**Not one line of `Runtime/` is built yet, as of 2026-09-19.** What
+follows is what it is to hold, settled here so it may be built
+straight:
+
+| Name       | Holds                                                                                              |
+| ---------- | -------------------------------------------------------------------------------------------------- |
+| `Sight`    | a `MonoBehaviour` on the prefab: `reach`, `halfYaw`, `halfPitch`, set from the Inspector (§3.7.3)  |
+| the reader | reads `Sight` once at start, and `transform.forward` each tick, into `Self`                        |
+| stage one  | one `Physics.OverlapSphere`, then the wedge check, into the near-list (§3.7.3)                     |
+| stage two  | one `Physics.Raycast` for each near thing `StageGate` marks, into the found-list (§3.7.1)          |
+
+Every one of these knows Unity, and that is the whole point of the
+part. What it hands `Scripts/` is plain: a `Self`, a list of `Near`, a
+list of `Found`. `Scripts/` is never told that `Sight` exists.
+
+**One thing `Runtime/` cannot have yet:** Modio holds no `.asmdef` of
+its own today, so a Unity project cannot take it in as a package at
+all (see `TASKLIST.md`, TASK-023). That must come first; `Runtime/`
+(TASK-024) stands on it.
+
 ### 3.7 What `Runtime` does, and what it costs
 
 Two stages, carried over from the older plan that once sat in
 `germio`:
 
-| Stage | What                                                       | How often                            |
-| ----- | ---------------------------------------------------------- | ------------------------------------ |
-| One   | a wide, cheap check — is anything near at all              | every tick                           |
-| Two   | a straight-line check — is it truly in sight, and how high | only where stage one finds something |
+| Stage | What                                                                       | How often                            |
+| ----- | -------------------------------------------------------------------------- | ------------------------------------ |
+| One   | a wide, cheap check — is anything near at all, and within `Sight` (§3.7.3) | every tick                           |
+| Two   | a straight-line check — is it truly in sight, and how high                 | only where stage one finds something |
 
 Measured on `stemic`: every Ground and Block piece carries a
 `BoxCollider`, with no `MeshCollider` anywhere, so a straight-line
@@ -431,6 +463,12 @@ Worked out at 50 ticks a second:
 | Stage two, one line thrown | only where stage one finds something — at 3 in 10, **960 a second** |
 | Memory, all 64 together    | 15 rows each = 960 rows, near **37 KB**                             |
 | The found-list             | 16 to a character, filled again each tick, never made new           |
+
+**A note on the 3 in 10, added 2026-09-19.** These sums were worked
+out with stage one taking in the whole sphere. Now that stage one
+keeps only what falls within `Sight` (§3.7.3), less reaches
+stage two, so 3 in 10 should fall. The old sums are kept as they were;
+no new count has been made yet.
 
 **Every character runs, seen or not** (Master's own word): one that
 walked off screen goes on wanting, seeking, and remembering, so a
@@ -487,6 +525,94 @@ hides what stands behind a hill; `id` is a mark with no name to build.
 **So seeking is written to be called from outside Modio, not only by a
 deed.** Whether `flugi` takes it up is `flugi`'s own call, and belongs
 in `flugi`'s own task list, not here.
+
+### 3.7.3 `Sight` — how far, and how wide, one character sees
+
+Every character sees a different amount. A guard sees far and
+wide; a villager sees little. This is of the body, not of the deed:
+the eyes do not change with what the character is doing. So the
+limit is held on the character's own prefab, in a small part named
+`Sight`, with three values set from the Inspector:
+
+| Value       | What it holds                                           |
+| ----------- | ------------------------------------------------------- |
+| `reach`     | how far ahead the character can see at all — the sphere |
+| `halfYaw`   | how far to each side, as an angle from straight ahead   |
+| `halfPitch` | how far up and down, as an angle from straight ahead    |
+
+`Runtime` reads these once, when the character starts, and hands
+Modio's own `Scripts/Core` plain numbers. `Scripts/Core` never sees
+`Sight` itself, so it stays free of Unity, as §3.6 asks. **The
+numbers themselves are not settled here** — they are set per prefab,
+and are to be looked at again later. Nothing in `Runtime` holds a
+number of its own.
+
+**`Sight` and `Seek`, taken together.** A `Seek` (§7.4) asks for a
+`reach` and a `spread` of its own — how far this one deed looks. The
+character's `Sight` is the wall it cannot look past. `Runtime` takes
+the smaller of the two, value by value:
+
+```text
+reach     = the smaller of  Sight.reach      and  Seek.reach
+halfYaw   = the smaller of  Sight.halfYaw    and  Seek.spread / 2
+halfPitch = the smaller of  Sight.halfPitch  and  Seek.spread / 2
+```
+
+From this, one thing follows on its own, with no special line of
+code: **a character with weak sight cannot find what a deed asks
+for.** Give the same Rule to two characters; the one that sees far
+finds the thing, the one that sees little finds nothing, and its deed
+ends **Failed** (§5.5). The difference sits in the two `Sight` parts
+alone.
+
+**The shape seen.** It is a wedge cut out of the sphere, pointing the
+way the character faces (`heading`, §3.3.2, read off
+`transform.forward`). Checked as a true 3D model, 2026-09-18, and
+given a pass; two parts, held apart on purpose:
+
++ **The dome** — the far face, lying on the sphere throughout. For
+  an angle `theta` run round the rim, and a scale `s` from `0` at the
+  middle to `1` at the rim:
+  `yaw = s * halfYaw * cos(theta)`, `pitch = s * halfPitch * sin(theta)`,
+  `dir = (sin(yaw) * cos(pitch), sin(pitch), cos(yaw) * cos(pitch))`,
+  `point = dir * reach`. `dir` is always of length `1`, so every point
+  sits on the sphere; only the angle grows toward the rim.
++ **The walls** — straight lines from the character's own position to
+  the rim of the dome, and to the rim alone. Seen from the side or from
+  above, each wall is one straight line, as a plain cone would give.
+
+**Why two angles, and not one.** `Vector3.Angle` gives back one
+angle, and one angle always cuts a round cap — as wide every
+way round. A person's sight is not round: it is wider from side to
+side than up and down. Two half-angles are needed for that; hence
+`halfYaw` and `halfPitch` apart. The dome above is a true ellipse only
+because the two are kept apart.
+
+**What stage one does, then**, put whole:
+
+```text
+1. Physics.OverlapSphere(own position, reach)   — one Unity call
+2. for each thing found:
+     dir   = its position - own position
+     yaw   = its angle to the side of straight ahead
+     pitch = its angle up or down from straight ahead
+     keep it only where (yaw/halfYaw)^2 + (pitch/halfPitch)^2 <= 1
+3. hand back what was kept, as the near-list
+```
+
+Only step 1 calls Unity. Steps 2 and 3 are plain sums, so stage one
+stays wide and cheap. What falls outside the wedge — to the side,
+behind, straight up, straight down — is gone before stage two ever
+sees it. Stage two (§3.7.1) is then left with one question alone: is
+there a wall between.
+
+**How the name was settled, 2026-09-19.** `Eyes` was the first word
+put forward. `Scout` was weighed and dropped: it says *looking for an
+enemy*, and here an NPC and an enemy are read the same way, with no
+line between them. `Sensor` was dropped too: it is the name of the
+plan that once sat in `germio` and broke in three places (§3.4). `Sight`
+was taken, since §3.7 already says *in sight* of stage two, and the
+one word now names both the part and the check.
 
 ### 3.8 Meeting is proof of arrival
 
@@ -1108,6 +1234,21 @@ works here with nothing new added. **A `request_deed` inside a
 | `not_given_to`    | text   | leave out any this was already done **with** | yes                         |
 | `keep_from`       | text   | leave out any of a sort with what went badly | yes                         |
 | `new_again_after` | number | how long before a thing done to is new again | yes                         |
+
+**`reach` and `spread` are what this one deed asks to look over — not
+what the character is able to see.** That limit is the character's own
+`Sight` (§3.7.3), set on its prefab. `Runtime` takes the smaller of the
+two for each value, so a deed may ask for less than the eyes give, but
+never more. Give the same Rule to a character that sees far and to one
+that sees little: the first finds the thing, the second finds nothing
+and its deed ends Failed (§5.5). No line in the Rule is different; the
+two `Sight` parts are.
+
+`spread` is one number, and is read as the half-angle both to the side
+and up and down. The ellipse the character truly sees (wider than it is
+tall) comes from `Sight` alone, which holds the two apart. Should a deed
+ever need to ask *wide, but not tall* on its own, `target` would want
+two numbers here in place of one; today it does not.
 
 **The last four are the questions a deed puts to its own past** (§4.7.4).
 They are written here, and not in `condition`, for three reasons:

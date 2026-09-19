@@ -28,6 +28,8 @@ change in as a commit.
 + [ ] TASK-020 [P-XX]: Hold real, given classic console-era AI patterns, for seeking to check against
 + [ ] TASK-021 [P-XX]: Wire animo's own true Engine to Modio's own real IMind
 + [ ] TASK-022 [P-XX]: Add a draft plan, a real Unity Tag for one named item
++ [ ] TASK-023 [P-02]: Add an asmdef of Modio's own, so a Unity project can take it in
++ [ ] TASK-024 [P-02]: Build Runtime, the eyes, with no garbage made on any tick
 
 ## Detail
 
@@ -200,7 +202,10 @@ tick, would come to **1,536 lines a tick for nothing**.
 
 What is left for P-02: `Runtime/`, which asks Unity's own `Physics`
 and fills these lists. **That part cannot be checked by `dotnet
-test`** — check it by eye, in a running game.
+test`** — check it by eye, in a running game. **It now stands as its
+own task, TASK-024, with TASK-023 (the `.asmdef`) and `germio`'s own
+TASK-067 (the world table) in front of it.** What follows below is the
+design record that led there, kept as it was written.
 
 **A real, given question found, this same session, never yet
 settled, held here as a matter still to weigh:** how `Runtime`
@@ -460,7 +465,7 @@ now stand, not "not yet written" as this whole task once read:**
 | `germio` | `Rule.actor`, `request_deed`, `update_need` (its own TASK-016 to TASK-039). | Done — every one closed `[x]`, or dropped `[xx]` for a real, given reason. |
 | Modio | everything in P-02 to P-05 here. | Done |
 | Bridge | a real, given `IMind` wired to `animo.Engine` — no such wiring exists yet at all (see TASK-021 below). Without it, all three of the above stand apart, never joined. | Not started — the one true, real gap left |
-| `Runtime/` | asking Unity's own real `Physics`, filling the seek list each tick (`docs/modio_spec.md` §3.7, TASK-006's own true "what is left"). | Not started — this whole task's own second real gap |
+| `Runtime/` | asking Unity's own real `Physics`, filling the seek list each tick (`docs/modio_spec.md` §3.7, §3.7.3). Now its own task, TASK-024, standing on TASK-023 and `germio`'s TASK-067. | Not started — this whole task's own second real gap |
 | `stemic`, not code at all | two given models, an Animator Controller, both `germio` Rule sets, two given prefabs, placed in a real level, checked to play — its own TASK-018 to TASK-026, every one `[ ]` still. | Not started |
 
 **So this whole task's own true block is never `animo`, `germio`, or
@@ -1223,3 +1228,62 @@ matching set) `kind` alone could never once tell apart.
 No real crack was found in three rounds of hard checking. This whole
 real shape stands ready, once `Runtime` and the Tag-reading piece of
 it are truly built.
+
+### TASK-023
+
+**Modio holds no `.asmdef` at all today** — checked live, 2026-09-18.
+`animo` holds four; Modio holds none. So no Unity project can take
+Modio in as a package, and `Runtime/` (TASK-024), which must call
+Unity's own `Physics`, has nothing to stand on. This was first noted
+inside TASK-021 as one worry among three; it is split out here since it
+is its own piece of work, needs no Unity open, and blocks TASK-024
+outright.
+
+**What to add:** `Scripts/Modio.asmdef` for the Unity-free core, and
+`Runtime/Modio.Runtime.asmdef` referencing it, the same two-part shape
+`germio` already holds (`Germio.asmdef`, `Germio.Editor.asmdef`). Both
+are read by Unity, neither carries a `~` — see `docs/modio_spec.md`
+§3.6. The `Scripts/Modio.csproj` used by `dotnet test` stays as it is;
+the two build roads read the same `.cs` files and never write into each
+other.
+
+### TASK-024
+
+**Build `Runtime/`, the eyes — not one line stands today.** The whole
+design is settled in `docs/modio_spec.md` §3.6.2, §3.7 and §3.7.3; this
+task builds it. Depends on TASK-023 (the `.asmdef`) and on `germio`'s
+own TASK-067 (the world table it reads from).
+
+**What goes in:**
+
+| Piece      | Does                                                                                     |
+| ---------- | ---------------------------------------------------------------------------------------- |
+| `Sight`    | a `MonoBehaviour` on the prefab: `reach`, `halfYaw`, `halfPitch`, set from the Inspector |
+| the reader | reads `Sight` once at start; reads `transform.forward` each tick into `Self`             |
+| stage one  | `Physics.OverlapSphereNonAlloc` into a buffer of 16, then the wedge check, into `Near`   |
+| stage two  | one `Physics.Raycast(out hit)` for each `Near` that `StageGate` marks, into `Found`      |
+
+**The one rule: no garbage on any tick.** This is the same bar TASK-009
+proved for the memory. Every hole found so far, and how each is
+closed:
+
+| Hole                                                  | Closed by                                                                                                                                                                    |
+| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Physics.OverlapSphere` makes a new array each call   | `OverlapSphereNonAlloc` into a `Collider[16]` made once at start                                                                                                             |
+| `GameObject.name` makes a new string each read        | never read on a tick. `Kind` and the id string come from `germio`'s own world table (TASK-067), keyed by `GetInstanceID()` (`int`, no boxing)                                |
+| the id string `g_1042` made each tick                 | the same table holds it, made once at scene load                                                                                                                             |
+| the buffer of 16 fills and cuts off, saying nothing   | Unity's own reference: a full buffer returns its own length. Check `count == buffer.Length` and warn                                                                         |
+| the character's own collider is inside its own sphere | drop any hit whose `GetInstanceID()` is the character's own                                                                                                                  |
+| one thing with two colliders shows up twice           | walk the 16 slots and drop a repeated id — 16 is small enough to do by hand, no set needed                                                                                   |
+| a 10-unit floor whose middle sits outside the wedge   | take `Collider.ClosestPoint(own position)`, not `transform.position`. Holds for `BoxCollider` (all `stemic` has); does not hold for `MeshCollider` — say so where it is used |
+| `Near`/`Found` lists grow                             | two arrays of 16, made once, filled again each tick, count kept apart                                                                                                        |
+
+**What cannot be checked by `dotnet test`:** all of it. `Runtime/`
+knows Unity by design. Check it by eye, in a real Windows Unity open,
+with the Profiler's GC Alloc column at zero through a full round.
+
+**Not settled, and to be weighed before building:** whether `Sight` is
+read once at start or every tick (a character in the dark may see
+less); today it reads once. Whether `Self.Heading` staying one `float`
+(no up or down in the character's own facing) is right; today the wedge
+stays level.

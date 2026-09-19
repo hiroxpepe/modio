@@ -126,6 +126,10 @@ by a set of named rules (A000 and up).
 **ScenarioRunner** — A tool that runs a persona through a set path of steps, so
 its behavior can be watched and tested without a full game.
 
+**Tulving** — Endel Tulving, the memory researcher whose account of the
+memory of living (who, when, where, what) Modio's own memory table and
+"far look" are built on. Used as a name only, in `docs/modio_spec.md`.
+
 ---
 
 ## Live monitor and networking
