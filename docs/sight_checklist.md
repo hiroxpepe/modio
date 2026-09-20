@@ -19,7 +19,7 @@ here together so none is lost.
 | --- | --- | --- | --- |
 | 1 | **Settled 2026-09-19.** `Collider.ClosestPoint` is used outright. `Level_1`'s own colliders, checked one by one, are all `BoxCollider` or a convex `MeshCollider` (`Despawn`, `m_Convex: 1` — held out anyway by the trigger rule). Unity's own reference holds `ClosestPoint` true for both | spec §3.7.3 | Done |
 | 2 | **Settled 2026-09-19, and kept as it stands.** Read once at start. Checked against every act in both personas (10 in all) and the first game's own plan: none asks for sight to change while play runs. `Sight` holds what a body can see at all, not what it is doing now | spec §3.7.6 | Done |
-| 3 | `Self.Heading` is one `float`, so the wedge stays level: a character can look to the side but never up or down | TASKLIST-025 | **Weighed 2026-09-19, and kept.** `Human.cs` turns a body flat, never leaning; no act in either persona asks a character to look up. Up and down are held by `halfPitch` instead. But this same look turned up a real hole — sight was being taken from the body, not the head — now closed by `Sight.eyes` (§3.7.5). **Settled in full 2026-09-19: what turns a thing toward what it looks at.** Checked live: `germio`'s own `faceToFace` is written but never called, and no line in the whole of `germio` ever sets `.Rotation`; no act in either persona asks for a turn alone. Real study of a body's own turning splits it two ways — a fast, automatic pull toward something sudden (settled ~100 ms), and a slower, turn, held on purpose toward a goal (settled past 300 ms, and held). Only the kind held on purpose is taken up here: when `animo` picks an act, `germio` turns `Sight.eyes` toward that act's own target, slow, with `Quaternion.Slerp`, the same way `Human.cs` already turns a body. The fast, automatic pull toward a sudden thing is left out, matched to §3.7.1's own rule that an unseen thing reads the same as a gone one — a missed pull reads the same way. This is `germio`'s own new work, not `Modio`'s |
+| 3 | `Self.Heading` is one `float`, so the wedge stays level: a character can look to the side but never up or down | TASKLIST-025 | **Weighed 2026-09-19, and kept.** `Human.cs` turns a body flat, never leaning; no act in either persona asks a character to look up. Up and down are held by `halfPitch` instead. But this same look turned up a real hole — sight was being taken from the body, not the head — now closed by `Sight.eyes` (§3.7.5). **Held 2026-09-19, and found short the next day — see part 4 below for the true, final word on who turns what, and toward where.** |
 | 4 | The 3 in 10 that reach stage two was counted before `Sight` cut the sphere down | spec §3.7 | Count it again, once `Runtime/` runs |
 
 ---
@@ -101,11 +101,10 @@ Read row 3 that way from now on.
   with a true `Head` bone. Neither `germio` nor `modio` should know
   this bone by name, since a body with no head at all (§3.7.5's own
   "block-shaped thing") must still work.
-+ Held for now: the turning call stays `germio`'s own work in name,
-  matching how a body already turns. Which `Transform` is handed to
-  it, and how that `Transform` is kept from a fight with the walk
-  animation, is `stemic`'s own work, through Unity's own Humanoid
-  Look-At IK.
++ **Held at first, and turned over the next day (see 4.8):** this
+  part first held the turning call itself as `germio`'s own work,
+  matching how a body already turns. That did not hold up. The
+  true, final word is in 4.8 below.
 
 ### 4.4 A real neck, turned while a walk plays on — checked, not run
 
@@ -139,7 +138,7 @@ that number on. **Held up, and found short, on four counts:**
 | 1 | "`modio` touches nothing of Unity at all" does not hold. §3.3.2 says outright that `Runtime` already reads `transform.forward`, straight off the body, for `heading`. The true rule is narrower: reading is allowed; moving a body is never allowed (§8) |
 | 2 | Nothing says where the number for "what to look toward" would come from. `Perceive` (§3.3) hands back what is found, not a pick of where next to look; no line ties one to the other |
 | 3 | A `Deed`'s own three steps (§5.2) each hold a clear end. A head turning side to side while a walk plays on has no end at all. Nothing in `modio`'s design today holds a kind of output that runs on without a stop |
-| 4 | Whether the number is a place in the world or an angle held against the body is not settled. A place still asks for `heading` to make sense of it; an angle asks `germio` or `stemic` to turn it into a place. Either way, something new must be agreed and written down |
+| 4 | **Set right, 2026-09-20 — this was never truly open.** `Found` and `Choice` (`TASK-019`, built) already answer it in full: neither ever holds a place in the world at all — each holds only `Angle`, `Distance` and `Height`, read against the body itself. `Found.cs`'s own words: "Nothing here is a Vector3, a Transform or a GameObject." Any number `modio` hands on for where to look was always going to be a body-relative angle, matching this same, already-built shape. What was missed was reading `Found.cs` before calling this open |
 
 Two counts already open, from part 3 above, stand in this newer
 plan's own way too:
@@ -159,6 +158,88 @@ head-turn itself waits on: a settled place for `Sight` (or for
 settled kind of output that can run on without a stop; and
 `Runtime/` itself, which stands on nothing today.
 
+### 4.7 Held, 2026-09-20 — where each piece now stands
+
++ **`Sight` moves to `germio`.** `germio` already holds eight
+  `MonoBehaviour` types, each with `[SerializeField]` values of its
+  own (`Zone.cs` is one). `Sight` (`reach`, `halfYaw`, `halfPitch`,
+  `eyeHeight`, `eyes`) fits this same shape. `germio` keeps its own
+  depend-on-nothing place; `modio`'s `Runtime` reads the five
+  values, and never the type itself — this also keeps the wedge
+  check open to a plain `dotnet test`, with no live Unity behind it,
+  since a `MonoBehaviour` cannot be made new outside one.
++ **Read `Engine.Behavior`, never `Engine.Snapshot()`, for the head
+  turn.** `Snapshot()` builds three `Dictionary` objects and one
+  more object, fresh, on every call — right for a monitor read once
+  a frame, wrong for a read on every character, every tick.
+  `Engine.Behavior` hands back the same string with nothing made
+  new. Zero-GC for this piece turns on this one line.
++ **One new depend-on line, read-only:** `stemic` comes to depend on
+  `animo`, to read `Behavior`. Today `stemic`'s own `manifest.json`
+  names `germio` and `briko`, and no more. `germio`'s own
+  depend-on-nothing place, and `animo`'s own depend-on-`germio`-only
+  place, both stay as they stood.
++ **Zero-GC, held against the true code.** §9.1's own "Done" mark
+  covers `Recall`'s own ring table alone, not `Sight` or the wedge
+  check — those wait on `Runtime/`, which holds not one line of code, to be run and
+  counted. The found-list's own fixed-16 plan (§3.7) already reads as
+  zero-GC on paper. The one true risk found today —
+  `Engine.Snapshot()` called every tick — is closed by reading
+  `Engine.Behavior` instead.
+
+### 4.8 Held, one day on — the three points 4.3/4.4/4.7 left hanging
+
+Read back the next day, 4.3 said the turning call stayed `germio`'s
+own work "for now"; 4.7 then said `stemic`'s own Look-At IK does it.
+Both cannot be true at once. Two more points, never settled at all,
+stood behind that one. All three are closed here.
+
+**1. Who truly turns the head — `stemic`, and `stemic` alone.**
+Unity's own Look-At IK (§4.4) only runs from `OnAnimatorIK`, a
+call Unity makes on the same `GameObject` that holds the `Animator`
+— `Pete`, in `stemic`. `germio` cannot be the one to call it; there
+is no such call to make from outside. `germio`'s own part in this
+whole idea shrinks to one thing alone: holding the `Sight` data
+(4.7's first point), for `modio`'s wedge check. It calls no turn,
+here or anywhere, for the head.
+
+**2. What the head looks toward — a swept point today; a real
+target, once one can be true.** Two things were never told apart:
+
++ `Sight`, and the wedge check it feeds (`TASK-024`) — this is
+  `Perceive`'s own work, telling `modio` what stands near a
+  character. It has no tie to what a head looks toward.
++ The head sweeping side to side while `Explore` runs — this is a
+  played, made-up motion in `stemic` alone: a point that swings a
+  set amount, left and right of the body's own front, on a timer.
+  It is never a real thing found by `Sight`, and asks nothing of
+  `modio`'s `Runtime` at all.
+
+Row 3's own first word — a head turned toward the act's own real
+target, not a made-up sweep — is not set aside outright after all;
+only the "who calls it" half of row 3 was wrong (closed by point 1,
+above: `stemic` alone, never `germio`). The "toward what" half may
+yet stand. `Deed.Holding` (a `Choice`, `TASK-019`,
+already built) already carries a body-relative `Angle` toward
+whatever a character truly reaches for. Once `Runtime/` stands and
+a `Choice` may hold a true, given thing (not `None`), the right
+shape is two-fold: read `Choice.Angle` where `Holding` is truly
+taken; fall back to the made-up sweep where it is `None` (nothing
+yet chosen — most of `Explore`'s own running time). **A true, held
+reason the sweep alone is built first:** `Runtime/` holds not one
+line of code (part 3, #2), so no true `Choice` can be filled yet,
+sweep or no. Building the sweep first, apart from `Sight` and
+`Runtime` both, is the only path open today — but it is a first
+step, not the whole of the answer.
+
+**3. Which acts turn the sweep on — `Explore` alone, for now.**
+`Patrol` was raised in 4.2 as a second true case. It belongs to
+`goblin_scout`, a design case only (`docs/persona_design_spec.md`) —
+no code, no `Behavior` string, nothing `Engine.Behavior` could ever
+read today. Held: build against `Explore` (`place_curious`, real
+and wired) alone. `Patrol` waits its own turn once `goblin_scout` is
+more than a name on paper.
+
 ---
 
 ## The order to take them in
@@ -166,14 +247,20 @@ settled kind of output that can run on without a stop; and
 ```text
 1. spec, part 2      settled 2026-09-19         — done
 2. TASK-023          the asmdef                 — no Unity open needed
-3. TASK-024          the wedge check            — dotnet test, twelve tests
-4. germio TASK-067   the world table            — germio's own work
-5. stemic TASK-018+  a prefab to look through   — stemic's own work
-6. TASK-025          Runtime, the eyes          — a real Unity open
-7. part 1, part 3    settle the rest by eye     — once it runs
+3. TASK-024          the wedge check             — dotnet test, twelve tests
+4. germio TASK-067   the world table             — germio's own work
+4b. germio TASK-069  set right, per 4.8          — words changed, no code
+5. stemic TASK-018+  a prefab to look through    — stemic's own work
+5b. stemic, new task the Explore sweep, per 4.8   — stemic's own work, held apart from Sight
+6. TASK-025          Runtime, the eyes           — a real Unity open
+7. part 1, part 3    settle the rest by eye      — once it runs
 ```
 
-Step 1 is done. Steps 2 and 3 need no Unity at all, and may be done here, today. Steps
-4 and 5 belong to other builds. Step 6 is where the design is
-first put to the test, and step 7 is where what was guessed is either
-held true or thrown out.
+Step 1 is done. Steps 2 and 3 need no Unity at all, and may be done
+here, today. Step 4b is words alone — `TASK-069` still reads
+"`Sight.eyes` (`modio`'s own name for it)", which 4.8 has now set
+aside; the task's own words are owed a fix, to match. Steps 4, 4b,
+5 and 5b belong to other builds, and 4b/5b do not wait on 4 or 5 —
+the sweep (5b) stands apart from `Sight` outright, per 4.8. Step 6
+is where the design is first put to the test, and step 7 is where
+what was guessed is either held true or thrown out.
