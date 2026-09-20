@@ -58,6 +58,109 @@ true once something exists to be true of.
 
 ---
 
+## 4. The head-turn idea — held up today, and found short (2026-09-20)
+
+Row 3 in part 1 called the head-turn "Settled in full" on 2026-09-19.
+Today it was held up again, against the true code and against
+`package.json`. What stood was less settled than the words said.
+
+### 4.1 Checked against the true code
+
++ No `Sight` type stands anywhere at all — not in `germio`, not in
+  `modio`, not in `animo`.
++ `faceToFace` still stands unused, as row 3 already said.
++ No line ties `animo`'s pick of an act to any turn of the eyes.
+
+So "Settled in full" meant a plan was made on paper, and no more.
+Read row 3 that way from now on.
+
+### 4.2 Is the head-turn truly owed?
+
++ A first read said no: `Rest`, `GoHome`, `Approach`, `ShowFind`,
+  `Explore`, `Call`, `Tend`, `Give` — none asks the body to face one
+  way while it looks another.
++ A truer read says yes: `Explore` and `Patrol` **are** this case. A
+  character that explores or walks a round without turning its head
+  looks wrong. The first read was too quick, and is set aside.
+
+### 4.3 Who moves the neck — held up, and split three ways
+
++ The plan in row 3 has `germio` turn `Sight.eyes`. But `Sight` is
+  `modio`'s own type (§3.6, §3.7.3). For `germio` to read it,
+  `germio` would need to depend on `modio`.
++ Checked against `package.json` in all three: `germio` depends on
+  nothing; `animo` depends on `germio`; `modio` depends on both. A
+  line from `germio` to `modio` runs the wrong way, and breaks this
+  order.
++ Weighed, and set aside: `modio` holding the bone itself and
+  turning it. `germio` already holds all turning of a body
+  (`Human.cs`), and a Deed's own `face` step (§5.2) leans on that.
+  Splitting "turning" across two layers would only raise the same
+  question again for the body's own turn.
++ Where the bone itself sits: `stemic` holds `Pete`, a Humanoid rig
+  with a true `Head` bone. Neither `germio` nor `modio` should know
+  this bone by name, since a body with no head at all (§3.7.5's own
+  "block-shaped thing") must still work.
++ Held for now: the turning call stays `germio`'s own work in name,
+  matching how a body already turns. Which `Transform` is handed to
+  it, and how that `Transform` is kept from a fight with the walk
+  animation, is `stemic`'s own work, through Unity's own Humanoid
+  Look-At IK.
+
+### 4.4 A real neck, turned while a walk plays on — checked, not run
+
++ Unity turns a Humanoid's head, neck and eyes toward a point
+  through `Animator.SetLookAtPosition` and `SetLookAtWeight`, called
+  from `OnAnimatorIK`, once "IK Pass" is turned on for the layer.
+  This runs after the walk pose is laid down, so both hold true at
+  once.
++ `stemic`'s own word list already allows `OnAnimatorIK`, and
+  `Assets/Plugins/UniRx` already wraps it. `Pete`'s own `.fbx.meta`
+  reads Humanoid. The true parts stand ready, though none of this
+  has been run.
++ A point, handed to `SetLookAtPosition` fresh on every tick, can
+  turn the head side to side while the walk plays on. This is not
+  yet run in `stemic`.
++ A warning, from Unity's own words, not yet checked live:
+  `clampWeight` holds a neck back from turning too far from the
+  body's own front. A slight turn should hold true; a turn near a
+  right angle may be held back and never fully reached.
+
+### 4.5 A newer plan — `modio` hands on a number, not a `Transform`
+
+To keep `germio` free of any tie to `modio`, and `modio` free of any
+tie to a `Transform`, one more plan was raised: `modio` works out,
+on its own, where a character should look, as a number — the same
+way it already hands on a `motion` or a `target` (§7.3) — and hands
+that number on. **Held up, and found short, on four counts:**
+
+| # | What is short |
+| --- | --- |
+| 1 | "`modio` touches nothing of Unity at all" does not hold. §3.3.2 says outright that `Runtime` already reads `transform.forward`, straight off the body, for `heading`. The true rule is narrower: reading is allowed; moving a body is never allowed (§8) |
+| 2 | Nothing says where the number for "what to look toward" would come from. `Perceive` (§3.3) hands back what is found, not a pick of where next to look; no line ties one to the other |
+| 3 | A `Deed`'s own three steps (§5.2) each hold a clear end. A head turning side to side while a walk plays on has no end at all. Nothing in `modio`'s design today holds a kind of output that runs on without a stop |
+| 4 | Whether the number is a place in the world or an angle held against the body is not settled. A place still asks for `heading` to make sense of it; an angle asks `germio` or `stemic` to turn it into a place. Either way, something new must be agreed and written down |
+
+Two counts already open, from part 3 above, stand in this newer
+plan's own way too:
+
++ `Runtime/` holds not one line of code (part 3, #2). There is
+  nowhere yet to put this new work.
++ A `Deed` does not carry the `id` of what it reached for, through
+  to its own end (§9.2, #3). "What to look toward" would run into
+  the same kind of hole.
+
+### 4.6 Where this stands now
+
+No code has been written for any of this. `TASK-023` and `TASK-024`
+still stand ready to take up first, apart from everything above. The
+head-turn itself waits on: a settled place for `Sight` (or for
+`modio`'s own new number) that keeps the depend-on order true; a
+settled kind of output that can run on without a stop; and
+`Runtime/` itself, which stands on nothing today.
+
+---
+
 ## The order to take them in
 
 ```text
