@@ -418,16 +418,25 @@ No Physics. No Transform. Same answer, every run.
 follows is what it is to hold, settled here so it may be built
 straight:
 
-| Name       | Holds                                                                                              |
-| ---------- | -------------------------------------------------------------------------------------------------- |
-| `Sight`    | a `MonoBehaviour` on the prefab: `reach`, `halfYaw`, `halfPitch`, set from the Inspector (§3.7.3)  |
-| the reader | reads `Sight` once at start, and `transform.forward` each tick, into `Self`                        |
-| stage one  | one `Physics.OverlapSphere`, then the wedge check, into the near-list (§3.7.3)                     |
-| stage two  | one `Physics.Raycast` for each near thing `StageGate` marks, into the found-list (§3.7.1)          |
+| Name       | Holds                                                                                                  |
+| ---------- | ------------------------------------------------------------------------------------------------------ |
+| `Sight`    | a `MonoBehaviour` on the prefab: `reach`, `halfYaw`, `halfPitch`, `eyeHeight`, `eyes` (§3.7.3, §3.7.5) |
+| the reader | reads `Sight` once at start, and the `eyes` thing's own forward each tick, into `Self`                 |
+| stage one  | one `Physics.OverlapSphereNonAlloc` into a buffer of 16 made at start, then the wedge check (§3.7.3)   |
+| stage two  | one `Physics.Raycast(out hit)` from the eyes (§3.7.5) for each near thing `StageGate` marks            |
+| the names  | asks `germio`'s own table, through an interface Modio holds, for a kind and an id string (§3.7.3)      |
 
 Every one of these knows Unity, and that is the whole point of the
 part. What it hands `Scripts/` is plain: a `Self`, a list of `Near`, a
 list of `Found`. `Scripts/` is never told that `Sight` exists.
+
+**Nothing here may make garbage on a tick.** This is the same bar the
+memory was held to, and met (§4). Every call named above is a
+no-garbage one: `OverlapSphereNonAlloc` fills a buffer made at start
+rather than making an array; `Raycast(out hit)` hands back a struct;
+the names come from a table keyed by `int`, never from `name`, which
+makes a new string every read. Both lists are arrays of 16, made at
+start, filled again each tick, with a count kept beside them.
 
 **One thing `Runtime/` cannot have yet:** Modio holds no `.asmdef` of
 its own today, so a Unity project cannot take it in as a package at
@@ -532,15 +541,17 @@ Every character sees a different amount. A guard sees far and
 wide; a villager sees little. This is of the body, not of the deed:
 the eyes do not change with what the character is doing. So the
 limit is held on the character's own prefab, in a small part named
-`Sight`, with three values set from the Inspector:
+`Sight`, with five things set from the Inspector:
 
-| Value       | What it holds                                           |
-| ----------- | ------------------------------------------------------- |
-| `reach`     | how far ahead the character can see at all — the sphere |
-| `halfYaw`   | how far to each side, as an angle from straight ahead   |
-| `halfPitch` | how far up and down, as an angle from straight ahead    |
+| Value       | What it holds                                                                          |
+| ----------- | -------------------------------------------------------------------------------------- |
+| `reach`     | how far ahead the character can see at all — the sphere                                |
+| `halfYaw`   | how far to each side, as an angle from straight ahead                                  |
+| `halfPitch` | how far up and down, as an angle from straight ahead                                   |
+| `eyeHeight` | how far above its own base the character's eyes sit (§3.7.5)                           |
+| `eyes`      | which `Transform` the character truly looks from — its head, where it has one (§3.7.5) |
 
-`Runtime` reads these once, when the character starts, and hands
+`Runtime` reads these once, when the character starts (§3.7.6), and hands
 Modio's own `Scripts/Core` plain numbers. `Scripts/Core` never sees
 `Sight` itself, so it stays free of Unity, as §3.6 asks. **The
 numbers themselves are not settled here** — they are set per prefab,
@@ -591,7 +602,8 @@ because the two are kept apart.
 **What stage one does, then**, put whole:
 
 ```text
-1. Physics.OverlapSphere(own position, reach)   — one Unity call
+1. Physics.OverlapSphereNonAlloc(own position, reach, buffer of 16)
+                                                — one Unity call
 2. for each thing found:
      dir   = its position - own position
      yaw   = its angle to the side of straight ahead
@@ -605,6 +617,170 @@ stays wide and cheap. What falls outside the wedge — to the side,
 behind, straight up, straight down — is gone before stage two ever
 sees it. Stage two (§3.7.1) is then left with one question alone: is
 there a wall between.
+
+**A full buffer says nothing of its own.** Unity's own reference: the
+call does not grow the buffer, and when it is full it simply returns
+the buffer's own length. So where the count comes back equal to 16,
+things were cut off and no one was told — a character would be blind
+to whatever was dropped. Stage one checks for that count and warns.
+
+**Triggers are not seen, settled 2026-09-19.** Step 1 passes
+`QueryTriggerInteraction.Ignore`. This was settled by counting
+`stemic`'s own `Level_1`: of every collider in that scene, three are
+triggers — `Despawn` (the catch for a fall), `RayBox` and
+`MainCamera`, all three the engine's own working parts, none of them
+a thing to be sought. `Ground` and `Block`, which are what a seek is
+after, are plain colliders on their own prefabs. So nothing sought is
+lost, and three things no one should see are kept out of a buffer
+that holds only 16. **One to watch:** `germio` holds `Home` as a
+kind, and a persona may hold `GoHome` as an act, but no `Home` stands
+in `Level_1` today. When one is put down, look at whether it is a
+trigger; if it is, this call must be weighed again.
+
+**Where a thing is taken to be, settled 2026-09-19.** A `Ground`
+piece may be 10 units across: its middle may fall outside the wedge
+while its near edge falls inside. So stage one takes the near edge —
+`Collider.ClosestPoint(own position)` — not the middle
+(`transform.position`). Checked against `stemic`'s own `Level_1`:
+every collider there is either a `BoxCollider` or a convex
+`MeshCollider` (`Despawn` alone, and it is a trigger, held out
+already). Unity's own reference holds `ClosestPoint` true for both a
+`BoxCollider` and a convex `MeshCollider`, never a plain one.
+
+**How `Runtime` learns a thing's kind and id, settled 2026-09-19.**
+Not by naming `germio`. Reading `name` on a tick is out of the
+question — Unity makes a new string each read, and 16 things, 64
+characters, 50 ticks a second would make over 50,000 strings a
+second. So the names are read once, at scene load, into a table held
+by `germio` (its own TASK-067), keyed by `GetInstanceID()`. Modio
+holds an interface for asking it — an `int` in, a kind and an id
+string out — and `germio` answers it. **This is the shape `IMind`
+already holds toward `animo`** (§6.2): what stands there in a real
+game is not named here. So `Runtime/` names neither `animo` nor
+`germio`, and the whole of Modio stays free of both.
+
+**What stands in where a number is left out, settled 2026-09-19.**
+`§7.4` says a left-out `reach` or `spread` has a set value stand in,
+but never said what it is. It is this:
+
+| Left out      | What stands in | Why                                                                                |
+| ------------- | -------------- | ---------------------------------------------------------------------------------- |
+| `Seek.reach`  | 30             | the number §3.7 already counts its sums with — a wide check at 30 on `Level_1`     |
+| `Seek.spread` | 360            | a deed that names no spread asks to look all round; `Sight` is then the only bound |
+
+**So a deed that names neither looks as far and as wide as the
+character's own eyes allow, and no further.** This follows from the
+smaller-of-two rule above: with `Seek` at 360, `Sight` wins every
+time. It is the right way round — a deed says what it wants, the body
+says what it can, and the body always has the last word.
+
+**Where no `Sight` part stands on the prefab at all.** `Runtime`
+warns once, at start, and stands in `reach` 30, `halfYaw` 180,
+`halfPitch` 90 — a full sphere. The character then sees all round,
+which is plainly wrong for a real body, but it is loud and easy to
+see in play, and it never quietly blinds a character that was meant
+to see. **A missing part must never read as a character with no
+eyes.**
+
+**What is still owed on all this** — what the spec marks open, what
+it never says, and what cannot be known until it runs — is kept
+together in `docs/sight_checklist.md`, with the order to take them in.
+
+#### 3.7.4 The bounds on `Sight`, and what is done outside them
+
+Settled 2026-09-19, following the shape `animo`'s own `Engine.Lock`
+already holds: throw on what cannot mean anything, cut down quietly
+what is merely too much, warn on what is allowed but strange.
+
+| Value       | Bound                | Outside it                                     |
+| ----------- | -------------------- | ---------------------------------------------- |
+| `reach`     | 0 or more            | below 0 throws at start                        |
+| `reach`     | 100 at most          | above it is cut down to 100, with a warning    |
+| `halfYaw`   | above 0, 180 at most | 0 or less throws; above 180 is cut down to 180 |
+| `halfPitch` | above 0, 90 at most  | 0 or less throws; above 90 is cut down to 90   |
+
+**Why a throw for a half-angle of 0, and not a cut-down.** A `reach`
+of 0 is a thing someone may truly want: a character that, for this
+moment, sees nothing at all. A `halfYaw` of 0 is not — it says the
+character sees along one line as thin as a hair, which no real eye does and
+no deed could use. The first is a choice; the second is a mistake, and
+is stopped where it is made.
+
+**Why 100 and 180 and 90.** 180 and 90 are the whole of a sphere:
+past them there is nothing more to see. 100 for `reach` is set against
+`stemic`'s own `Level_1`, which is far smaller than that across; a
+`reach` past 100 would take in the whole level and every other
+character in it, and is more likely a slip of a key than a wish.
+
+**`reach` of 0 takes no Unity call at all.** Stage one returns an
+empty near-list without asking `Physics` anything. This holds whether
+the 0 comes from `Sight` or from `Seek`, since the smaller of the two
+is what is used.
+
+#### 3.7.5 Where the character looks from, and how high a thing is
+
+**Stage two throws from the eyes, not from the feet.** `Sight` holds
+one value more for this: `eyeHeight`, how far above the character's
+own base its eyes sit. A line thrown from the feet would meet the very
+floor the character stands on, and a character would report itself
+blind to everything across a flat room.
+
+**Which way the character looks is its head's own way, not its body's
+— settled 2026-09-19.** A body turns to walk; a head turns to look,
+and the two part ways every time a character keeps walking while
+watching something to the side. `germio`'s own `Human.cs` turns the
+body alone (`Quaternion.Euler(0, y, 0)` — never leaning up or down), and moves no
+head at all. But `stemic`'s own `Pete` is a Humanoid rig with a real
+`Head` bone in it, so a head is there to be asked.
+
+So `Sight` holds one thing more: **`eyes`, a `Transform`**. Whatever
+it points at is where the character looks from and which way it faces:
+
+| `eyes` is            | Then                                                                                       |
+| -------------------- | ------------------------------------------------------------------------------------------ |
+| left empty           | the character's own `Transform` — the body's own way, which is what `Human.cs` turns today |
+| set to the head bone | the head's own way, which is what a person would call looking                              |
+| set to anything else | that thing's own way — a gun on a tower, a light on a post                                 |
+
+**Why a `Transform` and not a bone name.** A bone name would ask every
+prefab to be a Humanoid rig, and a block-shaped thing with no head at
+all could never answer it. A `Transform` is set once in the Inspector,
+read once at start (§3.7.6), and costs nothing on a tick —
+`GetBoneTransform` on every tick would not.
+
+**`eyeHeight` stands whatever `eyes` points at.** It is measured from
+the character's own base, never from the `eyes` thing, so it stays
+true when the head moves.
+
+**What is still not held:** the head turns only as the animation turns
+it. Nothing yet turns a head toward what a character wants to watch.
+`animo` names a Behavior and Modio carries out a Deed, but neither
+says *look there*. Where a game needs that, it belongs to whatever
+moves the body — `germio` — not here.
+
+**`Found.Height` is worked out from the feet, not from the eyes:**
+
+```text
+height = (the point the line met).y - (the character's own base).y
+```
+
+So a thing at eye level reads as `height` = `eyeHeight`, not 0, and a
+thing on the floor reads as 0. **This is on purpose.** Height is
+written into memory as a place in the world (§4.3), and a place must
+not move when a character bends low. The feet are where the character
+is; the eyes are only where it looks from.
+
+#### 3.7.6 `Sight` is read once, and changing it later does nothing
+
+`Runtime` reads the four `Sight` values once, when the character
+starts, and holds them. **Changing them in the Inspector while the
+game runs has no effect at all**, and nothing is said about it.
+
+This is on purpose, and it is the cheap answer: reading a
+`MonoBehaviour` field every tick, for 64 characters, buys nothing
+where no game yet asks sight to change. **Should one ever ask** — a
+character in the dark, a character whose eyes are shut — this is where it changes,
+and `docs/sight_checklist.md` holds the question open.
 
 **How the name was settled, 2026-09-19.** `Eyes` was the first word
 put forward. `Scout` was weighed and dropped: it says *looking for an
@@ -692,6 +868,12 @@ together. So the number of places stays small, and the memory with it.
 place was begun, turned into the world's own reckoning (§3.3.2), and
 rounded. Two things done on the same stretch of ground fall to the same
 `place`.
+
+**Whether a `place`'s own name should ever be taken wrong for
+another's — and what real study of a living body's own sense of
+place says about that — is worked out in full in
+`docs/place_memory_design.md`. Nothing there is built yet; it stands
+as talk on paper alone.**
 
 | Held      | `thing` | `place` | Lives                       |
 | --------- | ------- | ------- | --------------------------- |
@@ -1225,15 +1407,15 @@ works here with nothing new added. **A `request_deed` inside a
 
 ### 7.4 `target` — what to seek
 
-| Field             | Type   | Sense                                        | May be left out             |
-| ----------------- | ------ | -------------------------------------------- | --------------------------- |
-| `kind`            | text   | one of `germio`'s own type marks             | no                          |
-| `reach`           | number | how far out to look                          | yes — a set value stands in |
-| `spread`          | number | how far round to look, in degrees            | yes — a set value stands in |
-| `not_in_memory`   | text   | leave out any this was already done to       | yes                         |
-| `not_given_to`    | text   | leave out any this was already done **with** | yes                         |
-| `keep_from`       | text   | leave out any of a sort with what went badly | yes                         |
-| `new_again_after` | number | how long before a thing done to is new again | yes                         |
+| Field             | Type   | Sense                                          | May be left out              |
+| ----------------- | ------ | ---------------------------------------------- | ---------------------------- |
+| `kind`            | text   | one of `germio`'s own type marks               | no                           |
+| `reach`           | number | how far out to look                            | yes — 30 stands in (§3.7.3)  |
+| `spread`          | number | how far round to look, in degrees, taken whole | yes — 360 stands in (§3.7.3) |
+| `not_in_memory`   | text   | leave out any this was already done to         | yes                          |
+| `not_given_to`    | text   | leave out any this was already done **with**   | yes                          |
+| `keep_from`       | text   | leave out any of a sort with what went badly   | yes                          |
+| `new_again_after` | number | how long before a thing done to is new again   | yes                          |
 
 **`reach` and `spread` are what this one deed asks to look over — not
 what the character is able to see.** That limit is the character's own

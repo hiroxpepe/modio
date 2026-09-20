@@ -130,6 +130,26 @@ its behavior can be watched and tested without a full game.
 memory of living (who, when, where, what) Modio's own memory table and
 "far look" are built on. Used as a name only, in `docs/modio_spec.md`.
 
+**Profiler** — Unity's own window for watching how much time and memory a
+running game takes, frame by frame. Its GC Alloc column shows how much
+garbage a frame made; zero there is the bar this repository holds to.
+
+**hippocampus** — The brain's own part that holds a sense of place and a
+record of what happened. Used as a name only, in
+`docs/place_memory_design.md`.
+
+**amygdala** — The brain's own part that holds a sense of feeling, working
+beside the hippocampus to make a strongly felt memory hold harder. Used as
+a name only, in `docs/place_memory_design.md`.
+
+**rig** — The set of bones inside a 3D model that an animation moves. A
+**Humanoid rig** is Unity's own named set — head, chest, hands and the rest —
+which lets one animation play on any model that has them.
+
+**convex** — A shape with no cut-in curve: a straight line between any two
+points inside it never leaves the shape. Unity's own `MeshCollider.ClosestPoint`
+only works where its own shape is marked convex.
+
 ---
 
 ## Live monitor and networking
