@@ -1160,6 +1160,35 @@ itself stays a thin, given pass-through — `Behavior`/`Lock`/`Affect`
 translation only, no `Need`-name checking of its own at all, that
 whole real job handed whole to `germio`'s own future `V037`.
 
+**Held, 2026-09-20 — three real holes in `EngineMind`'s own
+contract, closed:**
+
+1. **`Lock`'s own direction.** `IMind.Lock(bool soft)` hands one
+   `bool` in; `Engine.Lock` asks for a true `LockMode`. Held:
+   `soft == true` turns into `LockMode.Soft`; `soft == false` turns
+   into `LockMode.Hard` — a plain, one-way turn, never the other way
+   round.
+2. **`Affect`'s own third, missing argument.** `IMind.Affect` hands
+   two things in; `Engine.Affect` asks for a third,
+   `force_reset`. Held: `EngineMind` always hands `false` for it — the
+   safe, given default, never a hard reset from a call that never
+   asked for one.
+3. **A `null` `Engine`.** Held: `EngineMind`'s own constructor throws
+   `ArgumentNullException` the moment a `null` `Engine` is handed in
+   — never a silent, later fault once some real call is made against
+   it.
+
+**How to check it — write these Red first:**
+
+1. `Behavior` reads back whatever the true, given `Engine.Behavior`
+   itself holds, whole and unchanged
+2. `Lock(true)` calls `Engine.Lock(LockMode.Soft)`
+3. `Lock(false)` calls `Engine.Lock(LockMode.Hard)`
+4. `Affect`, called through `IMind`'s own two-argument shape, calls
+   `Engine.Affect` with `force_reset: false`
+5. building an `EngineMind` around a `null` `Engine` throws
+   `ArgumentNullException`, at once — never later, and never quietly
+
 **Checked live, this same session, a real, given fact this whole
 task sits on top of: no game truly holds a `Need` at all yet.** A
 real `Need` name comes into being the one true moment someone writes
@@ -1214,6 +1243,52 @@ item, never two given items sharing one; how `Found` (and
 back the item's own true name, not a plain `g_1042`; and whether this
 whole real shape holds once checked live, in a real Windows Unity
 open.
+
+**Held, 2026-09-20 — a real, given clash in the two paragraphs
+above, closed.** The first says outright: no new field carried
+through `Found`. The second then asks how `Found` carries the Tag's
+own text through. Both cannot be true at once. **Closed: `Found`
+never carries a Tag at all — not now, not later.** A pickup's own
+`Tag` is read once, straight, at the one true moment a pickup `Deed`
+truly lands (`Enact`, never `Perceive`) — through `TASK-036`'s own
+`ITagSource`, keyed by the `Choice.ID` that `Deed.Holding` (`Choice`,
+`TASK-019`, already built) already holds at that same true moment.
+No tick before that moment ever reads a Tag at all — the hot path
+(`Perceive`, every tick, every character) never touches a string.
+
+```text
+readonly struct TargetMark {
+    public readonly string Tag;  // never null (ITagSource's own
+                                  // rule, TASK-036); read once, at
+                                  // Enact, keyed by Choice.ID
+}
+```
+
+`update_inventory.key` reads `TargetMark.Tag` in place of a plain
+`g_1042` id string — the whole real point of this task.
+
+**"One entry per named item," made plain.** This never meant one
+`GameObject` to one Tag — the strength below turns that around on
+purpose. It means the Tag **list itself** (Unity's own Project
+rules page, the catalog of names a Tag may hold) never holds two
+different given ways of writing the one true kind of key (`"GoldenKey"` and
+`"Golden_Key"` both standing for the same true thing) — a build-time
+check, the same true shape as `germio`'s own `V036` (§ above), fed
+the Tag list and every `Rule`'s own `condition` strings, checked
+once, never on the hot path at all.
+
+**How to check the logic — write these Red first (no Unity, once
+`TASK-036` stands):**
+
+1. a `Deed.Holding` truly taken, its own `Choice.ID` handed to a
+   stand-in `ITagSource` answering `"GoldenKey"`, gives back a
+   `TargetMark` whose `Tag` reads `"GoldenKey"`, whole
+2. `update_inventory.key`, built from that `TargetMark`, reads
+   `"GoldenKey"` — never the plain id string `g_1042`
+3. this whole turn runs once, at `Enact` alone — never called from
+   inside `Perceive`'s own loop (checked by a test double counting
+   its own calls, held at `1` across a whole tick with many things
+   found)
 
 **A real, given strength found this same session, weighed hard
 against, and not once broken:** where the object's own real name was
@@ -1344,12 +1419,26 @@ second task.
 
 ```text
 interface ISightSource {
-    float Reach { get; }
-    float HalfYaw { get; }
-    float HalfPitch { get; }
-    float EyeHeight { get; }
+    float Reach { get; }      // > 0, meters (Unity's own unit)
+    float HalfYaw { get; }    // > 0 and <= 180, degrees
+    float HalfPitch { get; }  // > 0 and <= 180, degrees
+    float EyeHeight { get; }  // meters, above the body's own root
 }
 ```
+
+**Contract:** every value is held true by germio's own `Sight`
+Inspector fields (`[Range]` there, not checked again here) — Runtime
+trusts them, never throws on them, never branches on them at all.
+**Held, 2026-09-20: this trust rests on germio's own `TASK-069`
+truly holding `[Range]` on every one of the four fields — not yet
+checked, since `TASK-069`'s own words are changed but its code is
+not yet built.** `TASK-026`'s own Play Mode test only proves the
+four numbers read back whole; it does not, and cannot, prove germio
+truly holds them inside a given range. This trust stays open across
+the two repository roots until `TASK-069` stands built and its own test
+runs. What happens if germio's own `Sight` is destroyed mid-play,
+once `TASK-026` already cached it at `Awake`, is not yet closed —
+held open, out of scope for this split.
 
 A real `Sight` (in germio) implements this; nothing past the
 interface's own four lines may be Unity-shaped. **How to check it:**
@@ -1365,7 +1454,9 @@ into `Self.Heading`, a `float`).
 
 ```text
 interface IHeadingSource {
-    Vector3 Forward { get; }
+    Vector3 Forward { get; }  // a unit vector, never zero — Unity's
+                               // own Transform.forward is always
+                               // unit length by its own contract
 }
 ```
 
@@ -1390,7 +1481,14 @@ readonly struct RawHit {
     public readonly Vector3 ClosestPoint;
 }
 interface IBroadPhaseSource {
-    int Find(RawHit[] buffer);   // returns count found, buffer.Length is the cap
+    // buffer: allocated once by the caller (TASK-034), fixed at 16,
+    // never null, never zero-length — a rule the caller must hold, not a
+    // case Find itself must guard.
+    // returns: the count truly found, always in [0, buffer.Length].
+    // Indices at or past the count are left unspecified (stale) —
+    // callers read only [0, count). No order is promised among the
+    // filled slots.
+    int Find(RawHit[] buffer);
 }
 ```
 
@@ -1406,8 +1504,8 @@ check whether one, once put down, is a trigger.
 
 **How to check the edge alone:** a Play Mode test, a held scene,
 checking `RawHit[]` reads back what the scene truly holds — real
-ids, real trigger marks, real closest points. `TASK-034` reads this
-same `IBroadPhaseSource`, and needs no Unity at all.
+ids, real closest points, and never past the true count. `TASK-034`
+reads this same `IBroadPhaseSource`, and needs no Unity at all.
 
 ### TASK-029
 
@@ -1416,6 +1514,19 @@ same `IBroadPhaseSource`, and needs no Unity at all.
 out. Modio holds the interface; germio's own world table (`TASK-067`)
 answers it — the same shape `IMind` already holds toward `animo`
 (`TASK-021`). Already shaped this way; no change owed here.
+
+**Held, 2026-09-20: an id germio's own table has never held.** Reads
+back an empty `kind` and an empty id string — the same, standing
+shape `Choice.None()` already holds for "nothing found" — never
+`null`, never thrown. `TASK-024`'s own wedge check already drops a
+`Found` whose kind reads empty, so this same empty-string answer
+falls straight into ground already proven true.
+
+**How to check it — write these Red first:**
+
+1. a known id answers with its own true kind and id string, whole
+2. an id the stand-in has never held answers with an empty kind and
+   an empty id string — never `null`
 
 **How to check it:** **this piece alone may be proved by a plain
 `dotnet test`**, unlike every other Unity-edge piece here — the
@@ -1434,16 +1545,32 @@ worth it, handed through `IRaySource` below as a plain record.
 ```text
 readonly struct RawRay {
     public readonly bool Hit;
-    public readonly int Id;      // GetInstanceID() of what was struck, if Hit
+    public readonly int Id;      // meaningful only when Hit; 0 when not
 }
 interface IRaySource {
-    RawRay Cast(Vector3 from, Vector3 toward, float reach);
+    // direction: a unit vector, the ray's own line — never a point
+    // to reach toward (renamed from "toward" to hold this plain).
+    // reach: > 0, the ray's own most far reach in meters.
+    RawRay Cast(Vector3 from, Vector3 direction, float reach);
 }
 ```
+
+**Contract:** `direction` is always a unit vector handed in by the
+caller (`TASK-035`'s own logic, itself reading `Choice`/`Found`'s own
+`Angle`, already a settled direction — never a raw point). A zero or
+non-unit `direction`, or a `reach <= 0`, breaks a rule the caller
+must hold, not a case `Cast` itself must answer for. **Held,
+2026-09-20: a thing at the exact edge, at `reach`'s own true
+distance, is held true (`<=`, not a strict `<`)** — matching Unity's
+own `Physics.Raycast`, which asks for `maxDistance` under this same
+rule.
 
 **How to check it:** a Play Mode test — a wall between the eyes and
 a thing; `Hit` reads false, or `Id` reads the wall's own id, never
 the thing past it. A clear line; `Id` reads the true thing's own id.
+A thing set at `reach` less a hair still reads true; past `reach`
+by a hair reads false — the edge itself, matched close as a real
+scene allows.
 
 ### TASK-031
 
@@ -1463,7 +1590,26 @@ past any interface.** This test is the true, final word on the old
 **The heading logic — split from `TASK-027`, needs no Unity at
 all.** Takes an `IHeadingSource` (a plain `Vector3`, `TASK-027`'s
 own edge) and turns it into `Self.Heading`, the one `float` §3.7.5
-asks for.
+asks for. **Held, 2026-09-20: the body may lean (a slope, a step),
+but `Self.Heading` stays level (§9.2-8's own held word). So this
+logic first drops `Forward`'s own `Y`, then makes the flat `X`/`Z`
+that remains a unit vector again, before ever turning it into an
+angle.** A `Forward` handed in as `Vector3.zero` is a caller's own
+mistake (never a true value from a real `Transform`) — not a case
+this logic need answer for.
+
+**Held, 2026-09-20, a second time — dropping `Y` may itself leave
+almost nothing.** A `Forward` leaning close to straight up or down
+leaves a flat `X`/`Z` close to `Vector3.zero` too, the very hole
+`Forward`'s own true rule was held to close, come back through
+the side door. **Closed: this logic holds its own last true
+`Heading`, as a small, given field — not a pure turn from one
+`Vector3` alone.** When the flat length falls under a small, given
+mark (`0.001`), `Heading` is left unchanged, holding its last true
+value, rather than turned from a shaking, near-zero line. A real
+body walking `stemic`'s own `Level_1` never leans this far, so this
+path stands mostly untouched — but a defined, tested answer stands
+ready all the same.
 
 **How to check it — write these Red first:**
 
@@ -1473,6 +1619,14 @@ asks for.
 4. turned three-quarters reads `270`
 5. a small, given `Vector3` noise (unit length, off by a hair) still
    reads within a small, named error of the true heading
+6. a `Forward` leaning well up (a real slope's own sharp angle,
+   `Y` far from `0`) still reads the same flat heading as the same
+   direction with no lean at all — proves the drop-`Y`-then-turn
+   order holds true
+7. a `Forward` given straight up (`(0, 1, 0)`, flat length near
+   zero) leaves `Heading` unchanged from whatever it last truly held
+   — proves the near-zero hole is closed by holding still, not by an
+   shaking turn
 
 **How to check zero garbage:** run the turn 10,000 times against one
 `IHeadingSource`; `GC.GetTotalAllocatedBytes` must show **0**,
@@ -1530,6 +1684,10 @@ still needs — a true, given thing, or none at all.
 3. `Hit == true`, `Id` matching neither what stage one held nor the
    wall between — a thing not asked after — is dropped, not held as
    a false true
+4. `Hit == false`, with `Id` handed in as a real, given value (never
+   `0`, as if the edge broke its own contract) still reads as nothing
+   found — proves the logic checks `Hit` first, and never reads `Id`
+   on its own
 
 **How to check zero garbage:** run against a fixed `IRaySource`
 10,000 times; `GC.GetTotalAllocatedBytes` must show **0**.
@@ -1544,9 +1702,14 @@ Tag string into what a pickup `Rule` needs — the same true shape
 
 ```text
 interface ITagSource {
-    string Tag { get; }
+    string Tag { get; }  // never null — Unity's own GameObject.tag
+                          // is never null, "Untagged" by default
 }
 ```
+
+**Contract:** matched exact, case-sensitive against a known string
+(`"GoldenKey"`), the same true way `GameObject.CompareTag` itself
+compares — no folding of upper and lower case, ever.
 
 **How to check it — write these Red first:**
 
@@ -1556,6 +1719,8 @@ interface ITagSource {
 3. two different given ids, both handed the same Tag string, both
    read back that one Tag — proves more than one key may share one
    real Tag, the strength `TASK-022` itself found
+4. a Tag handed in with the case changed (`"goldenkey"`) reads as a
+   different Tag from `"GoldenKey"` — no folding of case, ever
 
 **How to check zero garbage:** run the read 10,000 times against a
 fixed `ITagSource`; `GC.GetTotalAllocatedBytes` must show **0**.
@@ -1577,5 +1742,4 @@ to take them in.
 is read once at start or every tick (a character in the dark may see
 less); today it reads once. Whether `Self.Heading` staying one
 `float` (no up or down in the character's own facing) is right;
-today the wedge stays level.
 today the wedge stays level.
