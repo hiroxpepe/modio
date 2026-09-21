@@ -26,21 +26,21 @@ change in as a commit.
 + [x] TASK-018 [P-XX]: Put the questions in the target, not in a condition
 + [ ] TASK-016 [P-XX]: Put the rest of the docs into Basic English
 + [ ] TASK-020 [P-XX]: Hold real, given classic console-era AI patterns, for seeking to check against
-+ [ ] TASK-021 [P-XX]: Wire animo's own true Engine to Modio's own real IMind
++ [x] TASK-021 [P-XX]: Wire animo's own true Engine to Modio's own real IMind
 + [ ] TASK-022 [P-XX]: Add a draft plan, a real Unity Tag for one named item
-+ [ ] TASK-023 [P-02]: Add an asmdef of Modio's own, so a Unity project can take it in
-+ [ ] TASK-024 [P-02]: Build the wedge check in Scripts, with no Unity in it at all
++ [x] TASK-023 [P-02]: Add an asmdef of Modio's own, so a Unity project can take it in
++ [x] TASK-024 [P-02]: Build the wedge check in Scripts, with no Unity in it at all
 + [ ] TASK-026 [P-02]: The thin Unity edge, reading Sight's five numbers from germio
 + [ ] TASK-027 [P-02]: The thin Unity edge, reading transform.forward
 + [ ] TASK-028 [P-02]: The thin Unity edge, the broad sphere call alone
 + [ ] TASK-029 [P-02]: The name interface, asking germio for a kind and an id
 + [ ] TASK-030 [P-02]: The thin Unity edge, one ray call alone
 + [ ] TASK-031 [P-02]: Prove zero garbage across a whole tick, by a real Play Mode test
-+ [ ] TASK-032 [P-02]: The heading logic behind TASK-027, no Unity at all
++ [x] TASK-032 [P-02]: The heading logic behind TASK-027, no Unity at all
 + [xx] TASK-033 [P-02]: The Sight-data logic behind TASK-026 — dropped, no real logic stood in it
-+ [ ] TASK-034 [P-02]: The broad-phase logic behind TASK-028, no Unity at all
-+ [ ] TASK-035 [P-02]: The ray-result logic behind TASK-030, no Unity at all
-+ [ ] TASK-036 [P-XX]: The Tag logic behind TASK-022's own third path, no Unity at all
++ [x] TASK-034 [P-02]: The broad-phase logic behind TASK-028, no Unity at all
++ [x] TASK-035 [P-02]: The ray-result logic behind TASK-030, no Unity at all
++ [x] TASK-036 [P-XX]: The Tag logic behind TASK-022's own third path, no Unity at all
 
 ## Detail
 
@@ -1065,6 +1065,11 @@ game.
 
 ### TASK-021
 
+**Done 2026-09-21, 5 tests.** `EngineMind` stands built, against
+`IEngineFacing` (option B, 2026-09-20 — a stand-in shape, never a
+true tie to `animo`'s own `Engine` yet; that true tie still waits on
+a thin, given piece, not yet built).
+
 **Found true, checked live: `animo`'s own `Engine.cs` already holds
 almost every real member `Modio`'s own `IMind` asks for — `Behavior`,
 `Lock`, `Affect` — real, given, working code, not a bare stub.**
@@ -1207,6 +1212,11 @@ work, not yet real, given practice.**
 
 ### TASK-022
 
+**`TargetMarkLogic` itself done, 2026-09-21, 2 tests. Real, given
+work still owed:** the Unity Tag edge (`GameObject.CompareTag`) and
+the real, given checks against `stemic`'s own Tag list — both still
+need a real Windows Unity open.
+
 **Found true, checked live, this same session — a real, given gap:
 picking up one named item (a given key, not a plain given block) asks
 for more than `kind` alone. `kind`'s own true eleven marks (`germio`'s
@@ -1317,6 +1327,12 @@ it are truly built.
 
 ### TASK-023
 
+**Done 2026-09-21.** `Scripts/Modio.asmdef` (referencing `Germio`,
+`Animo`) and `Runtime/Modio.Runtime.asmdef` (referencing `Modio` as
+well) both stand, the same two-part shape `germio` already holds.
+`Runtime/` itself still holds no `.cs` file at all — the `.asmdef`
+there is ready for `TASK-026` through `TASK-031` to fill.
+
 **Modio holds no `.asmdef` at all today** — checked live, 2026-09-18.
 `animo` holds four; Modio holds none. So no Unity project can take
 Modio in as a package, and `Runtime/` (TASK-024), which must call
@@ -1334,6 +1350,10 @@ the two build roads read the same `.cs` files and never write into each
 other.
 
 ### TASK-024
+
+**Done 2026-09-21, 14 tests** (the twelve below, plus two more —
+a zero `halfYaw`/`halfPitch` finds nothing, held true after
+2026-09-21's own second look — see the "Held" note further down).
 
 **Build the wedge check — in `Scripts/`, with no Unity in it at all.**
 Split out of the old TASK-024 on 2026-09-19, once it was seen that
@@ -1599,6 +1619,8 @@ run.
 
 ### TASK-032
 
+**Done 2026-09-21, 7 tests.**
+
 **The heading logic — split from `TASK-027`, needs no Unity at
 all.** Takes an `IHeadingSource` (a plain `Vector3`, `TASK-027`'s
 own edge) and turns it into `Self.Heading`, the one `float` §3.7.5
@@ -1658,6 +1680,11 @@ named there — no second task is owed.
 
 ### TASK-034
 
+**Done 2026-09-21, 6 tests** (the four below, plus two more from
+2026-09-21's own second look — an empty `own_id` never drops a
+not-yet-named thing, and the `places` list's own first-`Add` cost is
+now held as a written warning, not a hole).
+
 **The broad-phase logic — split from `TASK-028`, needs no Unity at
 all.** Takes an `IBroadPhaseSource` (`TASK-028`'s own edge, a plain
 `RawHit[]`) and hands each true hit into the wedge check (`TASK-024`,
@@ -1683,6 +1710,8 @@ standing in front):**
 
 ### TASK-035
 
+**Done 2026-09-21, 4 tests.**
+
 **The ray-result logic — split from `TASK-030`, needs no Unity at
 all.** Takes an `IRaySource` (`TASK-030`'s own edge) and turns
 `RawRay` into what `Choice` (`TASK-019`) or a `Found` (`TASK-024`)
@@ -1705,6 +1734,8 @@ still needs — a true, given thing, or none at all.
 10,000 times; `GC.GetTotalAllocatedBytes` must show **0**.
 
 ### TASK-036
+
+**Done 2026-09-21, 4 tests.**
 
 **The Tag logic — split from `TASK-022`'s own drafted third path,
 needs no Unity at all.** Takes an `ITagSource` (a plain `string`, the

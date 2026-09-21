@@ -1,0 +1,18 @@
+{
+  "name": "Modio.Runtime",
+  "rootNamespace": "Modio.Runtime",
+  "references": [
+    "Modio",
+    "Germio",
+    "Animo"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
