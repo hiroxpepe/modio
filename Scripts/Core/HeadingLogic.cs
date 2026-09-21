@@ -32,7 +32,15 @@ namespace Modio.Core {
         /// <summary>Reads Forward, and turns Heading toward it.</summary>
         /// <param name="forward">A unit vector, never Vector3.zero.</param>
         public void Turn(Vector3 forward) {
-            throw new NotImplementedException();
+            float flat_length = MathF.Sqrt(forward.X * forward.X + forward.Z * forward.Z);
+            if (flat_length < 0.001f) { return; }
+
+            float x = forward.X / flat_length;
+            float z = forward.Z / flat_length;
+            float heading = MathF.Atan2(x, z) * (180f / MathF.PI);
+            if (heading < 0f) { heading += 360f; }
+
+            Heading = heading;
         }
     }
 }

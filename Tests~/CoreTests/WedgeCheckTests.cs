@@ -200,5 +200,50 @@ namespace Modio.Tests.Core {
 
             Assert.That(into, Has.Count.EqualTo(1), "One thing, seen through two colliders, is held once.");
         }
+
+        [Test, Description("A zero halfYaw (blind sight) finds nothing, never crashes on a division by zero")]
+        public void Worth_AZeroHalfYaw_FindsNothing() {
+            var near = new List<Place> { place(kind: "Ground", id: "g_1", bearing: 0f, distance: 8f) };
+            var into = new List<Found>();
+
+            worth(self: new Self(heading: 0f), sight_reach: 30f, sight_half_yaw: 0f, sight_half_pitch: 45f,
+                seek: new Seek(kind: "Ground"), own_id: "h_self", near: near, into: into);
+
+            Assert.That(into, Is.Empty, "A wedge with no width at all holds nothing, not even straight ahead.");
+        }
+
+        [Test, Description("A zero halfPitch (blind sight) finds nothing, never crashes on a division by zero")]
+        public void Worth_AZeroHalfPitch_FindsNothing() {
+            var near = new List<Place> { place(kind: "Ground", id: "g_1", bearing: 0f, distance: 8f) };
+            var into = new List<Found>();
+
+            worth(self: new Self(heading: 0f), sight_reach: 30f, sight_half_yaw: 90f, sight_half_pitch: 0f,
+                seek: new Seek(kind: "Ground"), own_id: "h_self", near: near, into: into);
+
+            Assert.That(into, Is.Empty);
+        }
+
+        [Test, Description("An empty own_id never drops an unresolved thing (empty kind, empty id) by accident")]
+        public void Worth_AnEmptyOwnId_NeverDropsAnUnresolvedThing() {
+            var near = new List<Place> { place(kind: "", id: "", bearing: 0f, distance: 8f) };
+            var into = new List<Found>();
+
+            worth(self: new Self(heading: 0f), sight_reach: 30f, sight_half_yaw: 90f, sight_half_pitch: 45f,
+                seek: new Seek(kind: ""), own_id: "", near: near, into: into);
+
+            Assert.That(into, Has.Count.EqualTo(1),
+                "An empty own_id must never be mistaken for a real character's own id.");
+        }
+
+        [Test, Description("A null own_id never throws, and never drops an unresolved thing by accident")]
+        public void Worth_ANullOwnId_NeverThrowsAndNeverDropsAnUnresolvedThing() {
+            var near = new List<Place> { place(kind: "", id: "", bearing: 0f, distance: 8f) };
+            var into = new List<Found>();
+
+            worth(self: new Self(heading: 0f), sight_reach: 30f, sight_half_yaw: 90f, sight_half_pitch: 45f,
+                seek: new Seek(kind: ""), own_id: null!, near: near, into: into);
+
+            Assert.That(into, Has.Count.EqualTo(1));
+        }
     }
 }

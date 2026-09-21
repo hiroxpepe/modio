@@ -44,11 +44,12 @@ namespace Modio.Tests.Core {
                 names.Add(id: i, kind: "Ground", id_string: $"g_{i}");
                 hits.Add(new RawHit(id_value: i, closest_point: new Vector3(x: 0f, y: 0f, z: 8f)));
             }
+            var places = new List<Place>();
             var into = new List<Found>();
 
             BroadPhaseLogic.Gather(self: new Self(heading: 0f), sight_reach: 30f, sight_half_yaw: 90f,
                 sight_half_pitch: 45f, seek: new Seek(kind: "Ground"), own_id: "h_self",
-                own_position: new Vector3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 16, names: names, into: into);
+                own_position: new Vector3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 16, names: names, places: places, into: into);
 
             Assert.That(into, Has.Count.EqualTo(16));
         }
@@ -61,11 +62,12 @@ namespace Modio.Tests.Core {
             // world's own zero) — matches WedgeCheck's own already-proven
             // ellipse case at yaw 60, halfYaw 90, halfPitch 20, height 2.5.
             var hits = new List<RawHit> { new RawHit(id_value: 1, closest_point: new Vector3(x: 8.66f, y: 2.5f, z: 5f)) };
+            var places = new List<Place>();
             var into = new List<Found>();
 
             BroadPhaseLogic.Gather(self: new Self(heading: 0f), sight_reach: 30f, sight_half_yaw: 90f,
                 sight_half_pitch: 20f, seek: new Seek(kind: "Ground"), own_id: "h_self",
-                own_position: new Vector3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 1, names: names, into: into);
+                own_position: new Vector3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 1, names: names, places: places, into: into);
 
             Assert.That(into, Has.Count.EqualTo(1),
                 "own_position must be subtracted before the wedge check ever runs.");
@@ -76,13 +78,31 @@ namespace Modio.Tests.Core {
             var names = new FakeNames();
             names.Add(id: 1, kind: "Human", id_string: "h_self");
             var hits = new List<RawHit> { new RawHit(id_value: 1, closest_point: new Vector3(x: 0f, y: 0f, z: 1f)) };
+            var places = new List<Place>();
             var into = new List<Found>();
 
             BroadPhaseLogic.Gather(self: new Self(heading: 0f), sight_reach: 30f, sight_half_yaw: 90f,
                 sight_half_pitch: 45f, seek: new Seek(kind: "Human"), own_id: "h_self",
-                own_position: new Vector3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 1, names: names, into: into);
+                own_position: new Vector3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 1, names: names, places: places, into: into);
 
             Assert.That(into, Is.Empty);
+        }
+
+        [Test, Description("An empty own_id never drops an unresolved thing (empty kind, empty id) by accident")]
+        public void Gather_AnEmptyOwnId_NeverDropsAnUnresolvedThing() {
+            // FakeNames answers ("", "") for an id it has never held — the same
+            // standing shape as a real, unresolved thing.
+            var names = new FakeNames();
+            var hits = new List<RawHit> { new RawHit(id_value: 99, closest_point: new Vector3(x: 0f, y: 0f, z: 8f)) };
+            var places = new List<Place>();
+            var into = new List<Found>();
+
+            BroadPhaseLogic.Gather(self: new Self(heading: 0f), sight_reach: 30f, sight_half_yaw: 90f,
+                sight_half_pitch: 45f, seek: new Seek(kind: ""), own_id: "",
+                own_position: new Vector3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 1, names: names, places: places, into: into);
+
+            Assert.That(into, Has.Count.EqualTo(1),
+                "An empty own_id must never be mistaken for a real character's own id.");
         }
 
         [Test, Description("One id, found through two hits, is read once")]
@@ -94,11 +114,12 @@ namespace Modio.Tests.Core {
                 new RawHit(id_value: 1, closest_point: new Vector3(x: 0f, y: 0f, z: 8f)),
                 new RawHit(id_value: 2, closest_point: new Vector3(x: 0.1f, y: 0f, z: 8f))
             };
+            var places = new List<Place>();
             var into = new List<Found>();
 
             BroadPhaseLogic.Gather(self: new Self(heading: 0f), sight_reach: 30f, sight_half_yaw: 90f,
                 sight_half_pitch: 45f, seek: new Seek(kind: "Ground"), own_id: "h_self",
-                own_position: new Vector3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 2, names: names, into: into);
+                own_position: new Vector3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 2, names: names, places: places, into: into);
 
             Assert.That(into, Has.Count.EqualTo(1));
         }

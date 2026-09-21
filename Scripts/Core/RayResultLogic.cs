@@ -25,7 +25,8 @@ namespace Modio.Core {
         /// held. Never reads ray.Id where ray.Hit is false.
         /// </summary>
         public static bool Confirms(RawRay ray, int expected_id) {
-            throw new NotImplementedException();
+            if (!ray.Hit) { return false; }
+            return ray.ID == expected_id;
         }
     }
 }

@@ -41,7 +41,8 @@ namespace Modio.Core {
         // public static Methods [verb]
 
         public static TargetMark Mark(string tag) {
-            throw new NotImplementedException();
+            if (tag == "Untagged") { return new TargetMark(tag: ""); }
+            return new TargetMark(tag: tag);
         }
     }
 }

@@ -20,26 +20,32 @@ namespace Modio.Core {
     /// <author>h.adachi (STUDIO MeowToon)</author>
     public sealed class EngineMind : IMind {
         ///////////////////////////////////////////////////////////////////////////////////////////////
+        // Fields
+
+        readonly IEngineFacing _engine;
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////
         // Constructor
 
         public EngineMind(IEngineFacing engine) {
-            throw new NotImplementedException();
+            if (engine == null) { throw new ArgumentNullException(nameof(engine)); }
+            _engine = engine;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
         // public Properties [noun, adjective]
 
-        public string Behavior => throw new NotImplementedException();
+        public string Behavior => _engine.Behavior;
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
         // public Methods [verb]
 
         public void Lock(float duration, bool soft) {
-            throw new NotImplementedException();
+            _engine.Lock(duration: duration, mode: soft ? LockMode.Soft : LockMode.Hard);
         }
 
         public void Affect(string need, float delta) {
-            throw new NotImplementedException();
+            _engine.Affect(need: need, delta: delta, force_reset: false);
         }
     }
 }

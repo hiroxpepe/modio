@@ -1585,6 +1585,18 @@ Unity-true, whole — a real measure of a real run cannot be moved
 past any interface.** This test is the true, final word on the old
 `TASK-025`'s own claim — no garbage on any tick.
 
+**Held, 2026-09-21, checked live: a real hole in "zero garbage",
+found and closed once already, held open here as a true warning.**
+`BroadPhaseLogic.Gather` and `WedgeCheck.Worth` both take a
+`List<T>` the caller holds — but a `List<T>` still at its own
+starting size of 0 makes new, once, the first time anything is ever
+added to it (checked live: 72 bytes, one `Add` on an empty list).
+**`Runtime` must give each list a true starting size
+(`new List<Place>(16)`, `new List<Found>(16)`) once, at
+`Awake` — never a fresh, empty list, tick after tick.** This one
+line, missed, would fail this whole task's own bar on its first real
+run.
+
 ### TASK-032
 
 **The heading logic — split from `TASK-027`, needs no Unity at

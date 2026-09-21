@@ -37,7 +37,8 @@ namespace Modio.Core {
 
         /// <summary>Builds a TargetMark for holding.ID, through lookup and TagLogic.Mark.</summary>
         public static TargetMark From(Choice holding, IEnactTagLookup lookup) {
-            throw new NotImplementedException();
+            if (!holding.Taken) { return new TargetMark(tag: ""); }
+            return TagLogic.Mark(tag: lookup.TagOf(id: holding.ID));
         }
     }
 }
