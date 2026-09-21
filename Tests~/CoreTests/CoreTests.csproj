@@ -29,6 +29,19 @@
     <Compile Include="..\..\Scripts\Core\Deed.cs" />
     <Compile Include="..\..\Scripts\Core\IMind.cs" />
     <Compile Include="..\..\Scripts\Core\Hand.cs" />
+    <Compile Include="..\..\Scripts\Core\Place.cs" />
+    <Compile Include="..\..\Scripts\Core\WedgeCheck.cs" />
+    <Compile Include="..\..\Scripts\Core\Vec3.cs" />
+    <Compile Include="..\..\Scripts\Core\HeadingLogic.cs" />
+    <Compile Include="..\..\Scripts\Core\TagLogic.cs" />
+    <Compile Include="..\..\Scripts\Core\INameSource.cs" />
+    <Compile Include="..\..\Scripts\Core\IEngineFacing.cs" />
+    <Compile Include="..\..\Scripts\Core\EngineMind.cs" />
+    <Compile Include="..\..\Scripts\Core\IBroadPhaseSource.cs" />
+    <Compile Include="..\..\Scripts\Core\BroadPhaseLogic.cs" />
+    <Compile Include="..\..\Scripts\Core\IRaySource.cs" />
+    <Compile Include="..\..\Scripts\Core\RayResultLogic.cs" />
+    <Compile Include="..\..\Scripts\Core\TargetMarkLogic.cs" />
     <Compile Include="..\..\Scripts\Tools\Seen.cs" />
     <Compile Include="..\..\Scripts\Tools\Trace.cs" />
     <Compile Include="..\..\Scripts\Tools\Runner.cs" />
@@ -48,6 +61,13 @@
     <Compile Include="PerceiveOtherTests.cs" />
     <Compile Include="PerceiveAgainTests.cs" />
     <Compile Include="DeedTargetTests.cs" />
+    <Compile Include="WedgeCheckTests.cs" />
+    <Compile Include="HeadingLogicTests.cs" />
+    <Compile Include="TagLogicTests.cs" />
+    <Compile Include="EngineMindTests.cs" />
+    <Compile Include="BroadPhaseLogicTests.cs" />
+    <Compile Include="RayResultLogicTests.cs" />
+    <Compile Include="TargetMarkLogicTests.cs" />
   </ItemGroup>
 
 </Project>
