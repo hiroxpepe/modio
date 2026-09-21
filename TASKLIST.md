@@ -30,12 +30,17 @@ change in as a commit.
 + [ ] TASK-022 [P-XX]: Add a draft plan, a real Unity Tag for one named item
 + [ ] TASK-023 [P-02]: Add an asmdef of Modio's own, so a Unity project can take it in
 + [ ] TASK-024 [P-02]: Build the wedge check in Scripts, with no Unity in it at all
-+ [ ] TASK-026 [P-02]: Read Sight's five numbers from germio, once a tick
-+ [ ] TASK-027 [P-02]: Read heading from the body, once a tick
-+ [ ] TASK-028 [P-02]: Stage one — the broad sphere, feeding the wedge check
++ [ ] TASK-026 [P-02]: The thin Unity edge, reading Sight's five numbers from germio
++ [ ] TASK-027 [P-02]: The thin Unity edge, reading transform.forward
++ [ ] TASK-028 [P-02]: The thin Unity edge, the broad sphere call alone
 + [ ] TASK-029 [P-02]: The name interface, asking germio for a kind and an id
-+ [ ] TASK-030 [P-02]: Stage two — one ray per thing the wedge already held true
++ [ ] TASK-030 [P-02]: The thin Unity edge, one ray call alone
 + [ ] TASK-031 [P-02]: Prove zero garbage across a whole tick, by a real Play Mode test
++ [ ] TASK-032 [P-02]: The heading logic behind TASK-027, no Unity at all
++ [xx] TASK-033 [P-02]: The Sight-data logic behind TASK-026 — dropped, no real logic stood in it
++ [ ] TASK-034 [P-02]: The broad-phase logic behind TASK-028, no Unity at all
++ [ ] TASK-035 [P-02]: The ray-result logic behind TASK-030, no Unity at all
++ [ ] TASK-036 [P-XX]: The Tag logic behind TASK-022's own third path, no Unity at all
 
 ## Detail
 
@@ -1303,112 +1308,265 @@ real test besides.** Five different pieces stood inside it, and the
 only check named was "by eye, in a real Windows Unity open." `germio`
 holding `Sight` itself (`sight_checklist.md` §4.7) split the first
 piece away outright. The rest is split into `TASK-026` through
-`TASK-031` below, each its own piece, each with its own true test —
+`TASK-036` below, each its own piece, each with its own true test —
 matching how `TASK-009` already proved zero garbage by a real,
 running test, not a read of the Profiler by eye.
 
+**Held, 2026-09-20 — how a thin edge and its own logic are wired
+together.** Unity cannot hold an interface in `[SerializeField]`
+directly. So each edge below (`TASK-026`, `027`, `028`, `030`) is a
+plain `MonoBehaviour` that implements its own interface
+(`ISightSource` and the rest); the logic piece behind it
+(`TASK-032`–`035`) holds a plain field of the interface's own type,
+set once, in `Awake`, by `GetComponent<T>()` on that same
+`MonoBehaviour`. No `[SerializeField]` ever names the interface
+itself — only the concrete edge type is ever placed in the
+Inspector.
+
+**Held, 2026-09-20 — where a trigger is dropped, settled once, not
+twice.** The old draft had `RawHit` itself carry `IsTrigger`, and
+`TASK-034` drop it again — a hit the edge could never truly hand
+over in the first place. **Trigger drop happens once, at the edge
+alone** (`QueryTriggerInteraction.Ignore`, inside `TASK-028`).
+`RawHit` never carries a trigger mark at all, and no logic test
+below asks after one.
+
 ### TASK-026
 
-**Read Sight's five numbers from germio, once at start.** `Sight`
-itself now stands in `germio` (`sight_checklist.md` §4.7), not here.
-Modio's own `Runtime` asks for `reach`, `halfYaw`, `halfPitch` and
-`eyeHeight` — four numbers, read once, never the type. Depends on
-`germio` first holding `Sight` at all (its own `TASK-069`, words
-changed to match).
+**The thin Unity edge alone — one call, reading germio's own
+`Sight`.** No logic of its own stands here: it reads `reach`,
+`halfYaw`, `halfPitch` and `eyeHeight` from germio's own `Sight`
+component, once at start, through the new `ISightSource` interface
+below. **No separate logic task stands behind this one** (`TASK-033`
+was dropped, held there for why) — a plain copy of four numbers,
+with no branch in it, is this task's own Play Mode test, not a
+second task.
 
-**How to check it:** a real Play Mode test, one scene, one prefab
-holding `germio`'s own `Sight`. Read the four numbers back through
-Modio's own `Runtime` and check each against what the prefab held.
-Run it 1,000 times; `GC.GetTotalAllocatedBytes` must show **0**
-difference, matching `TASK-009`'s own bar.
+```text
+interface ISightSource {
+    float Reach { get; }
+    float HalfYaw { get; }
+    float HalfPitch { get; }
+    float EyeHeight { get; }
+}
+```
+
+A real `Sight` (in germio) implements this; nothing past the
+interface's own four lines may be Unity-shaped. **How to check it:**
+a Play Mode test, one prefab holding a real `Sight`, checking the
+four numbers read back whole.
 
 ### TASK-027
 
-**Read `transform.forward` into `Self`, once a tick.** The smallest
-piece split from the old `TASK-025`: turn a body's own forward line
-into the one `float` `Self.Heading` asks for (§3.7.5).
+**The thin Unity edge alone — one call, `transform.forward`.** Turns
+a body's own forward line into a plain `Vector3`, handed to
+`IHeadingSource` below (`TASK-032` holds the logic that turns it
+into `Self.Heading`, a `float`).
 
-**How to check it:** a Play Mode test. Turn a prefab to four known
-headings (`0`, `90`, `180`, `270`) and check `Self.Heading` reads
-each one back, within a small, named error. Run the read 1,000
-times at one heading; `GC.GetTotalAllocatedBytes` must show **0**.
+```text
+interface IHeadingSource {
+    Vector3 Forward { get; }
+}
+```
+
+**How to check it:** a Play Mode test, turning a prefab and checking
+`Forward` reads back what the prefab truly holds. The turn from
+`Vector3` into one `float` of heading is `TASK-032`'s own work, and
+needs no Unity at all.
 
 ### TASK-028
 
-**Stage one — the broad sphere, feeding `TASK-024`'s own wedge
-check.** `Physics.OverlapSphereNonAlloc` into a `Collider[16]` made
-once at start, then each hit handed to the wedge check
-(`TASK-024`, already built and proved by its own twelve tests).
-This is the largest piece kept, since splitting the sphere call from
-the hand-off to the wedge check would leave neither one a true test
-of its own — the sphere call alone proves nothing without the wedge
-check reading its output, and the wedge check is already proved
-alone.
+**The thin Unity edge alone — one call,
+`Physics.OverlapSphereNonAlloc`.** Fills a `Collider[16]`, then hands
+each hit through `IBroadPhaseSource` below as a plain record — never
+a real `Collider` past this one line. `TASK-034` holds every piece
+of logic once held here: the buffer cut-off, trigger drop, the wide
+collider's own `ClosestPoint`, and the hand-off into the wedge check
+(`TASK-024`).
 
-**Holes closed here, each its own test:**
+```text
+readonly struct RawHit {
+    public readonly int Id;      // GetInstanceID()
+    public readonly Vector3 ClosestPoint;
+}
+interface IBroadPhaseSource {
+    int Find(RawHit[] buffer);   // returns count found, buffer.Length is the cap
+}
+```
 
-| Hole                                                  | Test                                                                                                      |
-| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| the buffer of 16 fills and cuts off                   | fill a scene with 20 things; check the count reads 16, and a warning is made                              |
-| triggers are read (`Despawn`, camera)                 | a scene with one trigger, one plain collider; only the plain one comes back                               |
-| a wide, flat collider's middle sits outside the wedge | `ClosestPoint` against a `BoxCollider` wider than the wedge; still found                                  |
-| the character's own collider comes back               | already `TASK-024`'s own test 11 — checked again here, with a real `Physics` call standing in front of it |
-| one thing, two colliders, comes back twice            | already `TASK-024`'s own test 12 — checked again here, the same way                                       |
+**Settled 2026-09-19, kept here as true against a real scene, moved
+from the old `TASK-025`: stage one passes
+`QueryTriggerInteraction.Ignore`.** Counted in `stemic`'s own
+`Level_1`: of every collider there, only three are triggers —
+`Despawn`, `RayBox`, `MainCamera`. `Ground` and `Block`, what a seek
+is truly after, are plain colliders. Dropping triggers loses nothing
+sought. **Watched:** `germio` holds `Home` as a kind, `poc_pair.json`
+holds `GoHome` as an act, but no `Home` stands in `Level_1` today —
+check whether one, once put down, is a trigger.
 
-**Settled 2026-09-19, by reading `stemic`'s own `Level_1`: stage one
-passes `QueryTriggerInteraction.Ignore`.** Counted in the scene file:
-of every collider there, only three are triggers — `Despawn` (the
-catch for a fall), `RayBox` and `MainCamera` (the camera's own work).
-`Ground` and `Block`, which are what a seek is after, are plain
-colliders on their own prefabs (`m_IsTrigger: 0`). So dropping
-triggers loses nothing that is sought, and keeps three things that
-are no one's business to see out of the buffer of 16. **One thing to
-watch:** `germio` holds `Home` as a kind, and `poc_pair.json` holds
-`GoHome` as an act, but no `Home` stands in `Level_1` at all today.
-When one is put down, check whether it is a trigger; if it is, this
-call must change.
-
-**How to check zero garbage:** a Play Mode test, `OverlapSphereNonAlloc`
-run 1,000 times against a held scene; `GC.GetTotalAllocatedBytes`
-must show **0**, matching `TASK-009`.
+**How to check the edge alone:** a Play Mode test, a held scene,
+checking `RawHit[]` reads back what the scene truly holds — real
+ids, real trigger marks, real closest points. `TASK-034` reads this
+same `IBroadPhaseSource`, and needs no Unity at all.
 
 ### TASK-029
 
-**The name interface — Modio asks, `germio` answers.** One call, an
+**The name interface — Modio asks, germio answers.** One call, an
 `int` id in (`GetInstanceID()`, no boxing), a kind and an id string
-out. Modio holds the interface; `germio`'s own world table
-(`TASK-067`) answers it — the same shape `IMind` already holds
-toward `animo` (`TASK-021`).
+out. Modio holds the interface; germio's own world table (`TASK-067`)
+answers it — the same shape `IMind` already holds toward `animo`
+(`TASK-021`). Already shaped this way; no change owed here.
 
 **How to check it:** **this piece alone may be proved by a plain
-`dotnet test`**, unlike every other piece here — the interface
-itself asks nothing of Unity. Write a stand-in answering a known id
-with a known kind and string; check Modio's own calling code reads
-it back whole. A second, Play Mode test then checks `germio`'s own
-table gives the same answer for real.
+`dotnet test`**, unlike every other Unity-edge piece here — the
+interface itself asks nothing of Unity. Write a stand-in answering a
+known id with a known kind and string; check Modio's own calling
+code reads it back whole. A second, Play Mode test then checks
+germio's own table gives the same answer for real.
 
 ### TASK-030
 
-**Stage two — one ray per thing the wedge already held true.** A
-single `Physics.Raycast(out hit)` from the eyes, for each thing
-`StageGate` marked worth it. Depends on `TASK-028` (what stage one
-hands it) and `TASK-029` (the name it reports).
+**The thin Unity edge alone — one call, `Physics.Raycast`.** A
+single ray from the eyes toward one thing stage one already held
+worth it, handed through `IRaySource` below as a plain record.
+`TASK-035` holds the logic reading what came back.
+
+```text
+readonly struct RawRay {
+    public readonly bool Hit;
+    public readonly int Id;      // GetInstanceID() of what was struck, if Hit
+}
+interface IRaySource {
+    RawRay Cast(Vector3 from, Vector3 toward, float reach);
+}
+```
 
 **How to check it:** a Play Mode test — a wall between the eyes and
-a thing the wedge holds true; the ray must fail it. A clear line;
-the ray must hold it true. Run against one thing 1,000 times;
-`GC.GetTotalAllocatedBytes` must show **0**.
+a thing; `Hit` reads false, or `Id` reads the wall's own id, never
+the thing past it. A clear line; `Id` reads the true thing's own id.
 
 ### TASK-031
 
 **Prove zero garbage across a whole tick — one real, running test,
 not a read of the Profiler by eye.** Once `TASK-026` through
-`TASK-030` stand, run the whole of `Runtime`, one full tick, against
-a held scene holding several things, 1,000 times running. Matches
-`TASK-009`'s own bar in full: `GC.GetTotalAllocatedBytes` must show
-**0** difference across the run. This test is the true, final word
-on the old `TASK-025`'s own claim — no garbage on any tick — and
-stands in place of checking it "by eye."
+`TASK-030` (the thin edges) and `TASK-032` through `TASK-035` (the
+logic behind each) stand, run the whole of `Runtime`, one full tick,
+against a held scene holding several things, 1,000 times running.
+Matches `TASK-009`'s own bar in full: `GC.GetTotalAllocatedBytes`
+must show **0** difference across the run. **This piece stays
+Unity-true, whole — a real measure of a real run cannot be moved
+past any interface.** This test is the true, final word on the old
+`TASK-025`'s own claim — no garbage on any tick.
+
+### TASK-032
+
+**The heading logic — split from `TASK-027`, needs no Unity at
+all.** Takes an `IHeadingSource` (a plain `Vector3`, `TASK-027`'s
+own edge) and turns it into `Self.Heading`, the one `float` §3.7.5
+asks for.
+
+**How to check it — write these Red first:**
+
+1. straight down the world's own `+Z` reads `0`
+2. turned a quarter reads `90`
+3. turned by half reads `180`
+4. turned three-quarters reads `270`
+5. a small, given `Vector3` noise (unit length, off by a hair) still
+   reads within a small, named error of the true heading
+
+**How to check zero garbage:** run the turn 10,000 times against one
+`IHeadingSource`; `GC.GetTotalAllocatedBytes` must show **0**,
+matching `TASK-009`.
+
+### TASK-033
+
+**Dropped 2026-09-20, held here for why.** This task asked only to
+copy four numbers from `ISightSource` straight through, with no
+branch, no choice, no logic of any true kind — the same real shape
+as `TASK-026`'s own edge, dressed as a second task for no true
+reason past matching the shape of `TASK-032`/`034`/`035`/`036`. A
+Red test with no logic to make it fail is not a true Red test.
+**Folded back into `TASK-026`:** the four-number read-back the old
+`TASK-033` asked for is `TASK-026`'s own Play Mode test, already
+named there — no second task is owed.
+
+### TASK-034
+
+**The broad-phase logic — split from `TASK-028`, needs no Unity at
+all.** Takes an `IBroadPhaseSource` (`TASK-028`'s own edge, a plain
+`RawHit[]`) and hands each true hit into the wedge check (`TASK-024`,
+already built). Holds every piece of logic once held together inside
+the old `TASK-025`.
+
+**How to check it — write these Red first (most already proven
+true, alone, by `TASK-024`; checked again here with a real edge
+standing in front):**
+
+1. a source returning 20 hits into a 16-slot buffer reads back 16,
+   and a warning is made
+2. a hit whose `ClosestPoint` sits outside the wedge, but whose
+   collider is wide, is still found (matches `TASK-024`'s own test 6
+   and 9)
+3. the character's own id, found among the hits, is dropped (matches
+   `TASK-024`'s own test 11)
+4. one id, found twice among the hits, is read once (matches
+   `TASK-024`'s own test 12)
+
+**How to check zero garbage:** run against a fixed `IBroadPhaseSource`
+10,000 times; `GC.GetTotalAllocatedBytes` must show **0**.
+
+### TASK-035
+
+**The ray-result logic — split from `TASK-030`, needs no Unity at
+all.** Takes an `IRaySource` (`TASK-030`'s own edge) and turns
+`RawRay` into what `Choice` (`TASK-019`) or a `Found` (`TASK-024`)
+still needs — a true, given thing, or none at all.
+
+**How to check it — write these Red first:**
+
+1. `Hit == false` reads as nothing found, whole
+2. `Hit == true`, `Id` matching what stage one already held, reads as
+   that same thing, found true
+3. `Hit == true`, `Id` matching neither what stage one held nor the
+   wall between — a thing not asked after — is dropped, not held as
+   a false true
+
+**How to check zero garbage:** run against a fixed `IRaySource`
+10,000 times; `GC.GetTotalAllocatedBytes` must show **0**.
+
+### TASK-036
+
+**The Tag logic — split from `TASK-022`'s own drafted third path,
+needs no Unity at all.** Takes an `ITagSource` (a plain `string`, the
+Unity edge's own `GameObject.CompareTag` wrapped thin) and turns a
+Tag string into what a pickup `Rule` needs — the same true shape
+`Like()` already holds for `kind`.
+
+```text
+interface ITagSource {
+    string Tag { get; }
+}
+```
+
+**How to check it — write these Red first:**
+
+1. a known Tag (`"GoldenKey"`) reads back as that same string, whole
+2. an empty Tag (Unity's own default, `"Untagged"`) reads as no Tag
+   held at all
+3. two different given ids, both handed the same Tag string, both
+   read back that one Tag — proves more than one key may share one
+   real Tag, the strength `TASK-022` itself found
+
+**How to check zero garbage:** run the read 10,000 times against a
+fixed `ITagSource`; `GC.GetTotalAllocatedBytes` must show **0**.
+
+**The thin edge itself (`GameObject.CompareTag`) stays inside
+`TASK-022`'s own real, given work, still owed: a real check that
+`stemic`'s own Tag list holds one entry per named item, and how
+`Found`/`TargetMark` carries the Tag's own text through to
+`update_inventory.key`. That real, given check still needs a real
+Windows Unity open — `TASK-036` above only takes the string-logic
+away from it.**
 
 **Everything still owed on the sight design is held in one place:**
 `docs/sight_checklist.md` — what the spec marks open, what it never
@@ -1419,4 +1577,5 @@ to take them in.
 is read once at start or every tick (a character in the dark may see
 less); today it reads once. Whether `Self.Heading` staying one
 `float` (no up or down in the character's own facing) is right;
+today the wedge stays level.
 today the wedge stays level.
