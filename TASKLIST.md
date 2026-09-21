@@ -30,7 +30,12 @@ change in as a commit.
 + [ ] TASK-022 [P-XX]: Add a draft plan, a real Unity Tag for one named item
 + [ ] TASK-023 [P-02]: Add an asmdef of Modio's own, so a Unity project can take it in
 + [ ] TASK-024 [P-02]: Build the wedge check in Scripts, with no Unity in it at all
-+ [ ] TASK-025 [P-02]: Build Runtime, the eyes, with no garbage made on any tick
++ [ ] TASK-026 [P-02]: Read Sight's five numbers from germio, once a tick
++ [ ] TASK-027 [P-02]: Read heading from the body, once a tick
++ [ ] TASK-028 [P-02]: Stage one — the broad sphere, feeding the wedge check
++ [ ] TASK-029 [P-02]: The name interface, asking germio for a kind and an id
++ [ ] TASK-030 [P-02]: Stage two — one ray per thing the wedge already held true
++ [ ] TASK-031 [P-02]: Prove zero garbage across a whole tick, by a real Play Mode test
 
 ## Detail
 
@@ -1291,38 +1296,64 @@ telling it to.
 writes into a list made by the caller; it makes nothing of its own,
 and never reads a `name`.
 
-### TASK-025
+### TASK-025 — retired, split 2026-09-20
 
-**Build `Runtime/`, the eyes — not one line stands today.** The whole
-design is in `docs/modio_spec.md` §3.6.2, §3.7 and §3.7.3. Depends on
-TASK-023 (the `.asmdef`), TASK-024 (the wedge check it calls), and
-`germio`'s own TASK-067 (the world table it asks for names).
+**This task grew too large to hold as one piece, and gave up on a
+real test besides.** Five different pieces stood inside it, and the
+only check named was "by eye, in a real Windows Unity open." `germio`
+holding `Sight` itself (`sight_checklist.md` §4.7) split the first
+piece away outright. The rest is split into `TASK-026` through
+`TASK-031` below, each its own piece, each with its own true test —
+matching how `TASK-009` already proved zero garbage by a real,
+running test, not a read of the Profiler by eye.
 
-**What goes in — and every piece of it knows Unity, which is why none
-of it can be checked by `dotnet test`:**
+### TASK-026
 
-| Piece      | Does                                                                                 |
-| ---------- | ------------------------------------------------------------------------------------ |
-| `Sight`    | a `MonoBehaviour` on the prefab: `reach`, `halfYaw`, `halfPitch`, `eyeHeight`        |
-| the reader | reads `Sight` once at start; reads `transform.forward` each tick into `Self`         |
-| stage one  | `Physics.OverlapSphereNonAlloc` into a buffer of 16, then hands each hit to TASK-024 |
-| the names  | asks `germio`'s table, through Modio's own interface, for a kind and an id string    |
-| stage two  | one `Physics.Raycast(out hit)` from the eyes for each `Near` that `StageGate` marks  |
+**Read Sight's five numbers from germio, once at start.** `Sight`
+itself now stands in `germio` (`sight_checklist.md` §4.7), not here.
+Modio's own `Runtime` asks for `reach`, `halfYaw`, `halfPitch` and
+`eyeHeight` — four numbers, read once, never the type. Depends on
+`germio` first holding `Sight` at all (its own `TASK-069`, words
+changed to match).
 
-**The one rule: no garbage on any tick.** This is the bar TASK-009
-proved for the memory. Every hole found so far, and how each is
-closed:
+**How to check it:** a real Play Mode test, one scene, one prefab
+holding `germio`'s own `Sight`. Read the four numbers back through
+Modio's own `Runtime` and check each against what the prefab held.
+Run it 1,000 times; `GC.GetTotalAllocatedBytes` must show **0**
+difference, matching `TASK-009`'s own bar.
 
-| Hole                                                  | Closed by                                                                                                                                                                                                                                                                     |
-| ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Physics.OverlapSphere` makes a new array each call   | `OverlapSphereNonAlloc` into a `Collider[16]` made once at start                                                                                                                                                                                                              |
-| `GameObject.name` makes a new string each read        | never read on a tick. Kind and id string come from `germio`'s world table (TASK-067), keyed by `GetInstanceID()` (`int`, no boxing)                                                                                                                                           |
-| the id string `g_1042` made each tick                 | the same table holds it, made once at scene load                                                                                                                                                                                                                              |
-| the buffer of 16 fills and cuts off, saying nothing   | Unity's own reference: a full buffer returns its own length. Check `count == buffer.Length` and warn                                                                                                                                                                          |
-| the character's own collider is inside its own sphere | TASK-024 drops any hit whose id is the character's own                                                                                                                                                                                                                        |
-| one thing with two colliders shows up twice           | TASK-024 drops a repeated id                                                                                                                                                                                                                                                  |
-| a 10-unit floor whose middle sits outside the wedge   | `Collider.ClosestPoint(own position)`. Checked live 2026-09-19: `Level_1`'s own colliders are all `BoxCollider` or a convex `MeshCollider` (`Despawn`, held out anyway by TASK-025's own trigger rule), both of which `ClosestPoint` holds true for, by Unity's own reference |
-| `Near`/`Found` lists grow                             | two arrays of 16, made once, filled again each tick, count kept apart                                                                                                                                                                                                         |
+### TASK-027
+
+**Read `transform.forward` into `Self`, once a tick.** The smallest
+piece split from the old `TASK-025`: turn a body's own forward line
+into the one `float` `Self.Heading` asks for (§3.7.5).
+
+**How to check it:** a Play Mode test. Turn a prefab to four known
+headings (`0`, `90`, `180`, `270`) and check `Self.Heading` reads
+each one back, within a small, named error. Run the read 1,000
+times at one heading; `GC.GetTotalAllocatedBytes` must show **0**.
+
+### TASK-028
+
+**Stage one — the broad sphere, feeding `TASK-024`'s own wedge
+check.** `Physics.OverlapSphereNonAlloc` into a `Collider[16]` made
+once at start, then each hit handed to the wedge check
+(`TASK-024`, already built and proved by its own twelve tests).
+This is the largest piece kept, since splitting the sphere call from
+the hand-off to the wedge check would leave neither one a true test
+of its own — the sphere call alone proves nothing without the wedge
+check reading its output, and the wedge check is already proved
+alone.
+
+**Holes closed here, each its own test:**
+
+| Hole                                                  | Test                                                                                                      |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| the buffer of 16 fills and cuts off                   | fill a scene with 20 things; check the count reads 16, and a warning is made                              |
+| triggers are read (`Despawn`, camera)                 | a scene with one trigger, one plain collider; only the plain one comes back                               |
+| a wide, flat collider's middle sits outside the wedge | `ClosestPoint` against a `BoxCollider` wider than the wedge; still found                                  |
+| the character's own collider comes back               | already `TASK-024`'s own test 11 — checked again here, with a real `Physics` call standing in front of it |
+| one thing, two colliders, comes back twice            | already `TASK-024`'s own test 12 — checked again here, the same way                                       |
 
 **Settled 2026-09-19, by reading `stemic`'s own `Level_1`: stage one
 passes `QueryTriggerInteraction.Ignore`.** Counted in the scene file:
@@ -1337,24 +1368,55 @@ watch:** `germio` holds `Home` as a kind, and `poc_pair.json` holds
 When one is put down, check whether it is a trigger; if it is, this
 call must change.
 
-**Settled 2026-09-19: how `Runtime` asks `germio` for a name.** Not
-by naming `germio` at all. Modio holds an interface of its own — one
-call, an `int` id in, a kind and an id string out — and `germio`'s
-own world table (its TASK-067) answers it. This is the shape `IMind`
-already holds toward `animo`: "`animo` is what stands here in a real
-game, but Modio does not name it". The same rule now reaches `germio`
-too, so nothing in Modio, `Runtime/` included, names either one.
+**How to check zero garbage:** a Play Mode test, `OverlapSphereNonAlloc`
+run 1,000 times against a held scene; `GC.GetTotalAllocatedBytes`
+must show **0**, matching `TASK-009`.
 
-**How to check it:** by eye, in a real Windows Unity open, with the
-Profiler's GC Alloc column held at zero through a whole round.
+### TASK-029
+
+**The name interface — Modio asks, `germio` answers.** One call, an
+`int` id in (`GetInstanceID()`, no boxing), a kind and an id string
+out. Modio holds the interface; `germio`'s own world table
+(`TASK-067`) answers it — the same shape `IMind` already holds
+toward `animo` (`TASK-021`).
+
+**How to check it:** **this piece alone may be proved by a plain
+`dotnet test`**, unlike every other piece here — the interface
+itself asks nothing of Unity. Write a stand-in answering a known id
+with a known kind and string; check Modio's own calling code reads
+it back whole. A second, Play Mode test then checks `germio`'s own
+table gives the same answer for real.
+
+### TASK-030
+
+**Stage two — one ray per thing the wedge already held true.** A
+single `Physics.Raycast(out hit)` from the eyes, for each thing
+`StageGate` marked worth it. Depends on `TASK-028` (what stage one
+hands it) and `TASK-029` (the name it reports).
+
+**How to check it:** a Play Mode test — a wall between the eyes and
+a thing the wedge holds true; the ray must fail it. A clear line;
+the ray must hold it true. Run against one thing 1,000 times;
+`GC.GetTotalAllocatedBytes` must show **0**.
+
+### TASK-031
+
+**Prove zero garbage across a whole tick — one real, running test,
+not a read of the Profiler by eye.** Once `TASK-026` through
+`TASK-030` stand, run the whole of `Runtime`, one full tick, against
+a held scene holding several things, 1,000 times running. Matches
+`TASK-009`'s own bar in full: `GC.GetTotalAllocatedBytes` must show
+**0** difference across the run. This test is the true, final word
+on the old `TASK-025`'s own claim — no garbage on any tick — and
+stands in place of checking it "by eye."
 
 **Everything still owed on the sight design is held in one place:**
 `docs/sight_checklist.md` — what the spec marks open, what it never
 says at all, and what cannot be known until it runs, with the order
 to take them in.
 
-**Not settled, and to be weighed before building:** whether `Sight` is
-read once at start or every tick (a character in the dark may see
-less); today it reads once. Whether `Self.Heading` staying one `float`
-(no up or down in the character's own facing) is right; today the wedge
-stays level.
+**Not settled, and to be weighed before building:** whether `Sight`
+is read once at start or every tick (a character in the dark may see
+less); today it reads once. Whether `Self.Heading` staying one
+`float` (no up or down in the character's own facing) is right;
+today the wedge stays level.

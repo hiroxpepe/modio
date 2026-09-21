@@ -51,7 +51,7 @@ true once something exists to be true of.
 | # | What stands today | What it blocks |
 | --- | --- | --- |
 | 1 | Modio holds no `.asmdef`, so Unity cannot take it in at all (TASK-023) | Everything. `Runtime/` has nothing to stand on |
-| 2 | Not one line of `Runtime/` is built (TASK-025) | The whole design has never been run |
+| 2 | Not one line of `Runtime/` is built (TASK-026 to TASK-031) | The whole design has never been run |
 | 3 | `germio` holds no world table (its own TASK-067) | `Runtime/` has no one to ask for a kind or an id |
 | 4 | `stemic` holds no prefab for either persona (its own TASK-018 to 023) | There is no body to put a `Sight` part on |
 | 5 | The `Sight` numbers are borrowed from a person's own eyes (210 by 150) | Whether they suit a game character at all is unknown |
@@ -252,7 +252,7 @@ more than a name on paper.
 4b. germio TASK-069  set right, per 4.8          — words changed, no code
 5. stemic TASK-018+  a prefab to look through    — stemic's own work
 5b. stemic, new task the Explore sweep, per 4.8   — stemic's own work, held apart from Sight
-6. TASK-025          Runtime, the eyes           — a real Unity open
+6. TASK-026 to 031   Runtime, the eyes           — six pieces, each a real Unity open
 7. part 1, part 3    settle the rest by eye      — once it runs
 ```
 
