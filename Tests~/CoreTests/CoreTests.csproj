@@ -31,7 +31,7 @@
     <Compile Include="..\..\Scripts\Core\Hand.cs" />
     <Compile Include="..\..\Scripts\Core\Place.cs" />
     <Compile Include="..\..\Scripts\Core\WedgeCheck.cs" />
-    <Compile Include="..\..\Scripts\Core\Vec3.cs" />
+    <Compile Include="..\..\Scripts\Core\Vector3.cs" />
     <Compile Include="..\..\Scripts\Core\HeadingLogic.cs" />
     <Compile Include="..\..\Scripts\Core\TagLogic.cs" />
     <Compile Include="..\..\Scripts\Core\INameSource.cs" />

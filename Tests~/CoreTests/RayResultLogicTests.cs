@@ -21,7 +21,7 @@ namespace Modio.Tests.Core {
 
         [Test, Description("Hit == false reads as nothing found, whole")]
         public void Confirms_HitFalse_ReadsAsNothingFound() {
-            var ray = new RawRay(hit: false, id: 0);
+            var ray = new RawRay(hit: false, id_value: 0);
 
             bool confirmed = RayResultLogic.Confirms(ray: ray, expected_id: 1);
 
@@ -30,7 +30,7 @@ namespace Modio.Tests.Core {
 
         [Test, Description("Hit == true, Id matching what stage one held, reads as that same thing found")]
         public void Confirms_HitTrueMatchingId_ReadsAsFound() {
-            var ray = new RawRay(hit: true, id: 1);
+            var ray = new RawRay(hit: true, id_value: 1);
 
             bool confirmed = RayResultLogic.Confirms(ray: ray, expected_id: 1);
 
@@ -39,7 +39,7 @@ namespace Modio.Tests.Core {
 
         [Test, Description("Hit == true, Id matching neither the sought thing nor the wall, is dropped")]
         public void Confirms_HitTrueWrongId_IsDropped() {
-            var ray = new RawRay(hit: true, id: 99);
+            var ray = new RawRay(hit: true, id_value: 99);
 
             bool confirmed = RayResultLogic.Confirms(ray: ray, expected_id: 1);
 
@@ -51,7 +51,7 @@ namespace Modio.Tests.Core {
             // As if the edge broke its own contract and handed back a non-zero
             // Id anyway. The logic must check Hit first, and never read Id on
             // its own.
-            var ray = new RawRay(hit: false, id: 1);
+            var ray = new RawRay(hit: false, id_value: 1);
 
             bool confirmed = RayResultLogic.Confirms(ray: ray, expected_id: 1);
 

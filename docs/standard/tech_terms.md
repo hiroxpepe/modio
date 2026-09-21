@@ -294,3 +294,11 @@ real one, so the two may be set against each other.
 is true, given the state of the world.
 
 **Executor** — `germio`'s own part that carries out a command.
+
+**yaw** — How far a thing sits to the side of straight ahead, as an angle.
+
+**pitch** — How far a thing sits up or down from straight ahead, as an angle.
+
+**Vector** — A line held as flat numbers (its X, Y and Z), with no other
+Unity type behind it — the shape a plain dotnet test may check with no
+Unity at all.

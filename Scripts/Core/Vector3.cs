@@ -16,11 +16,11 @@ namespace Modio.Core {
     /// Vector3 into this, and back, at the one line where Unity is touched.
     /// </summary>
     /// <author>h.adachi (STUDIO MeowToon)</author>
-    public readonly struct Vec3 {
+    public readonly struct Vector3 {
         ///////////////////////////////////////////////////////////////////////////////////////////////
         // Constructor
 
-        public Vec3(float x, float y, float z) {
+        public Vector3(float x, float y, float z) {
             X = x;
             Y = y;
             Z = z;

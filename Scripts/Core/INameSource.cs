@@ -20,7 +20,7 @@ namespace Modio.Core {
     /// <author>h.adachi (STUDIO MeowToon)</author>
     public interface INameSource {
         ///////////////////////////////////////////////////////////////////////////////////////////////
-        // public Methods [verb]
+        // private Methods [verb]
 
         (string Kind, string ID) NameOf(int instance_id);
     }

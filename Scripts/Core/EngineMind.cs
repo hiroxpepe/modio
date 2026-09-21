@@ -27,12 +27,12 @@ namespace Modio.Core {
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
-        // Properties [noun, adjective]
+        // public Properties [noun, adjective]
 
         public string Behavior => throw new NotImplementedException();
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
-        // Methods [verb]
+        // public Methods [verb]
 
         public void Lock(float duration, bool soft) {
             throw new NotImplementedException();

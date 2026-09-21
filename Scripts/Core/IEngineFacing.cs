@@ -5,7 +5,7 @@
 
 namespace Modio.Core {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    // public Enums
+    // public Enums [noun]
 
     /// <summary>
     /// Mirrors Animo.Core.LockMode's own shape, held here so EngineMind need
@@ -35,7 +35,7 @@ namespace Modio.Core {
         string Behavior { get; }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
-        // Methods [verb]
+        // private Methods [verb]
 
         void Lock(float duration, LockMode mode = LockMode.Hard);
 

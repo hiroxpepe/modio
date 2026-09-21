@@ -8,9 +8,9 @@ namespace Modio.Core {
     // public Classes
 
     /// <summary>
-    /// One ray's own answer, told in two fields. Id is meaningful only when
-    /// Hit is true; a real edge always hands back 0 for Id when Hit is
-    /// false, and no logic behind this may read Id without checking Hit
+    /// One ray's own answer, told in two fields. ID is meaningful only when
+    /// Hit is true; a real edge always hands back 0 for ID when Hit is
+    /// false, and no logic behind this may read ID without checking Hit
     /// first.
     /// </summary>
     /// <author>h.adachi (STUDIO MeowToon)</author>
@@ -18,17 +18,16 @@ namespace Modio.Core {
         ///////////////////////////////////////////////////////////////////////////////////////////////
         // Constructor
 
-        public RawRay(bool hit, int id) {
+        public RawRay(bool hit, int id_value) {
             Hit = hit;
-            Id = id;
+            ID = id_value;
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////////
         // public Properties [noun, adjective]
 
         public bool Hit { get; }
-
-        public int Id { get; }
+        public int ID { get; }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,13 +40,13 @@ namespace Modio.Core {
     /// <author>h.adachi (STUDIO MeowToon)</author>
     public interface IRaySource {
         ///////////////////////////////////////////////////////////////////////////////////////////////
-        // Methods [verb]
+        // private Methods [verb]
 
         /// <summary>
         /// direction: a unit vector, the ray's own line. reach: greater
         /// than 0, the ray's own most far reach, held true up to and
         /// including this distance.
         /// </summary>
-        RawRay Cast(Vec3 from, Vec3 direction, float reach);
+        RawRay Cast(Vector3 from, Vector3 direction, float reach);
     }
 }

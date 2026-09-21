@@ -17,8 +17,8 @@ namespace Modio.Core {
         ///////////////////////////////////////////////////////////////////////////////////////////////
         // Constructor
 
-        public RawHit(int id, Vec3 closest_point) {
-            Id = id;
+        public RawHit(int id_value, Vector3 closest_point) {
+            ID = id_value;
             ClosestPoint = closest_point;
         }
 
@@ -26,10 +26,10 @@ namespace Modio.Core {
         // public Properties [noun, adjective]
 
         /// <summary>GetInstanceID(), at the real edge. A plain int here.</summary>
-        public int Id { get; }
+        public int ID { get; }
 
         /// <summary>A world point — Collider.ClosestPoint, at the real edge.</summary>
-        public Vec3 ClosestPoint { get; }
+        public Vector3 ClosestPoint { get; }
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ namespace Modio.Core {
     /// <author>h.adachi (STUDIO MeowToon)</author>
     public interface IBroadPhaseSource {
         ///////////////////////////////////////////////////////////////////////////////////////////////
-        // Methods [verb]
+        // private Methods [verb]
 
         /// <summary>
         /// Fills buffer with what the wide sphere truly holds. Returns the

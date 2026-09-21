@@ -16,7 +16,7 @@ namespace Modio.Core {
     /// <author>h.adachi (STUDIO MeowToon)</author>
     public interface IEnactTagLookup {
         ///////////////////////////////////////////////////////////////////////////////////////////////
-        // Methods [verb]
+        // private Methods [verb]
 
         string TagOf(string id);
     }

@@ -42,13 +42,13 @@ namespace Modio.Tests.Core {
             var hits = new List<RawHit>();
             for (int i = 0; i < 16; i++) {
                 names.Add(id: i, kind: "Ground", id_string: $"g_{i}");
-                hits.Add(new RawHit(id: i, closest_point: new Vec3(x: 0f, y: 0f, z: 8f)));
+                hits.Add(new RawHit(id_value: i, closest_point: new Vector3(x: 0f, y: 0f, z: 8f)));
             }
             var into = new List<Found>();
 
             BroadPhaseLogic.Gather(self: new Self(heading: 0f), sight_reach: 30f, sight_half_yaw: 90f,
                 sight_half_pitch: 45f, seek: new Seek(kind: "Ground"), own_id: "h_self",
-                own_position: new Vec3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 16, names: names, into: into);
+                own_position: new Vector3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 16, names: names, into: into);
 
             Assert.That(into, Has.Count.EqualTo(16));
         }
@@ -60,12 +60,12 @@ namespace Modio.Tests.Core {
             // Closest point at x=8.66, z=5 (bearing 60 from own_position at the
             // world's own zero) — matches WedgeCheck's own already-proven
             // ellipse case at yaw 60, halfYaw 90, halfPitch 20, height 2.5.
-            var hits = new List<RawHit> { new RawHit(id: 1, closest_point: new Vec3(x: 8.66f, y: 2.5f, z: 5f)) };
+            var hits = new List<RawHit> { new RawHit(id_value: 1, closest_point: new Vector3(x: 8.66f, y: 2.5f, z: 5f)) };
             var into = new List<Found>();
 
             BroadPhaseLogic.Gather(self: new Self(heading: 0f), sight_reach: 30f, sight_half_yaw: 90f,
                 sight_half_pitch: 20f, seek: new Seek(kind: "Ground"), own_id: "h_self",
-                own_position: new Vec3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 1, names: names, into: into);
+                own_position: new Vector3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 1, names: names, into: into);
 
             Assert.That(into, Has.Count.EqualTo(1),
                 "own_position must be subtracted before the wedge check ever runs.");
@@ -75,12 +75,12 @@ namespace Modio.Tests.Core {
         public void Gather_TheCharactersOwnId_IsDropped() {
             var names = new FakeNames();
             names.Add(id: 1, kind: "Human", id_string: "h_self");
-            var hits = new List<RawHit> { new RawHit(id: 1, closest_point: new Vec3(x: 0f, y: 0f, z: 1f)) };
+            var hits = new List<RawHit> { new RawHit(id_value: 1, closest_point: new Vector3(x: 0f, y: 0f, z: 1f)) };
             var into = new List<Found>();
 
             BroadPhaseLogic.Gather(self: new Self(heading: 0f), sight_reach: 30f, sight_half_yaw: 90f,
                 sight_half_pitch: 45f, seek: new Seek(kind: "Human"), own_id: "h_self",
-                own_position: new Vec3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 1, names: names, into: into);
+                own_position: new Vector3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 1, names: names, into: into);
 
             Assert.That(into, Is.Empty);
         }
@@ -91,14 +91,14 @@ namespace Modio.Tests.Core {
             names.Add(id: 1, kind: "Ground", id_string: "g_1");
             names.Add(id: 2, kind: "Ground", id_string: "g_1");
             var hits = new List<RawHit> {
-                new RawHit(id: 1, closest_point: new Vec3(x: 0f, y: 0f, z: 8f)),
-                new RawHit(id: 2, closest_point: new Vec3(x: 0.1f, y: 0f, z: 8f))
+                new RawHit(id_value: 1, closest_point: new Vector3(x: 0f, y: 0f, z: 8f)),
+                new RawHit(id_value: 2, closest_point: new Vector3(x: 0.1f, y: 0f, z: 8f))
             };
             var into = new List<Found>();
 
             BroadPhaseLogic.Gather(self: new Self(heading: 0f), sight_reach: 30f, sight_half_yaw: 90f,
                 sight_half_pitch: 45f, seek: new Seek(kind: "Ground"), own_id: "h_self",
-                own_position: new Vec3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 2, names: names, into: into);
+                own_position: new Vector3(x: 0f, y: 0f, z: 0f), hits: hits, hit_count: 2, names: names, into: into);
 
             Assert.That(into, Has.Count.EqualTo(1));
         }

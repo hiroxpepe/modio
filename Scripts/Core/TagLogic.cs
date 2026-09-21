@@ -31,6 +31,9 @@ namespace Modio.Core {
         public string Tag { get; }
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    // public Classes
+
     /// <summary>Turns a raw Tag string, at Enact, into a TargetMark.</summary>
     /// <author>h.adachi (STUDIO MeowToon)</author>
     public static class TagLogic {

@@ -31,7 +31,7 @@ namespace Modio.Core {
 
         /// <summary>Reads Forward, and turns Heading toward it.</summary>
         /// <param name="forward">A unit vector, never Vector3.zero.</param>
-        public void Turn(Vec3 forward) {
+        public void Turn(Vector3 forward) {
             throw new NotImplementedException();
         }
     }

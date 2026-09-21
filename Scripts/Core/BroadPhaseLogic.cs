@@ -31,7 +31,7 @@ namespace Modio.Core {
         /// <param name="hits">What the edge truly found, this tick.</param>
         /// <param name="hit_count">How many of hits are truly filled.</param>
         public static void Gather(Self self, float sight_reach, float sight_half_yaw, float sight_half_pitch,
-            Seek seek, string own_id, Vec3 own_position, IReadOnlyList<RawHit> hits, int hit_count,
+            Seek seek, string own_id, Vector3 own_position, IReadOnlyList<RawHit> hits, int hit_count,
             INameSource names, List<Found> into) {
             throw new NotImplementedException();
         }
