@@ -10,6 +10,20 @@
 
 ---
 
+## Still owed, checked 2026-09-21 — the whole list, in one place
+
++ [ ] The four thin Unity edges (`TASK-026`, `027`, `028`, `030`) — needs a real Windows Unity open
++ [ ] Zero-garbage proof across a whole tick (`TASK-031`) — waits on the point above
++ [ ] germio's own world table (`TASK-067`) — germio's own work
++ [ ] germio `TASK-069`'s own words, still reading "`Sight.eyes` (`modio`'s own name for it)" — words alone, no code, no Unity needed
++ [ ] stemic's own prefab for either persona (`TASK-018` to `023`) — stemic's own work, needs Unity
++ [ ] stemic's own new task, the `Explore` sweep (4.8-2) — not yet given a task number, needs Unity
++ [ ] The "3 in 10" count, from spec §3.7 — waits on `Runtime/` running
++ [ ] Whether the `Sight` numbers (210 by 150) truly suit a game character — only known once it runs
++ [ ] Reading `Choice.Angle` for a real target, once `Runtime/` can fill one (4.8-2) — waits on `Runtime/`
+
+---
+
 ## 1. Open in the spec, and marked so
 
 Each of these is already written down as not settled. They are held
@@ -50,8 +64,8 @@ true once something exists to be true of.
 
 | # | What stands today | What it blocks |
 | --- | --- | --- |
-| 1 | Modio holds no `.asmdef`, so Unity cannot take it in at all (TASK-023) | Everything. `Runtime/` has nothing to stand on |
-| 2 | Not one line of `Runtime/` is built (TASK-026 to TASK-031) | The whole design has never been run |
+| 1 | **Closed 2026-09-21.** `Modio` now holds `Scripts/Modio.asmdef` and `Runtime/Modio.Runtime.asmdef` (`TASK-023`, done). Unity may take `Modio` in as a package | Everything, once. Now closed |
+| 2 | Not one line of `Runtime/` itself is built (`TASK-026` to `TASK-028`, `TASK-030`) | The Unity edges alone. The logic behind each (`TASK-032`, `TASK-034`, `TASK-035`, `TASK-036`) is done, 2026-09-21, Green — `TASK-024`'s own wedge check too |
 | 3 | `germio` holds no world table (its own TASK-067) | `Runtime/` has no one to ask for a kind or an id |
 | 4 | `stemic` holds no prefab for either persona (its own TASK-018 to 023) | There is no body to put a `Sight` part on |
 | 5 | The `Sight` numbers are borrowed from a person's own eyes (210 by 150) | Whether they suit a game character at all is unknown |
@@ -240,27 +254,47 @@ read today. Held: build against `Explore` (`place_curious`, real
 and wired) alone. `Patrol` waits its own turn once `goblin_scout` is
 more than a name on paper.
 
+### 4.9 Held, 2026-09-21 — the logic side stands built, Green, and checked twice over
+
+`TASK-021`, `TASK-022` (its `TargetMarkLogic` piece), `TASK-024`,
+`TASK-032`, `TASK-034`, `TASK-035` and `TASK-036` all stand built
+and Green — checked live, in this sandbox and again on a real
+Windows machine, matching down to the failure count. Three real
+holes, found only once Green work began, were closed the same day:
+a `List<Place>` made new on every call (closed — the caller now
+holds and reuses its own list); a zero `halfYaw`/`halfPitch` giving
+a wrong "found" answer, from a division that gives `NaN` (closed —
+guarded outright); and an empty or `null` `own_id` once wrongly taken
+as a real character's own id (closed — `string.IsNullOrEmpty`).
+
+**Still owed, and still real Unity work, none of it touched yet:**
+the four thin edges (`TASK-026`, `027`, `028`, `030`) and the one
+true, running proof of zero garbage across a whole tick
+(`TASK-031`) — every one of these needs a real Windows Unity open,
+which this sandbox does not have.
+
 ---
 
 ## The order to take them in
 
 ```text
 1. spec, part 2      settled 2026-09-19         — done
-2. TASK-023          the asmdef                 — no Unity open needed
-3. TASK-024          the wedge check             — dotnet test, twelve tests
+2. TASK-023          the asmdef                 — done, 2026-09-21
+3. TASK-024          the wedge check             — done, 2026-09-21, Green
 4. germio TASK-067   the world table             — germio's own work
 4b. germio TASK-069  set right, per 4.8          — words changed, no code
 5. stemic TASK-018+  a prefab to look through    — stemic's own work
 5b. stemic, new task the Explore sweep, per 4.8   — stemic's own work, held apart from Sight
-6. TASK-026 to 031   Runtime, the eyes           — six pieces, each a real Unity open
+6. TASK-026 to 031   Runtime, the eyes           — the logic half (032/034/035/036) done, 2026-09-21; the Unity-edge half (026-028, 030-031) still needs a real Windows Unity open
 7. part 1, part 3    settle the rest by eye      — once it runs
 ```
 
-Step 1 is done. Steps 2 and 3 need no Unity at all, and may be done
-here, today. Step 4b is words alone — `TASK-069` still reads
+Step 1 is done. Step 2 is done. Step 3 is done, Green, and checked twice over
+(4.9 above). Step 4b is words alone — `TASK-069` still reads
 "`Sight.eyes` (`modio`'s own name for it)", which 4.8 has now set
 aside; the task's own words are owed a fix, to match. Steps 4, 4b,
 5 and 5b belong to other builds, and 4b/5b do not wait on 4 or 5 —
 the sweep (5b) stands apart from `Sight` outright, per 4.8. Step 6
-is where the design is first put to the test, and step 7 is where
-what was guessed is either held true or thrown out.
+is half done — the logic side, Green — and half still waiting on a
+real Unity open. Step 7 is where what was guessed is either held
+true or thrown out.
