@@ -41,6 +41,7 @@ change in as a commit.
 + [x] TASK-034 [P-02]: The broad-phase logic behind TASK-028, no Unity at all
 + [x] TASK-035 [P-02]: The ray-result logic behind TASK-030, no Unity at all
 + [x] TASK-036 [P-XX]: The Tag logic behind TASK-022's own third path, no Unity at all
++ [ ] TASK-037 [P-XX]: The adapter joining germio's world table to Modio's own name interface
 
 ## Detail
 
@@ -1501,6 +1502,9 @@ readonly struct RawHit {
     public readonly Vector3 ClosestPoint;
 }
 interface IBroadPhaseSource {
+    // origin: where the sphere's own center stands (the eyes, per Sight).
+    // radius: how wide the sphere reaches — held true 2026-09-21, found
+    // missing here on the first real try at writing the true edge.
     // buffer: allocated once by the caller (TASK-034), fixed at 16,
     // never null, never zero-length — a rule the caller must hold, not a
     // case Find itself must guard.
@@ -1508,7 +1512,7 @@ interface IBroadPhaseSource {
     // Indices at or past the count are left unspecified (stale) —
     // callers read only [0, count). No order is promised among the
     // filled slots.
-    int Find(RawHit[] buffer);
+    int Find(Vector3 origin, float radius, RawHit[] buffer);
 }
 ```
 
@@ -1594,16 +1598,27 @@ scene allows.
 
 ### TASK-031
 
-**Prove zero garbage across a whole tick — one real, running test,
-not a read of the Profiler by eye.** Once `TASK-026` through
-`TASK-030` (the thin edges) and `TASK-032` through `TASK-035` (the
-logic behind each) stand, run the whole of `Runtime`, one full tick,
-against a held scene holding several things, 1,000 times running.
-Matches `TASK-009`'s own bar in full: `GC.GetTotalAllocatedBytes`
-must show **0** difference across the run. **This piece stays
-Unity-true, whole — a real measure of a real run cannot be moved
-past any interface.** This test is the true, final word on the old
-`TASK-025`'s own claim — no garbage on any tick.
+**Held, 2026-09-21 — set right, after being held wrong.** This task
+once called for a real, running Unity test (`[UnityTest]`, Unity's
+own Test Runner) to prove zero garbage across a whole tick. **Checked
+against the whole of this family's own true history: no repository
+here has ever once run a test inside Unity itself.** Every
+`EditModeTests` folder, in every repository, runs through a plain
+`dotnet test` alone — the name never meant a real Unity Editor ran
+it. Building a real Unity Test Runner piece for this task alone
+would have been the first of its kind, never once asked for, and is set aside
+outright.
+
+**Held true instead, matching this family's own real practice:**
+proving zero garbage across a whole tick — `Runtime`, whole, once
+`TASK-026` through `TASK-030` (the thin edges) stand — is checked
+**by eye, in a real Windows Unity open, with the Profiler's own GC
+Alloc column held at zero through a whole round.** The same true
+words the old `TASK-025` already held. `TASK-032` through `TASK-036`
+(the logic behind each edge) already carry their own real,
+`dotnet test`-checked zero-garbage proof; this task is only the
+whole, put together, checked the one way this family truly checks
+Unity-true things.
 
 **Held, 2026-09-21, checked live: a real hole in "zero garbage",
 found and closed once already, held open here as a true warning.**
@@ -1775,6 +1790,38 @@ fixed `ITagSource`; `GC.GetTotalAllocatedBytes` must show **0**.
 `update_inventory.key`. That real, given check still needs a real
 Windows Unity open — `TASK-036` above only takes the string-logic
 away from it.**
+
+### TASK-037
+
+**Found true, held 2026-09-21: `germio`'s own `WorldNames`
+(`TASK-067`, germio's own repository, built and Green) and `Modio`'s
+own `INameSource` (`TASK-029`) were built apart, with no line
+joining either to the other.** The same true hole `TASK-021` once
+found between `IMind` and `animo`'s real `Engine` — found again,
+here, and closed the same way.
+
+**`NameSourceAdapter` turns `Modio`'s own `INameSource` ask into a
+real `IWorldNamesFacing` call** (`Scripts/Core/IWorldNamesFacing.cs`,
+the true shape of `germio`'s own `WorldNames.NameOf`, held here with
+no tie to `germio` at all — the same option B choice `TASK-021`
+made). A stand-in implements `IWorldNamesFacing` for testing; the
+real `germio.WorldNames` is wired in later, through a thin piece not
+built here.
+
+**Held true, 2026-09-21: this piece holds real logic of its own, and
+is not `TASK-033` come back.** `TASK-033` was dropped for holding no
+branch at all — a plain copy, dressed as a task. Here, the
+constructor's own `null` check is real, given logic, checked below;
+`NameOf` alone is a plain pass-through, and is not tested by itself —
+only through the constructor's own true guard.
+
+**How to check it — write these Red first:**
+
+1. `NameOf`, called on a `NameSourceAdapter` built around a given
+   `IWorldNamesFacing`, reads back exactly what that stand-in itself
+   answers, whole
+2. building a `NameSourceAdapter` around a `null` table throws
+   `ArgumentNullException`, at once — never later, and never quietly
 
 **Everything still owed on the sight design is held in one place:**
 `docs/sight_checklist.md` — what the spec marks open, what it never

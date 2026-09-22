@@ -1,11 +1,11 @@
 {
   "name": "com.meowtoon.modio",
-  "version": "0.0.1-design",
+  "version": "0.0.1",
   "displayName": "Modio",
   "description": "Tulving-driven memory and seeing ahead for Unity (the HOW layer between Animo and Germio).",
   "unity": "2022.3",
   "author": {
-    "name": "h.adachi (STUDIO MeowToon)",
+    "name": "STUDIO MeowToon",
     "url": "https://github.com/hiroxpepe"
   },
   "dependencies": {

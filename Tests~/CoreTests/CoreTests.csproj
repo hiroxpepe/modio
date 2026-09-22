@@ -42,6 +42,9 @@
     <Compile Include="..\..\Scripts\Core\IRaySource.cs" />
     <Compile Include="..\..\Scripts\Core\RayResultLogic.cs" />
     <Compile Include="..\..\Scripts\Core\TargetMarkLogic.cs" />
+    <Compile Include="..\..\Scripts\Core\IWorldNamesFacing.cs" />
+    <Compile Include="..\..\Scripts\Core\NameSourceAdapter.cs" />
+    <Compile Include="..\..\Scripts\Core\EdgeMath.cs" />
     <Compile Include="..\..\Scripts\Tools\Seen.cs" />
     <Compile Include="..\..\Scripts\Tools\Trace.cs" />
     <Compile Include="..\..\Scripts\Tools\Runner.cs" />
@@ -68,6 +71,8 @@
     <Compile Include="BroadPhaseLogicTests.cs" />
     <Compile Include="RayResultLogicTests.cs" />
     <Compile Include="TargetMarkLogicTests.cs" />
+    <Compile Include="NameSourceAdapterTests.cs" />
+    <Compile Include="EdgeMathTests.cs" />
   </ItemGroup>
 
 </Project>

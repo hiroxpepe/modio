@@ -14,8 +14,9 @@
 
 + [ ] The four thin Unity edges (`TASK-026`, `027`, `028`, `030`) — needs a real Windows Unity open
 + [ ] Zero-garbage proof across a whole tick (`TASK-031`) — waits on the point above
-+ [ ] germio's own world table (`TASK-067`) — germio's own work
-+ [ ] germio `TASK-069`'s own words, still reading "`Sight.eyes` (`modio`'s own name for it)" — words alone, no code, no Unity needed
++ [x] germio's own world table (`TASK-067`), done 2026-09-21 — `WorldNames`, built and Green
++ [x] germio `TASK-069`'s own words, closed 2026-09-21 — no longer reads "`Sight.eyes` (`modio`'s own name for it)"
++ [x] the join between germio's own world table and `modio`'s own `INameSource` (a new task, `TASK-037`), done 2026-09-21 — `NameSourceAdapter`, the same option B as `EngineMind`
 + [ ] stemic's own prefab for either persona (`TASK-018` to `023`) — stemic's own work, needs Unity
 + [ ] stemic's own new task, the `Explore` sweep (4.8-2) — not yet given a task number, needs Unity
 + [ ] The "3 in 10" count, from spec §3.7 — waits on `Runtime/` running

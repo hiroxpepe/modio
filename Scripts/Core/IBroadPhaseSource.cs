@@ -45,10 +45,11 @@ namespace Modio.Core {
         // private Methods [verb]
 
         /// <summary>
-        /// Fills buffer with what the wide sphere truly holds. Returns the
-        /// count truly found, always in [0, buffer.Length]. Indices at or
-        /// past the count are left unspecified. No order is promised.
+        /// Fills buffer with what the wide sphere, centered on origin, out
+        /// to radius, truly holds. Returns the count truly found, always
+        /// in [0, buffer.Length]. Indices at or past the count are left
+        /// unspecified. No order is promised.
         /// </summary>
-        int Find(RawHit[] buffer);
+        int Find(Vector3 origin, float radius, RawHit[] buffer);
     }
 }

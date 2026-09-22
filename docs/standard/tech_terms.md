@@ -302,3 +302,5 @@ is true, given the state of the world.
 **Vector** — A line held as flat numbers (its X, Y and Z), with no other
 Unity type behind it — the shape a plain dotnet test may check with no
 Unity at all.
+
+**radius** — How far out from a center point a search reaches, as one flat number.
