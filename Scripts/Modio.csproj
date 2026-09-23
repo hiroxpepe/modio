@@ -26,6 +26,8 @@
     <Compile Include="Core\IMind.cs" />
     <Compile Include="Core\Hand.cs" />
     <Compile Include="Core\Vector3.cs" />
+    <Compile Include="Core\ISightSource.cs" />
+    <Compile Include="Core\IHeadingSource.cs" />
     <Compile Include="Core\Place.cs" />
     <Compile Include="Core\WedgeCheck.cs" />
     <Compile Include="Core\HeadingLogic.cs" />
