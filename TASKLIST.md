@@ -41,7 +41,9 @@ change in as a commit.
 + [x] TASK-034 [P-02]: The broad-phase logic behind TASK-028, no Unity at all
 + [x] TASK-035 [P-02]: The ray-result logic behind TASK-030, no Unity at all
 + [x] TASK-036 [P-XX]: The Tag logic behind TASK-022's own third path, no Unity at all
-+ [ ] TASK-037 [P-XX]: The adapter joining germio's world table to Modio's own name interface
++ [x] TASK-037 [P-XX]: The adapter joining germio's world table to Modio's own name interface
++ [ ] TASK-038 [P-XX]: The join between germio's own DeedRequested and a real seek
++ [ ] TASK-039 [P-XX]: Add DeedRunner, one per NPC, driving its own deed each tick
 
 ## Detail
 
@@ -1793,6 +1795,8 @@ away from it.**
 
 ### TASK-037
 
+**Done 2026-09-21, 2 tests.**
+
 **Found true, held 2026-09-21: `germio`'s own `WorldNames`
 (`TASK-067`, germio's own repository, built and Green) and `Modio`'s
 own `INameSource` (`TASK-029`) were built apart, with no line
@@ -1823,6 +1827,113 @@ only through the constructor's own true guard.
 2. building a `NameSourceAdapter` around a `null` table throws
    `ArgumentNullException`, at once — never later, and never quietly
 
+### TASK-038
+
+**Found true, checked live 2026-09-22, across every repository in
+this family at once — the whole chain from a want to a real move
+breaks at one true, given point.**
+
+`animo`'s own `Engine` fires a real signal (`RaiseSignal`, checked
+against `Engine.cs` line 515), `Agent.cs` truly hands it to `germio`'s
+own `Bus` (`_bus?.Publish`, checked against `Agent.cs` line 135),
+`germio`'s own `Executor` truly matches the given rule and calls
+`store.RequestDeedStart(deed: command.request_deed)` (checked against
+`Executor.cs` line 83). **`RequestDeedStart` itself does nothing at
+all past one plain event: `DeedRequested?.Invoke(deed)`** (checked
+against `Store.cs` line 342). Searched whole, across `germio`,
+`animo`, `Modio`, and every game repository this family holds: **no
+line anywhere listens for `DeedRequested`.**
+
+So a `request_deed`'s own `target` (`kind`, `reach`, `spread`) is
+never turned into a real seek at all — `Modio`'s own `WedgeCheck` and
+`BroadPhaseLogic` (`TASK-024`, `TASK-034`, both built and Green)
+stand ready, called by nothing. And a real find, once made, is never
+turned into a real move either — that half waits on `germio`'s own
+`TASK-070` (in that repository), the `Human` fitting-together work, not
+yet built.
+
+**Held true, found on a closer look — germio's own half of this is
+not whole either, apart from `Modio` outright.** `germio` already
+holds a real, working piece for putting a found id in place of the
+`$target` mark: `TargetMark.WriteID(instance_id)` writes the letter-led
+id string (`g_1042`), and `TargetMark.PutInPlaceOn(command, id)` puts
+it through every text field a `Command` holds. **Checked live: the
+only true caller of this whole piece, in the entire family, is
+`Validator.cs` line 613 — a design-time check, never a real run.**
+`Executor.cs` itself never once names `TargetMark`. So even once a
+real find lands, `germio`'s own real, running side has no true call
+that puts the id in place at all — this half of the gap sits wholly
+inside `germio`, with no tie to `Modio` needed to close it.
+
+**Held true, found on the same closer look — `TargetMark.PutInPlaceOn`
+covers a `Command`'s own fields alone.** `RequestDeed`'s own
+`condition` and `Until.meets` can hold `$target` too (`RequestDeed`'s
+own written words say so outright), yet `PutInPlaceOn` never touches
+either — only `TargetMark.PutInPlace` (the plain, one-string form)
+does, and only `Validator.cs` ever calls it, on `condition` alone,
+still at design time. A true, running put-in-place for a whole
+`RequestDeed` — `condition`, `Until.meets`, and its own `command` all
+at once — does not yet exist.
+
+**What this task holds, narrowed to the one true, given piece ready
+for a real test now — the rest split apart, below:**
+
+**`SeekResolver.Nearest`** — one plain, static method, held apart
+from Unity and from `germio`'s own `Evaluator` alike:
+
+```text
+static Found? Nearest(IReadOnlyList<Found> found)
+```
+
+Given a list `WedgeCheck`/`BroadPhaseLogic` already filled (both
+built and Green), reads back the one `Found` whose own `Distance` is
+smallest — `null` where the list holds nothing at all. This is the
+one true rule `RequestDeed`'s own written words already give:
+"Empty takes the nearest." Turning `Target.kind`/`reach`/`spread`
+into `Seek.Kind`/`Reach`/`Spread` is a plain, given field-for-field
+copy, no branch in it at all — held apart from any true test, the
+same way `TASK-033` was once dropped for holding none.
+
+**Split apart, out of this task's own true scope, each its own
+question:**
+
++ [ ] A `condition` that is not empty — asking `germio`'s own
+      `Evaluator`, once for each candidate, its own id put in place
+      first — is real, given work of its own, not yet designed at
+      this same true grain. `SeekResolver.Nearest` alone stands for
+      the empty-`condition` case only.
++ [ ] Where the whole piece (listening for `DeedRequested`, calling
+      `SeekResolver`, and handing a found id along) truly lives —
+      `Modio`'s own `Runtime/`, once `TASK-026` through `TASK-031`
+      stand, is the one true candidate found so far, given `Modio`
+      already depends on `germio` outright, and never the other way
+      around.
++ [ ] The true, whole put-in-place for `condition` and `Until.meets`
+      — now its own task, `germio`'s `TASK-073` (in that
+      repository)
++ [ ] How a found target's own true position feeds back into
+      `RequestDeed`'s own `$target` mark, so `until: { meets: $target }`
+      may ever truly close — waits on `germio`'s own `TASK-072`
+      (`UntilLogic`) landing first
++ [ ] Whether the whole piece waits on `germio`'s own `TASK-070`
+      first, or may be built and checked apart from it
+
+**How to check `SeekResolver.Nearest` — write these Red first, no
+Unity needed at all:**
+
+1. given three `Found`, distances `8`, `3`, `12`: reads back the one
+   at `3`, whole
+2. given one `Found` alone: reads that one back, whichever its own
+   distance
+3. given an empty list: reads `null`, never thrown
+4. given two `Found` at the exact same distance: reads back one of
+   the two — either is a true answer, so long as it never throws and
+   never reads `null`
+5. checked across 10,000 given calls, against a fixed, given list of
+   16 (`WedgeCheck`'s own true bound), `GC.GetTotalAllocatedBytes`
+   shows **0** — matching `TASK-009`'s own bar; reading through a
+   given list for the smallest number makes nothing new, ever
+
 **Everything still owed on the sight design is held in one place:**
 `docs/sight_checklist.md` — what the spec marks open, what it never
 says at all, and what cannot be known until it runs, with the order
@@ -1833,3 +1944,138 @@ is read once at start or every tick (a character in the dark may see
 less); today it reads once. Whether `Self.Heading` staying one
 `float` (no up or down in the character's own facing) is right;
 today the wedge stays level.
+
+### TASK-039
+
+**Found true, checked live 2026-09-22 — no whole piece drives a
+single NPC's own deed at all, and `animo`'s own `Agent` gave the true
+answer, already standing, to who should.** `Agent` (a `MonoBehaviour`,
+one held per body) already calls its own `_engine.Live(delta_time)`
+every tick — the same true shape a deed's own check belongs to, one
+per body, not one piece minding every body at once.
+
+**`DeedRunner`** — a `MonoBehaviour`, one held beside `Agent` on the
+same true body, in `Modio`'s own `Runtime/` (given `Modio` already
+depends on `germio`, never the other way; `SeekResolver` is
+`Modio`'s own, `UntilLogic` is `germio`'s own, and this piece calls
+both):
+
++ at `Awake`, reads its own `agent_id` off the held `Agent`, and
+  listens for `Store.DeedRequested` (its own new, given `actor`,
+  `germio`'s own `TASK-074`)
++ on that event, where the given `actor` is not its own, does
+  nothing at all — the deed is not truly its own to run
++ where it is its own: calls `BroadPhaseEdge`/`BroadPhaseLogic`
+  (already standing), turns the `RequestDeed`'s own `target` into a
+  `Seek` (a plain, given field copy), and calls `SeekResolver.Nearest`
+  (`TASK-038`) against what came back
++ **given nothing at all comes back:** the deed ends `Failed` at
+  once — `Modio`'s own `DeedEnd.Failed` already holds these same true
+  words: "Nothing was found, what was found left, or the time ran
+  out." No `command` fires; nothing is held along
++ **given a real `Found`:** writes its own id (`TargetMark.WriteID`),
+  calls `TargetMark.PutInPlaceOnDeed` (`germio`'s own `TASK-073`)
+  on the whole `RequestDeed`, and holds the deed, its own found id,
+  and `now` as its own start time
++ every tick past that, while a deed is held: calls
+  `BroadPhaseEdge`/`BroadPhaseLogic` again, the same true way, and
+  reads back the one `Found` whose own `ID` matches the held id (not
+  found this tick where it moved out of reach — held as `Running`
+  still, not `Failed`, so long as time has not run out); hands its
+  own real distance, a real touch flag, and `now` to `germio`'s own
+  `UntilLogic`
++ **`UntilLogic` reads `Done`:** calls `germio`'s own
+  `Executor.Execute` on the deed's own `command`, given its own
+  `agent_id` as the `actor` (`germio`'s own `TASK-074` extension to
+  `Execute`); clears the held deed
++ **`UntilLogic` reads `Failed`:** clears the held deed; no `command`
+  fires at all — the same true shape `DeedEnd.Failed` already holds.
+  **Held true, found on walking through given plays, one after another: a real,
+  given second-try cost, held on `DeedRunner` itself, not thrown away.**
+  `animo`'s own `Engine` fires a signal only where its own Behavior
+  truly changed (`onBehaviorChanged`, checked against `Engine.cs`) —
+  a `Failed` deed, its own Need left untouched, would see the same
+  Behavior picked again, with no new signal ever fired to try once more.
+  So `DeedRunner` holds the `RequestDeed` it was given even past
+  `Failed`, and a plain, given given wait (a `[SerializeField] float`,
+  held on `DeedRunner` itself) says when it may make the whole seek whole
+  again, on its own, with no new event needed at all
++ **Held true, a second real, given cost found the same way: `near`
+  alone, with the target truly lost for good, would hold `Running`
+  forever.** `Until` truly allows one of its own four words alone
+  (`near`, `meets`, `elapsed`, `@while`) — a rule built on `near`
+  alone has no true given time bound written into it at all.
+  `DeedRunner` itself holds a second, plain, given ceiling (a
+  `[SerializeField] float`, apart from `Until` outright) — past it,
+  the deed reads `Failed`, whatever `UntilLogic` itself would still
+  say
++ **Held true, a third found the same way: a Behavior truly changed,
+  mid-deed, is never once noticed.** `DeedEnd.Dropped` already holds
+  the true words for this ("another Behavior came, or the Node
+  changed") — `DeedRunner` needs no new event for the first true
+  half of it: at its own deed's own true start, it reads
+  `Agent.Behavior` once, and holds it; every tick past, if
+  `Agent.Behavior` no longer matches, the deed ends `Dropped` at
+  once — no `command` fires, the same true way `Failed` does not.
+  **The Node-changed half, found true and checked live: `germio`'s
+  own `Executor.cs` says it outright, in its own written words: a
+  scene change lets go of the whole scene it moves away from. So a Node
+  truly changing is one and the same real event as this whole body's
+  own Unity scene being let go — `DeedRunner`'s own `GameObject` is
+  thrown away with it, the same way `germio`'s own `WorldNames`
+  already is (`TASK-067`). No new code is owed for this half at all;
+  nothing is left standing to drop.** Held true, still, as a real,
+  narrow, given edge not yet closed: Unity's own scene unload runs
+  apart from the main thread's own tick, over more than one frame in
+  general — a real, given window where `DeedRunner` might still run
+  one tick against a Node already truly gone. Held here as a known,
+  narrow risk, not yet given its own real check
+
+**How to check the second try, the ceiling, and `Dropped` — write
+these Red first, no Unity needed at all:**
+
+1. a deed `Failed` once, given `now` at less than the given wait past
+   that: no new true try is made
+2. the same deed, given `now` at or past the given wait: a new true
+   try is made — `SeekResolver.Nearest` called once more
+3. a deed held `Running`, given `now` at or past its own ceiling:
+   reads `Failed`, whatever a real distance or touch flag would
+   otherwise say
+4. a deed held, given `Agent.Behavior` still reads the same one it
+   started with: still holds `Running`, changed in no way
+5. a deed held, given `Agent.Behavior` now reads some other true
+   word: ends `Dropped` at once — no `command` call at all
+
+**Not yet settled, held here so it is not lost:**
+
++ [ ] Real movement itself — turning "the held target sits this way,
+      this far off" into a true walk toward it — waits on `germio`'s
+      own `TASK-070` (`Human` fitting-together work)
++ [ ] A `condition` that is not empty on the `RequestDeed` itself —
+      `SeekResolver.Nearest` alone is called here; the `Evaluator`-
+      driven pick (`TASK-038`'s own split-apart question) still
+      needs its own design before `DeedRunner` may use it
++ [ ] Whether re-running `BroadPhaseEdge`/`BroadPhaseLogic` every
+      tick, for every NPC holding a deed, holds zero garbage true at
+      real scale (many bodies at once) — `BroadPhaseLogic` itself is
+      already proven so (`TASK-034`); a real, running check across
+      many `DeedRunner`s at once is not yet made
+
+**How to check it — write these Red first, no Unity needed at all
+for the parts held apart from `BroadPhaseEdge`/`Agent` themselves:**
+
+1. an event for an `actor` that is not this runner's own `agent_id`:
+   nothing held, nothing done
+2. an event for this runner's own `agent_id`, given `SeekResolver.Nearest`
+   reads back nothing at all: the deed reads `Failed` at once, no
+   `command` called
+3. an event for this runner's own `agent_id`, given a real `Found`:
+   the deed is held, its own id put in place through the whole
+   `RequestDeed` (checked through `TargetMark`'s own true call)
+4. a held deed, checked once more, `UntilLogic` reading `Running`: the deed
+   is still held after
+5. a held deed, checked once more, `UntilLogic` reading `Done`: `Executor.Execute`
+   is called once, with this runner's own `agent_id` as `actor`; the
+   deed is cleared after
+6. a held deed, checked once more, `UntilLogic` reading `Failed`: no
+   `command` call at all; the deed is cleared after

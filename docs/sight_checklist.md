@@ -22,6 +22,7 @@
 + [ ] The "3 in 10" count, from spec §3.7 — waits on `Runtime/` running
 + [ ] Whether the `Sight` numbers (210 by 150) truly suit a game character — only known once it runs
 + [ ] Reading `Choice.Angle` for a real target, once `Runtime/` can fill one (4.8-2) — waits on `Runtime/`
++ [ ] germio's own `Store.DeedRequested` event, checked live 2026-09-22 across every repository in this family, has no true listener at all — animo fires it true, through germio's own `Bus`, and there the whole chain stops. No code anywhere turns a `RequestDeed`'s own `target` into a real seek, nor a real seek's own find into real movement
 
 ---
 

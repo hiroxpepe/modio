@@ -304,3 +304,6 @@ Unity type behind it — the shape a plain dotnet test may check with no
 Unity at all.
 
 **radius** — How far out from a center point a search reaches, as one flat number.
+
+**NPC** — A body in the game moved by animo's own Engine, never by a
+person's own real input (an enemy or a friend alike).
