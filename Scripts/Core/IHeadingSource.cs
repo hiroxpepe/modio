@@ -16,7 +16,7 @@ namespace Modio.Core {
     /// <author>h.adachi (STUDIO MeowToon)</author>
     public interface IHeadingSource {
         ///////////////////////////////////////////////////////////////////////////////////////////////
-        // private Properties [noun, adjective]
+        // Properties [noun, adjective]
 
         /// <summary>A unit vector, never Vector3.zero — real for a live Transform.</summary>
         Vector3 Forward { get; }

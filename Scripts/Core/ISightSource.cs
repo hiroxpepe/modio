@@ -15,7 +15,7 @@ namespace Modio.Core {
     /// <author>h.adachi (STUDIO MeowToon)</author>
     public interface ISightSource {
         ///////////////////////////////////////////////////////////////////////////////////////////////
-        // private Properties [noun, adjective]
+        // Properties [noun, adjective]
 
         float Reach { get; }
         float HalfYaw { get; }
