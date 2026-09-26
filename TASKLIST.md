@@ -24,7 +24,7 @@ change in as a commit.
 + [x] TASK-019 [P-04]: Carry what was found, from the seek to the row
 + [ ] TASK-015 [P-06]: Join Modio to stemic, and check it by real play
 + [x] TASK-018 [P-XX]: Put the questions in the target, not in a condition
-+ [ ] TASK-016 [P-XX]: Put the rest of the docs into Basic English
++ [x] TASK-016 [P-XX]: Put the rest of the docs into Basic English
 + [ ] TASK-020 [P-XX]: Hold real, given classic console-era AI patterns, for seeking to check against
 + [x] TASK-021 [P-XX]: Wire animo's own true Engine to Modio's own real IMind
 + [ ] TASK-022 [P-XX]: Add a draft plan, a real Unity Tag for one named item
@@ -495,6 +495,17 @@ now, `dotnet test` and all.**
 
 `docs/modio_spec.md` is written to the family rule already. The rest
 of the docs, once written, must follow.
+
+**Done, 2026-09-26.** Every `.md` file in this whole repository —
+all eleven files under `docs/`, plus `README.md`, `ROADMAP.md`,
+`TASKLIST.md`, `CLAUDE.md`, `HANDOFF.md`, and `CHANGELOG.md` — was
+checked true against `tools/basic_english_cli.js`. `ROADMAP.md`
+alone turned up one true gap: `roadmap` itself sat in `germio`'s own
+`project_words.md` already, but never in `modio`'s own copy. Added
+to `modio`'s own `draft_words.md` instead (never `project_words.md`
+directly — that move needs the master's own, direct GO). The `xx`
+word `TASKLIST.md` itself turns up is a known, shared tool limit,
+found the same way in `germio` itself — not a true gap owed here.
 
 ### TASK-017
 
