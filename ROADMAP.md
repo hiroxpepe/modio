@@ -4,9 +4,9 @@
 
 + [x] P-01: Settle every real-world limit, before any code
 + [~] P-02: Build Perceive — seeking, with memory beside it
-+ [~] P-03: Build Remember — the memory, and its own fading
-+ [~] P-04: Build Enact — the Deed, ending three ways
-+ [~] P-05: Build the far look — the memory, faced the other way
++ [x] P-03: Build Remember — the memory, and its own fading
++ [x] P-04: Build Enact — the Deed, ending three ways
++ [x] P-05: Build the far look — the memory, faced the other way
 + [ ] P-06: Join Modio to a real Germio game, and check it by real play
 + [~] P-XX: Work that does not fit the phases above
 

@@ -30,11 +30,11 @@ change in as a commit.
 + [ ] TASK-022 [P-XX]: Add a draft plan, a real Unity Tag for one named item
 + [x] TASK-023 [P-02]: Add an asmdef of Modio's own, so a Unity project can take it in
 + [x] TASK-024 [P-02]: Build the wedge check in Scripts, with no Unity in it at all
-+ [ ] TASK-026 [P-02]: The thin Unity edge, reading Sight's five numbers from germio
-+ [ ] TASK-027 [P-02]: The thin Unity edge, reading transform.forward
-+ [ ] TASK-028 [P-02]: The thin Unity edge, the broad sphere call alone
-+ [ ] TASK-029 [P-02]: The name interface, asking germio for a kind and an id
-+ [ ] TASK-030 [P-02]: The thin Unity edge, one ray call alone
++ [ ] TASK-026 [P-02]: The thin Unity edge, reading Sight's five numbers from germio (built; the real check is open)
++ [ ] TASK-027 [P-02]: The thin Unity edge, reading transform.forward (built; the real check is open)
++ [ ] TASK-028 [P-02]: The thin Unity edge, the broad sphere call alone (built; the real check is open)
++ [ ] TASK-029 [P-02]: The name interface, asking germio for a kind and an id (built; the real check is open)
++ [ ] TASK-030 [P-02]: The thin Unity edge, one ray call alone (built; the real check is open)
 + [ ] TASK-031 [P-02]: Prove zero garbage across a whole tick, by a real Play Mode test
 + [x] TASK-032 [P-02]: The heading logic behind TASK-027, no Unity at all
 + [xx] TASK-033 [P-02]: The Sight-data logic behind TASK-026 — dropped, no real logic stood in it
@@ -1479,6 +1479,8 @@ interface's own four lines may be Unity-shaped. **How to check it:**
 a Play Mode test, one prefab holding a real `Sight`, checking the
 four numbers read back whole.
 
+**Now (2026-11-07).** Built: `Runtime/SightEdge.cs` (commit `a1e3ca5`, 2026-09-22) stands, and its window `ISightSource` stands in `Scripts/Core`. It has not been run in a real Unity yet; the check is by eye, in `TASK-031`.
+
 ### TASK-027
 
 **The thin Unity edge alone — one call, `transform.forward`.** Turns
@@ -1498,6 +1500,8 @@ interface IHeadingSource {
 `Forward` reads back what the prefab truly holds. The turn from
 `Vector3` into one `float` of heading is `TASK-032`'s own work, and
 needs no Unity at all.
+
+**Now (2026-11-07).** Built: `Runtime/HeadingEdge.cs` (commit `a1e3ca5`, 2026-09-22) stands, and its window `IHeadingSource` stands in `Scripts/Core`. It has not been run in a real Unity yet; the check is by eye, in `TASK-031`.
 
 ### TASK-028
 
@@ -1544,6 +1548,8 @@ checking `RawHit[]` reads back what the scene truly holds — real
 ids, real closest points, and never past the true count. `TASK-034`
 reads this same `IBroadPhaseSource`, and needs no Unity at all.
 
+**Now (2026-11-07).** Built: `Runtime/BroadPhaseEdge.cs` (commit `a1e3ca5`, 2026-09-22) stands, and its window `IBroadPhaseSource` stands in `Scripts/Core`. It has not been run in a real Unity yet; the check is by eye, in `TASK-031`.
+
 ### TASK-029
 
 **The name interface — Modio asks, germio answers.** One call, an
@@ -1571,6 +1577,8 @@ interface itself asks nothing of Unity. Write a stand-in answering a
 known id with a known kind and string; check Modio's own calling
 code reads it back whole. A second, Play Mode test then checks
 germio's own table gives the same answer for real.
+
+**Now (2026-11-07).** Built: `INameSource` (`Scripts/Core/INameSource.cs`) and `NameSourceAdapter` (`Scripts/Core/NameSourceAdapter.cs`) stand, and `NameSourceAdapterTests.NameOf_ReadsBackWhatTheTableAnswers` (`Tests~/CoreTests`) checks both cases named above: an id the table holds answers its kind and id string, and an id it never held answers an empty pair; it passes. What stays open is the check against `germio`'s own world table (`WorldNames`; `germio` `TASK-067`, in part) in a real Unity.
 
 ### TASK-030
 
@@ -1608,6 +1616,8 @@ the thing past it. A clear line; `Id` reads the true thing's own id.
 A thing set at `reach` less a hair still reads true; past `reach`
 by a hair reads false — the edge itself, matched close as a real
 scene allows.
+
+**Now (2026-11-07).** Built: `Runtime/RayEdge.cs` (commit `a1e3ca5`, 2026-09-22) stands, and its window `IRaySource` stands in `Scripts/Core`. It has not been run in a real Unity yet; the check is by eye, in `TASK-031`.
 
 ### TASK-031
 
