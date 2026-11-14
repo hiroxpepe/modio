@@ -12,8 +12,10 @@
 + [ ] Every one of the nine designed tasks — `TASK-038`, `TASK-039`
       (in `modio`); `TASK-070` through `TASK-075` (in `germio`) —
       holds a real, given Red test plan and not one true line of
-      code. `TASK-037`, `TASK-067`, and `TASK-069` are the only three
-      real, Green, built pieces this whole loop stands on so far
+      code, except `TASK-038`, which was built on 2026-11-14
+      (`SeekResolver.Nearest`, 5 tests, all Green). `TASK-037`,
+      `TASK-067`, and `TASK-069` are the other three real, Green, built
+      pieces this whole loop stands on so far
 + [ ] **The one true missing link between "wants to go this way" and
       a real button signal.** `TASK-070` (`germio`) makes `Human`'s
       own button fields made to work the same true way with a computed source; `TASK-039`
