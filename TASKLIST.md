@@ -27,7 +27,7 @@ change in as a commit.
 + [x] TASK-016 [P-XX]: Put the rest of the docs into Basic English
 + [ ] TASK-020 [P-XX]: Hold real, given classic console-era AI patterns, for seeking to check against
 + [x] TASK-021 [P-XX]: Wire animo's own true Engine to Modio's own real IMind
-+ [ ] TASK-022 [P-XX]: Add a draft plan, a real Unity Tag for one named item
++ [ ] TASK-022 [P-XX]: Add the Unity Tag edge (`GameObject.CompareTag`) for `TargetMarkLogic`
 + [x] TASK-023 [P-02]: Add an asmdef of Modio's own, so a Unity project can take it in
 + [x] TASK-024 [P-02]: Build the wedge check in Scripts, with no Unity in it at all
 + [ ] TASK-026 [P-02]: The thin Unity edge, reading Sight's five numbers from germio (built; the real check is open)
@@ -44,6 +44,8 @@ change in as a commit.
 + [x] TASK-037 [P-XX]: The adapter joining germio's world table to Modio's own name interface
 + [ ] TASK-038 [P-XX]: The join between germio's own DeedRequested and a real seek
 + [ ] TASK-039 [P-XX]: Add DeedRunner, one per NPC, driving its own deed each tick
++ [ ] TASK-040 [P-XX]: Check that the Tag list of `stemic` holds one entry for each named item
++ [ ] TASK-041 [P-XX]: Carry the Tag text through `Found` and `TargetMark` to `update_inventory.key`
 
 ## Detail
 
@@ -1339,6 +1341,8 @@ No real crack was found in three rounds of hard checking. This whole
 real shape stands ready, once `Runtime` and the Tag-reading piece of
 it are truly built.
 
+**The title was changed on 2026-11-14.** `TargetMarkLogic` is done (code and 2 tests found). This task now holds the Unity Tag edge only; the two other pieces that were still owed are `TASK-040` and `TASK-041`. The edge needs a real Windows Unity open.
+
 ### TASK-023
 
 **Done 2026-09-21.** `Scripts/Modio.asmdef` (referencing `Germio`,
@@ -2100,3 +2104,11 @@ for the parts held apart from `BroadPhaseEdge`/`Agent` themselves:**
    deed is cleared after
 6. a held deed, checked once more, `UntilLogic` reading `Failed`: no
    `command` call at all; the deed is cleared after
+
+### TASK-040
+
+Cut out of TASK-022 on 2026-11-14, so that each task is 8 hours or less. A check that the given Tag list of `stemic` holds one entry for each named item, never two given items that share one. **Done, once**: the check is run on the real Tag list, and the answer is written here.
+
+### TASK-041
+
+Cut out of TASK-022 on 2026-11-14. How `Found` (and `TargetMark` behind it) carries the real text of the Tag through to `update_inventory.key`, so that a `Rule` may write `"$target"` and get back the true name of the item, not a plain `g_1042`. **Done, once**: a Red test first, then the carry is built, and the test passes.
