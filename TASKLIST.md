@@ -42,7 +42,7 @@ change in as a commit.
 + [x] TASK-035 [P-02]: The ray-result logic behind TASK-030, no Unity at all
 + [x] TASK-036 [P-XX]: The Tag logic behind TASK-022's own third path, no Unity at all
 + [x] TASK-037 [P-XX]: The adapter joining germio's world table to Modio's own name interface
-+ [ ] TASK-038 [P-XX]: The join between germio's own DeedRequested and a real seek
++ [x] TASK-038 [P-XX]: The join between germio's own DeedRequested and a real seek
 + [ ] TASK-039 [P-XX]: Add DeedRunner, one per NPC, driving its own deed each tick
 + [ ] TASK-040 [P-XX]: Check that the Tag list of `stemic` holds one entry for each named item
 + [ ] TASK-041 [P-XX]: Carry the Tag text through `Found` and `TargetMark` to `update_inventory.key`
@@ -1969,6 +1969,8 @@ is read once at start or every tick (a character in the dark may see
 less); today it reads once. Whether `Self.Heading` staying one
 `float` (no up or down in the character's own facing) is right;
 today the wedge stays level.
+
+**Done 2026-11-14.** `SeekResolver.Nearest` is built (`Scripts/Core/SeekResolver.cs`), with the 5 tests of `Tests~/CoreTests/SeekResolverTests.cs`, all green (the whole `CoreTests` run: 204 pass). One change from the plan: test 5 makes 64 calls, not 10,000, because of the master rule that a new test is short and does not repeat a call many times; it still shows that no garbage is made.
 
 ### TASK-039
 

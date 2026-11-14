@@ -44,6 +44,7 @@
     <Compile Include="..\..\Scripts\Core\TargetMarkLogic.cs" />
     <Compile Include="..\..\Scripts\Core\IWorldNamesFacing.cs" />
     <Compile Include="..\..\Scripts\Core\NameSourceAdapter.cs" />
+    <Compile Include="..\..\Scripts\Core\SeekResolver.cs" />
     <Compile Include="..\..\Scripts\Core\EdgeMath.cs" />
     <Compile Include="..\..\Scripts\Tools\Seen.cs" />
     <Compile Include="..\..\Scripts\Tools\Trace.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="TargetMarkLogicTests.cs" />
     <Compile Include="NameSourceAdapterTests.cs" />
     <Compile Include="EdgeMathTests.cs" />
+    <Compile Include="SeekResolverTests.cs" />
   </ItemGroup>
 
 </Project>

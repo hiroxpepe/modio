@@ -12,7 +12,7 @@ State on 2026-11-07, checked against the code.
 | 2 | The code | `Scripts/Modio.csproj` holds the real, working code: `Seek`, `Memory`, `Deed`, `Hand`, `IMind`, `EngineMind`, the source windows, and `NameSourceAdapter` |
 | 3 | The tests | 199 in `Tests~/CoreTests` and 106 in `Tests~/ConventionTests`, all pass |
 | 4 | The thin edges | `Runtime/` holds `SightEdge`, `HeadingEdge`, `BroadPhaseEdge`, and `RayEdge` (built 2026-09-22); none has been run in a real Unity |
-| 5 | Open work | 11 tasks: `TASK-015` (the join to `stemic`), `020`, `022`, `026` to `031` (the Unity edges and their one check by eye), `038`, `039` (`DeedRunner`) |
+| 5 | Open work | 10 tasks: `TASK-015` (the join to `stemic`), `020`, `022`, `026` to `031` (the Unity edges and their one check by eye), `039` (`DeedRunner`). `TASK-038` is done: `SeekResolver.Nearest` is built, with 5 tests |
 | 6 | The design | `docs/modio_spec.md` holds the whole design this build follows |
 
 ## What is settled
