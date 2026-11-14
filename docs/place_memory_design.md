@@ -298,3 +298,53 @@ well (error 0.22), took the wrong floor 14.3 in 100 of the time, and
 took the red post of one floor for the one over or under it. The
 master's word, 2026-11-14: the way the trial goes is good. Nothing of
 it is built into `modio`.
+
+---
+
+## 11. From the trial to Modio, 2026-11-14
+
+**What the trial is, and what it is not.** The working of the trial
+(§10) is true as a way of reckoning; as the mind of a Modio character
+it is not yet anything, since it is joined to no part of Modio.
+
+| # | Part                                                            | In the trial                                              | True for Modio?                                           |
+| - | --------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------- |
+| 1 | putting the sense of moving, the way faced, and height together | works, and the measures come from it                      | yes, as a way of reckoning                                |
+| 2 | what is seen                                                    | made from the true points of the world, with error put on | no: it does not go through `Sight` or `Found`             |
+| 3 | marks                                                           | five, put down by hand, and known from the start          | no: no mark is put into memory on the way                 |
+| 4 | the road walked                                                 | a fixed road                                              | no: it does not come from a want of `animo`               |
+| 5 | memory                                                          | none                                                      | no: nothing is written as a `Row`                         |
+| 6 | the build                                                       | `JavaScript`, with garbage at run time, and no tests      | no: Modio is `C#`, with no garbage at run time, and tests |
+
+**What Modio holds today (read in the code, 2026-11-14).**
+
+| # | Part                              | What it holds                                                                                                                    | What it means for the plan                          |
+| - | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| 1 | `Found` (`Scripts/Core/Found.cs`) | `Kind`, `ID`, `Angle`, `Distance`, `Height`, as seen from the body                                                               | a seen mark, ready to use as it is                  |
+| 2 | `Self` (`Scripts/Core/Self.cs`)   | `Heading` alone; no point of the body                                                                                            | the point of the body is made by the mind, not read |
+| 3 | `Row` (`Scripts/Core/Row.cs`)     | `Place` is a plain string                                                                                                        | the name the mind makes goes here                   |
+| 4 | a part that makes a place name    | none: §4.3 of `docs/modio_spec.md` says how, but no code does it                                                                 | the mind fills this gap                             |
+| 5 | the edges in `Runtime/`           | `SightEdge`, `RayEdge`, `BroadPhaseEdge`, `HeadingEdge`, for `ISightSource`, `IRaySource`, `IBroadPhaseSource`, `IHeadingSource` | one more edge is needed, for the moving of the body |
+| 6 | `Depth` (`Scripts/Core/Depth.cs`) | `SEEN`, `MET`, `HELD`                                                                                                            | how sure the mind is of a mark                      |
+
+**The plan (put forward, not built).**
+
+| # | Part                        | Where                                                       | What it does                                                                                                                                                                                                                                                                                                                                                     |
+| - | --------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 | the mind (one new type)     | `Scripts/Core`, with no `Unity`, so `dotnet test` checks it | takes `Move` (how far the body went, how much it turned, how much it went up, each update) and `See` (a `Found` that is a mark); holds its guess of the point, the way faced, and how sure it is; makes no garbage at run time (the memory of marks is a table of fixed size); its error comes from a seed of its own, so a test gives the same answer each time |
+| 2 | the edge of the moving body | `Runtime`, one new edge                                     | gives only how much the body moved in one update, never its point, as the body's own sense does                                                                                                                                                                                                                                                                  |
+| 3 | marks                       | in the mind                                                 | a `Found` of a kind that does not move is a mark; its look is its kind; where kinds are the same, the mind may take one for another, as a person does                                                                                                                                                                                                            |
+| 4 | the name of a place         | made by the mind                                            | the mind's guess of the point, rounded; when the mind is wrong, the place is wrong; new, known, and to keep away from (§3.1, §4.5 of `docs/modio_spec.md`) all come from it                                                                                                                                                                                      |
+| 5 | how deep a mark sits        | `Depth`, as it is                                           | a mark only seen is less sure than one met or held                                                                                                                                                                                                                                                                                                               |
+
+The order of the work, as for every change: this record first, then
+the Red tests, then the build.
+
+**Not yet settled.**
+
+| # | Point                                                                                                                                                     |
+| - | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 | where the five values of each character are kept: on the part of the character, or in the person of `animo`                                               |
+| 2 | which of the marks of `germio` are kinds that do not move                                                                                                 |
+| 3 | how much ground one place name holds when the guess is rounded                                                                                            |
+| 4 | how a place kept into the next level (§4.5.1 of `docs/modio_spec.md`) and the mind's guess go together, since the guess starts from nothing in each level |

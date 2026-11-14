@@ -869,6 +869,13 @@ place was begun, turned into the world's own reckoning (§3.3.2), and
 rounded. Two things done on the same stretch of ground fall to the same
 `place`.
 
+**Not built yet, read in the code 2026-11-14:** no code makes a place
+name. **Put forward, 2026-11-14 (the master holds the way of the trial good):** the name is made
+by the character's own mind, as its guess of where the body stands,
+rounded, so a wrong guess gives a wrong place, the way a person goes
+wrong (`docs/place_memory_design.md`, §10 and §11). Nothing of it is
+built.
+
 **Whether a `place`'s own name should ever be taken wrong for
 another's — and what real study of a living body's own sense of
 place says about that — is worked out in full in
