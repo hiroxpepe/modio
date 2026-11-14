@@ -250,3 +250,51 @@ once wrongly (a count of kinds), once true (§5.3's own shape of
 wall-distances). A wall's own shape holds true wherever a game's own
 world calls a boundary by any name at all, or none, so no widening
 of `germio`'s own marks is asked for.**
+
+---
+
+## 10. The way forward, 2026-11-14
+
+**The three designs thrown out (§3.1, §3.2, §5.3) each used one sign
+alone.** A count of what is seen turned with the head; a walked count
+of steps had nothing to put it right; the shape of the walls, run on
+`Level_1`, gave one name to every place that faced open ground. A
+fourth, the edges of the ground, was thrown out by the master on the
+spot: it leans on how one level is built, and the models of a level are
+not fixed.
+
+**How a person finds the way.** No one sign does it. A person puts
+three together all the time: what is seen (marks that stand out and
+do not move, the look of a whole scene, and the shape of the space),
+the sense of moving (steps and turns), and the sense of which way the
+body faces. The sense of moving goes wrong more the more one walks and
+turns; seen marks put it right. A person is lost when the sense of
+moving has gone wrong and no mark puts it right: no mark, a mark that
+looks like another, a mark that moves, or no looking. The sense of
+height is much weaker than the flat sense: a climb is felt as less
+than it is, and a person in a building of many floors takes one floor
+for another.
+
+**What the study of how people find their way holds, and what is used
+here.**
+
+| # | Way of looking                                                                                                                              | Used here                                          |
+| - | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| 1 | signs are put together by how sure each is; the surer one counts more                                                                       | yes: the ground of the design                      |
+| 2 | knowledge grows as marks, then roads between marks, then a map of the whole                                                                 | marks only, so far                                 |
+| 3 | people are not the same: some keep roads, some keep the way faced; fear makes the seen space small; some cannot join two roads into one map | yes: values that may be changed for each character |
+| 4 | the cells of the body for a place, for steps, for the way faced, and for walls and drops                                                    | as the reason for 1, not as a design               |
+
+**The order of the work.** The needs of §3.1 and §4 come first: to tell
+a new place, a known place, and a place to keep away from, across
+levels. Going wrong, the way a person does, is put on top of that, and
+not in its place.
+
+**The trial.** `Tests~/PoC/place_brain_3d_2026-11-14/` holds a small
+brain that puts the three signs together in 3D, on two floors joined
+by a slope, with five values for each character. Its numbers are in its
+`README.md`: one with a weak sense of height alone kept the flat place
+well (error 0.22), took the wrong floor 14.3 in 100 of the time, and
+took the red post of one floor for the one over or under it. The
+master's word, 2026-11-14: the way the trial goes is good. Nothing of
+it is built into `modio`.

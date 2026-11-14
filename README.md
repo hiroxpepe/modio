@@ -28,6 +28,25 @@ already.
 
 **Modio is the only layer with a past.**
 
+**The aim, the master's word, 2026-11-14: a game should go after how
+wise and how natural its enemies and other characters are, before how
+fine its pictures are.** What enemies and other characters in most
+games do not have, and what Modio gives in its place:
+
+| # | What most games do                                                                      | What Modio does (`docs/modio_spec.md`)                                                                                 |
+| - | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| 1 | a character notes the player in a cone of sight, looks a while, and gives up by a clock | seeking comes from a want, and is done on purpose (§3.1)                                                               |
+| 2 | a character knows where the player is, through walls                                    | it knows only what it has seen and what it keeps in memory (§3.7.1)                                                    |
+| 3 | a character has no past of its own                                                      | it holds what this one character did (§2.2)                                                                            |
+| 4 | a new level or scene wipes its memory                                                   | places and other characters are kept into the next level, and saved (§4.5.1)                                           |
+| 5 | a character never loses its way                                                         | it puts the same signs together that a person does, and may go wrong the same way (`docs/place_memory_design.md`, §10) |
+
+Why games do little of this, and how Modio meets it: a wise enemy is
+hard to test and may make a player angry, it costs time to work out, and a
+picture sells better than a wise enemy. Modio goes wrong only the way a
+person does, so a mistake does not make a player angry; it keeps few places, so
+memory stays small; and it makes no garbage at run time.
+
 ## Seeing ahead comes free
 
 Tulving held that the true point of the memory of living is not
