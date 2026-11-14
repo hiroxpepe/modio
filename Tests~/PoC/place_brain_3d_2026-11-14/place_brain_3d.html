@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>place brain 3d (trial, 2026-11-14)</title>
+<style>
+:root{--text-primary:#1f1f1e;--text-secondary:#5f5e5a;--text-muted:#888780;--border:rgba(0,0,0,0.12);--border-strong:rgba(0,0,0,0.25);--surface-1:#f5f4ef;--radius:8px}
+@media (prefers-color-scheme: dark){:root{--text-primary:#f1efe8;--text-secondary:#b4b2a9;--text-muted:#888780;--border:rgba(255,255,255,0.14);--border-strong:rgba(255,255,255,0.28);--surface-1:#2c2c2a}body{background:#1f1f1e}}
+body{font-family:system-ui,sans-serif;color:var(--text-primary);max-width:720px;margin:24px auto;padding:0 16px}
+button{font:inherit;font-size:14px;padding:6px 12px;border:0.5px solid var(--border-strong);border-radius:var(--radius);background:transparent;color:var(--text-primary);cursor:pointer}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<h2 class="sr-only">2 階建ての場所で、動きの見当・向き・高さの感覚と目印を重ね合わせる、3D の小さな脳の試作</h2>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px">
+<button id="play">歩かせる</button><button id="reset">やり直し</button><button id="good">迷いにくい人</button><button id="bad">迷いやすい人</button><button id="vert">高さの感覚だけが弱い人</button>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px 14px;margin:0 0 10px;font-size:13px;color:var(--text-secondary)">
+<label>目印を見る力 <span id="v_att"></span><input type="range" id="att" min="0" max="1" step="0.05" value="0.6" style="width:100%"></label>
+<label>向きの更新 <span id="v_turn"></span><input type="range" id="turn" min="0" max="1" step="0.05" value="0.6" style="width:100%"></label>
+<label>不安 <span id="v_anx"></span><input type="range" id="anx" min="0" max="1" step="0.05" value="0.3" style="width:100%"></label>
+<label>記憶の深さ <span id="v_dep"></span><input type="range" id="dep" min="0" max="1" step="0.05" value="0.6" style="width:100%"></label>
+<label>高さの感覚 <span id="v_vert"></span><input type="range" id="vert" min="0" max="1" step="0.05" value="0.6" style="width:100%"></label>
+</div>
+<div id="box" style="width:100%;height:400px;border:0.5px solid var(--border);border-radius:12px;overflow:hidden;cursor:grab"></div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 0">
+<div style="background:var(--surface-1);border-radius:var(--radius);padding:8px 10px"><div style="font-size:12px;color:var(--text-secondary)">平面のずれ</div><div id="s_err" style="font-size:20px;font-weight:500">0</div></div>
+<div style="background:var(--surface-1);border-radius:var(--radius);padding:8px 10px"><div style="font-size:12px;color:var(--text-secondary)">本当の階 / 思っている階</div><div id="s_floor" style="font-size:20px;font-weight:500">1 / 1</div></div>
+<div style="background:var(--surface-1);border-radius:var(--radius);padding:8px 10px"><div style="font-size:12px;color:var(--text-secondary)">目印の取り違え</div><div id="s_wrong" style="font-size:20px;font-weight:500">0</div></div>
+<div style="background:var(--surface-1);border-radius:var(--radius);padding:8px 10px"><div style="font-size:12px;color:var(--text-secondary)">状態</div><div id="s_state" style="font-size:20px;font-weight:500">分かる</div></div>
+</div>
+<p id="log" style="font-size:13px;color:var(--text-secondary);margin:8px 0 0;min-height:20px"></p>
+<p style="font-size:12px;color:var(--text-muted);margin:4px 0 0">ドラッグで回す。灰色の玉：本当の位置。紫の玉と線：脳が思っている位置と道。紫の雲：見当の幅（縦は高さの見当）。赤いポストは、1 階と 2 階の同じ場所に 1 つずつ。紫の塔は、どこからも見える</p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const L=[{id:"T",look:"塔",x:28,y:0,z:7},{id:"R1",look:"赤いポスト",x:18,y:0,z:4},{id:"R2",look:"赤いポスト",x:18,y:3,z:4},{id:"B",look:"青い屋根",x:5,y:0,z:8},{id:"G",look:"木",x:3,y:0,z:12}];
+const W=[[2,0,2],[20,0,2],[20,0,6],[10,0,6],[10,0,11],[4,0,11],[4,0,13],[8,0,13],[14,3,13],[22,3,13],[22,3,3],[16,3,3],[16,3,9],[14,3,9],[14,3,13],[8,0,13],[2,0,13],[2,0,2]];
+function seed(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
+const P=id=>parseFloat(document.getElementById(id).value);
+function par(){return {att:P("att"),turn:P("turn"),anx:P("anx"),dep:P("dep"),vert:P("vert")};}
+let S;
+function make(sd){const rnd=seed(sd);const N=s=>{let u=0,v=0;while(!u)u=rnd();v=rnd();return s*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+return {rnd,N,T:{x:2,y:0,z:2,h:0},B:{x:2,y:0,z:2,h:0,v:0.01,vy:0.01,hv:0.001},wi:1,wrong:0};}
+function step(S,p){const {T,B,N,rnd}=S;const tg=W[S.wi],dx=tg[0]-T.x,dy=tg[1]-T.y,dz=tg[2]-T.z,d=Math.hypot(dx,dy,dz),s=Math.min(0.08,d),f=d>0?s/d:0;
+const nh=Math.atan2(dz,dx);if(Math.hypot(dx,dz)>0.01&&Math.abs(wrap(nh-T.h))>0.01){const turn=wrap(nh-T.h),sk=(1-p.turn)*0.5+0.03;T.h=nh;B.h+=turn+N(sk);B.hv+=sk*sk;}
+const hs=Math.hypot(dx,dz)*f,ys=dy*f;T.x+=dx*f;T.y+=ys;T.z+=dz*f;
+const so=hs*(1+N(0.12));B.x+=Math.cos(B.h)*so;B.z+=Math.sin(B.h)*so;B.h+=N(0.002);B.v+=0.012*hs+Math.pow(Math.sin(Math.sqrt(B.hv))*hs,2)*4;
+const g=0.35+0.65*p.vert,vn=0.05+(1-p.vert)*0.15;B.y+=ys*(g+N(vn));B.vy+=Math.pow(ys*vn,2);
+if(d<=0.08){S.wi++;if(S.wi>=W.length)S.wi=1;}
+const range=1+8*(1-p.anx*Math.min(1,Math.sqrt(B.v)/1.5));let msg="";
+for(const l of L){const hd=Math.hypot(l.x-T.x,l.z-T.z),ld=Math.hypot(hd,l.y-T.y);if(l.id!=="T"&&ld>range)continue;if(l.id==="T"&&ld>30)continue;if(rnd()>p.att*0.06)continue;
+const rb=wrap(Math.atan2(l.z-T.z,l.x-T.x)-T.h+N(0.04)),rd=hd*(1+N(0.04)),rh=(l.y-T.y)+N(0.15+(1-p.vert)*0.8);
+const c=L.filter(o=>o.look===l.look).map(o=>({o,px:o.x-rd*Math.cos(B.h+rb),pz:o.z-rd*Math.sin(B.h+rb),py:o.y-rh})).sort((a,b)=>((a.px-B.x)**2+(a.pz-B.z)**2)/B.v+(a.py-B.y)**2/B.vy-(((b.px-B.x)**2+(b.pz-B.z)**2)/B.v+(b.py-B.y)**2/B.vy))[0];
+if(l.id!=="T"){const sl=Math.pow(0.25+(1-p.dep)*2.5,2),w=B.v/(B.v+sl);B.x+=w*(c.px-B.x);B.z+=w*(c.pz-B.z);B.v*=(1-w);}
+const sly=Math.pow(0.15+(1-p.vert)*0.8,2)+Math.pow((1-p.dep),2),wy=B.vy/(B.vy+sly);B.y+=wy*(c.py-B.y);B.vy*=(1-wy);
+if(c.o.id!==l.id){S.wrong++;msg="取り違え："+(l.y>1.5?"2 階":"1 階")+"の"+l.look+"を、"+(c.o.y>1.5?"2 階":"1 階")+"の"+l.look+"だと思い込んだ";}
+if(l.id==="T"){const imp=wrap(Math.atan2(l.z-B.z,l.x-B.x)-rb),wh=B.hv/(B.hv+0.02);B.h+=wh*wrap(imp-B.h);B.hv*=(1-wh);}}
+return msg;}
+const box=document.getElementById("box"),Wd=box.clientWidth,Ht=400;
+const R3=new THREE.WebGLRenderer({antialias:true,alpha:true});R3.setSize(Wd,Ht);R3.setClearColor(0x000000,0);box.appendChild(R3.domElement);
+const sc=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,Wd/Ht,0.1,300);
+sc.add(new THREE.AmbientLight(0xffffff,0.75));const dl=new THREE.DirectionalLight(0xffffff,0.6);dl.position.set(10,30,15);sc.add(dl);
+const mat=(c,o)=>new THREE.MeshLambertMaterial({color:c,transparent:o<1,opacity:o});
+const add=(g,m,x,y,z)=>{const k=new THREE.Mesh(g,m);k.position.set(x,y,z);sc.add(k);return k;};
+add(new THREE.BoxGeometry(24,0.1,14),mat(0xB4B2A9,0.55),12,-0.05,7);
+add(new THREE.BoxGeometry(12,0.1,14),mat(0x85B7EB,0.4),18,2.95,7);
+[[12.2,0.2],[23.8,0.2],[12.2,13.8],[23.8,13.8]].forEach(q=>add(new THREE.BoxGeometry(0.3,3,0.3),mat(0x888780,1),q[0],1.5,q[1]));
+const rp=add(new THREE.BoxGeometry(Math.hypot(6,3),0.1,1.6),mat(0x5DCAA5,0.7),11,1.5,13);rp.rotation.z=Math.atan2(3,6);
+add(new THREE.CylinderGeometry(0.6,0.8,10,12),mat(0x7F77DD,1),28,5,7);
+[[18,0,4],[18,3,4]].forEach(q=>add(new THREE.CylinderGeometry(0.25,0.25,1.2,10),mat(0xD85A30,1),q[0],q[1]+0.6,q[2]));
+add(new THREE.ConeGeometry(1.2,1,4),mat(0x378ADD,1),5,0.5,8);add(new THREE.ConeGeometry(0.8,2,8),mat(0x639922,1),3,1.2,12);
+const tM=add(new THREE.SphereGeometry(0.3,16,12),mat(0x5F5E5A,1),2,0.3,2),bM=add(new THREE.SphereGeometry(0.25,16,12),mat(0x534AB7,1),2,0.3,2);
+const cloud=add(new THREE.SphereGeometry(1,20,14),mat(0x7F77DD,0.18),2,0.3,2);
+const MAX=6000;function trail(c){const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.BufferAttribute(new Float32Array(MAX*3),3));g.setDrawRange(0,0);const l=new THREE.Line(g,new THREE.LineBasicMaterial({color:c}));sc.add(l);return {g,n:0};}
+let tT,tB;
+const push=(t,x,y,z)=>{if(t.n>=MAX)return;const a=t.g.attributes.position.array;a[t.n*3]=x;a[t.n*3+1]=y+0.05;a[t.n*3+2]=z;t.n++;t.g.setDrawRange(0,t.n);t.g.attributes.position.needsUpdate=true;};
+let az=0.9,el=0.75;const ctr=new THREE.Vector3(14,1.5,7);
+function setCam(){const r=40;cam.position.set(ctr.x+r*Math.cos(el)*Math.cos(az),ctr.y+r*Math.sin(el),ctr.z+r*Math.cos(el)*Math.sin(az));cam.lookAt(ctr);}
+let drag=null;box.onpointerdown=e=>{drag=[e.clientX,e.clientY,az,el];box.setPointerCapture(e.pointerId);};
+box.onpointermove=e=>{if(!drag)return;az=drag[2]+(e.clientX-drag[0])*0.01;el=Math.max(0.1,Math.min(1.45,drag[3]+(e.clientY-drag[1])*0.01));setCam();render();};
+box.onpointerup=()=>{drag=null;};
+function render(){R3.render(sc,cam);}
+function fl(y){return y<0.01?"1":(y>2.99?"2":"坂");}
+function show(){const {T,B}=S;tM.position.set(T.x,T.y+0.3,T.z);bM.position.set(B.x,B.y+0.3,B.z);cloud.position.set(B.x,B.y+0.3,B.z);cloud.scale.set(Math.min(8,Math.sqrt(B.v)+0.2),Math.min(4,Math.sqrt(B.vy)+0.2),Math.min(8,Math.sqrt(B.v)+0.2));
+const e=Math.hypot(B.x-T.x,B.z-T.z),tf=fl(T.y),bf=B.y>1.5?"2":"1";document.getElementById("s_err").textContent=e.toFixed(1);document.getElementById("s_floor").textContent=tf+" / "+bf;document.getElementById("s_wrong").textContent=S.wrong;
+document.getElementById("s_state").textContent=(e>2.5||(tf!=="坂"&&tf!==bf))?"迷子":(e>1.2?"あやしい":"分かる");["att","turn","anx","dep","vert"].forEach(k=>document.getElementById("v_"+k).textContent=P(k).toFixed(2));render();}
+function reset(){S=make(7);if(tT){sc.remove(tT.line);}tT=trail(0x888780);tB=trail(0x7F77DD);document.getElementById("log").textContent="";show();}
+let run=false;function loop(){if(!run)return;const p=par();for(let i=0;i<3;i++){const m=step(S,p);if(m)document.getElementById("log").textContent=m;push(tT,S.T.x,S.T.y,S.T.z);push(tB,S.B.x,S.B.y,S.B.z);}show();requestAnimationFrame(loop);}
+const setP=(a,t,x,d,v)=>{[["att",a],["turn",t],["anx",x],["dep",d],["vert",v]].forEach(([k,val])=>document.getElementById(k).value=val);sc.children.filter(o=>o.type==="Line").forEach(o=>sc.remove(o));reset();};
+document.getElementById("play").onclick=e=>{run=!run;e.target.textContent=run?"止める":"歩かせる";if(run)loop();};
+document.getElementById("reset").onclick=()=>{sc.children.filter(o=>o.type==="Line").forEach(o=>sc.remove(o));reset();};
+document.getElementById("good").onclick=()=>setP(0.9,0.9,0.1,0.85,0.9);
+document.getElementById("bad").onclick=()=>setP(0.15,0.15,0.85,0.25,0.2);
+document.getElementById("vert").onclick=()=>setP(0.9,0.9,0.1,0.85,0.05);
+["att","turn","anx","dep","vert"].forEach(k=>document.getElementById(k).oninput=show);
+setCam();reset();
+</script>
+</body>
+</html>
