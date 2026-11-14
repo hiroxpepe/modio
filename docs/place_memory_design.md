@@ -124,6 +124,8 @@ the amygdala's own true part, carried into one line of code.
 
 ### 5.3 A `place`'s own name comes from the shape of what stands in the way
 
+**Thrown out by the master, 2026-11-14: it would not truly work.** A run on `stemic`'s own `Level_1` (its 12 blocks, read from `Level_1.unity`; a stand every 0.5 on each ground, faced 4 ways: 4,916 stands) gave 372 names. The most common name, all 12 cells `x`, came at 550 stands (11 in 100), at places as far as 34.6 apart. Of the 58,992 cells, `x` was 71.5 in 100, `near` 27.2, `mid` 1.3, and `far` 16 cells alone; the top row was almost always `x`, since the blocks stand lower than the eye. So the name is made by a few cells, `far` is almost never used, and facing open ground gives one name anywhere. Put in for the run, as nothing is settled: the band lines at 10, 20, and 30; the eye 1.0 over the ground; the sight of `germio`'s own `Sight.cs` as it starts (`reach` 30, `halfYaw` 90, `halfPitch` 45); every stand, and not the ways in alone. Nothing of the run is kept.
+
 **Not yet built. Thrown out once already, 2026-09-19, and built
 again true.** The first try named a `place` from the kind and count
 of everything `Found` held — a rich mix here, a plain one there.
@@ -233,12 +235,12 @@ too, may not know a room once its own things have moved.
 
 ## 9. Left open
 
-| # | Question                                                                                                                                                                                                                                                        |
-| - | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1 | how big `delta` must be before a `Depth` is lifted                                                                                                                                                                                                              |
-| 2 | **Settled 2026-09-19, in full: a 4-by-3 set of 12 cells (matching `Sight`'s own true 210-by-150 ratio), each held as one of four bands (near, mid, far, x), not a true number.** Left open still: where the band lines truly sit for `Sight`'s own real `reach` |
-| 3 | whether a rest (the `Rest` act, held in both personas already) should itself lift `Depth` for memories made close before it, matching the still-body going-over-again that real study points to                                                                 |
-| 4 | how many true ways in `Level_1` would give, once counted — not yet done                                                                                                                                                                                         |
+| # | Question                                                                                                                                                                                                                                                                                                |
+| - | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 | how big `delta` must be before a `Depth` is lifted                                                                                                                                                                                                                                                      |
+| 2 | **Settled 2026-09-19, then thrown out by the master 2026-11-14 (§5.3): a 4-by-3 set of 12 cells (matching `Sight`'s own true 210-by-150 ratio), each held as one of four bands (near, mid, far, x), not a true number.** Left open still: where the band lines truly sit for `Sight`'s own real `reach` |
+| 3 | whether a rest (the `Rest` act, held in both personas already) should itself lift `Depth` for memories made close before it, matching the still-body going-over-again that real study points to                                                                                                         |
+| 4 | how many true ways in `Level_1` would give, once counted — not yet done                                                                                                                                                                                                                                 |
 
 **Settled 2026-09-19, not left open: what a place-name does where
 `germio`'s own eleven marks are too few to tell a scene apart —
