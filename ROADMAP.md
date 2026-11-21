@@ -2,17 +2,17 @@
 
 <!-- format: v1 | fields: status, phase, title -->
 
-+ [x] P-01: Settle every real-world limit, before any code
-+ [~] P-02: Build Perceive — seeking, with memory beside it
-+ [x] P-03: Build Remember — the memory, and its own fading
-+ [x] P-04: Build Enact — the Deed, ending three ways
-+ [x] P-05: Build the far look — the memory, faced the other way
-+ [ ] P-06: Join Modio to a real Germio game, and check it by real play
-+ [~] P-XX: Work that does not fit the phases above
++ [x] PHASE-01: Settle every real-world limit, before any code
++ [~] PHASE-02: Build Perceive — seeking, with memory beside it
++ [x] PHASE-03: Build Remember — the memory, and its own fading
++ [x] PHASE-04: Build Enact — the Deed, ending three ways
++ [x] PHASE-05: Build the far look — the memory, faced the other way
++ [ ] PHASE-06: Join Modio to a real Germio game, and check it by real play
++ [~] PHASE-XX: Work that does not fit the phases above
 
 ## Detail
 
-### P-01
+### PHASE-01
 
 Seeking sits in Modio itself, beside memory (`docs/modio_spec.md`
 §3.3), so no other build must make a thing first.
@@ -36,7 +36,7 @@ seconds leaves nothing new), a full working out of every
 forward-facing question, and word to `germio` that its own sensor
 plan should be cut back to the plain physical ask.
 
-### P-02
+### PHASE-02
 
 Build Perceive, in two parts held apart: `Runtime/` calls Unity's own
 `Physics` straight and hands back a plain list (angle, distance,
@@ -47,34 +47,34 @@ holds only Unity's own five stock layers.
 The drop-off check comes here too, not `germio`: an edge worth
 keeping away from is a thing worth remembering.
 
-**Meeting is not seeking; it belongs to P-04, as proof of arrival.**
+**Meeting is not seeking; it belongs to PHASE-04, as proof of arrival.**
 
-### P-03
+### PHASE-03
 
 Build the memory table (`when`/`what`/`object`/`with`), the three
-depths of meeting, and the fading P-01 settles. Must make no garbage
+depths of meeting, and the fading PHASE-01 settles. Must make no garbage
 on the hot path — the bar `animo` met with a test running `Live()`
 100,000 times.
 
-### P-04
+### PHASE-04
 
 Build `Deed`: one Behavior, carried through over time, ending Done,
 Failed, or Dropped. Held together by `animo`'s own `Lock(Soft)`
 while it plays out. Every test written first.
 
-### P-05
+### PHASE-05
 
 Build the far look: the same memory, read facing the other way, plus
 `animo`'s own `rates` and `GetNeed`. **One road, two ways** —
 Tulving's own claim, put to work.
 
-### P-06
+### PHASE-06
 
 Put Modio into `stemic`, driving the two given personas
 (`place_curious`, `company_seeking`), and check by real play that
 each truly seeks, remembers, and acts on both.
 
-### P-XX
+### PHASE-XX
 
 Work that does not fit any of the phases above is tracked here
 instead. See `TASKLIST.md` for the open work under this phase.

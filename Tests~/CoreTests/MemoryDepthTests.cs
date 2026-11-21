@@ -13,7 +13,7 @@ namespace Modio.Tests.Core {
 
     /// <summary>
     /// Unit tests for how deep a meeting sits, and what that means when a row
-    /// must go (modio P-03).
+    /// must go (modio PHASE-03).
     ///
     /// Master's own word: seeing, touching and holding are three depths of one
     /// meeting, not three separate things. So when the ring is full, the least

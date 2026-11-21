@@ -6,46 +6,46 @@ change in as a commit.
 
 <!-- format: v1 | fields: status, id, title, phase -->
 
-+ [x] TASK-001 [P-01]: Wait on germio TASK-015 to TASK-018, then fold the older plan in
-+ [x] TASK-002 [P-01]: Set a fading rate against the count, not a fixed number
-+ [x] TASK-003 [P-01]: Work out the whole set of forward-facing questions
-+ [x] TASK-004 [P-01]: Find a home in germio for a line said over a head
-+ [x] TASK-005 [P-01]: Put the spec through a hard-questioning G review
-+ [x] TASK-006 [P-02]: Build seeking, by type and reach, against memory
-+ [x] TASK-007 [P-03]: Build the memory table, and the three depths of meeting
-+ [x] TASK-008 [P-03]: Build fading, to the rate TASK-002 settles
-+ [x] TASK-009 [P-03]: Prove no garbage is made on the hot path
-+ [x] TASK-010 [P-04]: Build the Deed, ending Done, Failed, or Dropped
-+ [x] TASK-011 [P-04]: Hold a Deed together with animo Lock, in Soft mode
-+ [xx] TASK-012 [P-04]: Build the DSL reader — dropped, there is no modio.json
-+ [x] TASK-013 [P-05]: Build the far look, matching a found thing against like ones
-+ [x] TASK-017 [P-05]: Hold the reach and the height of every remembered meeting
-+ [x] TASK-014 [P-05]: Build a runner, proving same input, same answer
-+ [x] TASK-019 [P-04]: Carry what was found, from the seek to the row
-+ [ ] TASK-015 [P-06]: Join Modio to stemic, and check it by real play
-+ [x] TASK-018 [P-XX]: Put the questions in the target, not in a condition
-+ [x] TASK-016 [P-XX]: Put the rest of the docs into Basic English
-+ [ ] TASK-020 [P-XX]: Hold real, given classic console-era AI patterns, for seeking to check against
-+ [x] TASK-021 [P-XX]: Wire animo's own true Engine to Modio's own real IMind
-+ [ ] TASK-022 [P-XX]: Add the Unity Tag edge (`GameObject.CompareTag`) for `TargetMarkLogic`
-+ [x] TASK-023 [P-02]: Add an asmdef of Modio's own, so a Unity project can take it in
-+ [x] TASK-024 [P-02]: Build the wedge check in Scripts, with no Unity in it at all
-+ [ ] TASK-026 [P-02]: The thin Unity edge, reading Sight's five numbers from germio (built; the real check is open)
-+ [ ] TASK-027 [P-02]: The thin Unity edge, reading transform.forward (built; the real check is open)
-+ [ ] TASK-028 [P-02]: The thin Unity edge, the broad sphere call alone (built; the real check is open)
-+ [ ] TASK-029 [P-02]: The name interface, asking germio for a kind and an id (built; the real check is open)
-+ [ ] TASK-030 [P-02]: The thin Unity edge, one ray call alone (built; the real check is open)
-+ [ ] TASK-031 [P-02]: Prove zero garbage across a whole tick, by a real Play Mode test
-+ [x] TASK-032 [P-02]: The heading logic behind TASK-027, no Unity at all
-+ [xx] TASK-033 [P-02]: The Sight-data logic behind TASK-026 — dropped, no real logic stood in it
-+ [x] TASK-034 [P-02]: The broad-phase logic behind TASK-028, no Unity at all
-+ [x] TASK-035 [P-02]: The ray-result logic behind TASK-030, no Unity at all
-+ [x] TASK-036 [P-XX]: The Tag logic behind TASK-022's own third path, no Unity at all
-+ [x] TASK-037 [P-XX]: The adapter joining germio's world table to Modio's own name interface
-+ [x] TASK-038 [P-XX]: The join between germio's own DeedRequested and a real seek
-+ [ ] TASK-039 [P-XX]: Add DeedRunner, one per NPC, driving its own deed each tick
-+ [ ] TASK-040 [P-XX]: Check that the Tag list of `stemic` holds one entry for each named item
-+ [ ] TASK-041 [P-XX]: Carry the Tag text through `Found` and `TargetMark` to `update_inventory.key`
++ [x] TASK-001 [PHASE-01]: Wait on germio TASK-015 to TASK-018, then fold the older plan in
++ [x] TASK-002 [PHASE-01]: Set a fading rate against the count, not a fixed number
++ [x] TASK-003 [PHASE-01]: Work out the whole set of forward-facing questions
++ [x] TASK-004 [PHASE-01]: Find a home in germio for a line said over a head
++ [x] TASK-005 [PHASE-01]: Put the spec through a hard-questioning G review
++ [x] TASK-006 [PHASE-02]: Build seeking, by type and reach, against memory
++ [x] TASK-007 [PHASE-03]: Build the memory table, and the three depths of meeting
++ [x] TASK-008 [PHASE-03]: Build fading, to the rate TASK-002 settles
++ [x] TASK-009 [PHASE-03]: Prove no garbage is made on the hot path
++ [x] TASK-010 [PHASE-04]: Build the Deed, ending Done, Failed, or Dropped
++ [x] TASK-011 [PHASE-04]: Hold a Deed together with animo Lock, in Soft mode
++ [xx] TASK-012 [PHASE-04]: Build the DSL reader — dropped, there is no modio.json
++ [x] TASK-013 [PHASE-05]: Build the far look, matching a found thing against like ones
++ [x] TASK-017 [PHASE-05]: Hold the reach and the height of every remembered meeting
++ [x] TASK-014 [PHASE-05]: Build a runner, proving same input, same answer
++ [x] TASK-019 [PHASE-04]: Carry what was found, from the seek to the row
++ [ ] TASK-015 [PHASE-06]: Join Modio to stemic, and check it by real play
++ [x] TASK-018 [PHASE-XX]: Put the questions in the target, not in a condition
++ [x] TASK-016 [PHASE-XX]: Put the rest of the docs into Basic English
++ [ ] TASK-020 [PHASE-XX]: Hold real, given classic console-era AI patterns, for seeking to check against
++ [x] TASK-021 [PHASE-XX]: Wire animo's own true Engine to Modio's own real IMind
++ [ ] TASK-022 [PHASE-XX]: Add the Unity Tag edge (`GameObject.CompareTag`) for `TargetMarkLogic`
++ [x] TASK-023 [PHASE-02]: Add an asmdef of Modio's own, so a Unity project can take it in
++ [x] TASK-024 [PHASE-02]: Build the wedge check in Scripts, with no Unity in it at all
++ [ ] TASK-026 [PHASE-02]: The thin Unity edge, reading Sight's five numbers from germio (built; the real check is open)
++ [ ] TASK-027 [PHASE-02]: The thin Unity edge, reading transform.forward (built; the real check is open)
++ [ ] TASK-028 [PHASE-02]: The thin Unity edge, the broad sphere call alone (built; the real check is open)
++ [ ] TASK-029 [PHASE-02]: The name interface, asking germio for a kind and an id (built; the real check is open)
++ [ ] TASK-030 [PHASE-02]: The thin Unity edge, one ray call alone (built; the real check is open)
++ [ ] TASK-031 [PHASE-02]: Prove zero garbage across a whole tick, by a real Play Mode test
++ [x] TASK-032 [PHASE-02]: The heading logic behind TASK-027, no Unity at all
++ [xx] TASK-033 [PHASE-02]: The Sight-data logic behind TASK-026 — dropped, no real logic stood in it
++ [x] TASK-034 [PHASE-02]: The broad-phase logic behind TASK-028, no Unity at all
++ [x] TASK-035 [PHASE-02]: The ray-result logic behind TASK-030, no Unity at all
++ [x] TASK-036 [PHASE-XX]: The Tag logic behind TASK-022's own third path, no Unity at all
++ [x] TASK-037 [PHASE-XX]: The adapter joining germio's world table to Modio's own name interface
++ [x] TASK-038 [PHASE-XX]: The join between germio's own DeedRequested and a real seek
++ [ ] TASK-039 [PHASE-XX]: Add DeedRunner, one per NPC, driving its own deed each tick
++ [ ] TASK-040 [PHASE-XX]: Check that the Tag list of `stemic` holds one entry for each named item
++ [ ] TASK-041 [PHASE-XX]: Carry the Tag text through `Found` and `TargetMark` to `update_inventory.key`
 
 ## Detail
 
@@ -216,7 +216,7 @@ Checked by real sums: `stemic`'s own `Level_1` holds 24 pieces of 8
 kinds. Throwing a line at all 24, for each of 64 characters, every
 tick, would come to **1,536 lines a tick for nothing**.
 
-What is left for P-02: `Runtime/`, which asks Unity's own `Physics`
+What is left for PHASE-02: `Runtime/`, which asks Unity's own `Physics`
 and fills these lists. **That part cannot be checked by `dotnet
 test`** — check it by eye, in a running game. **It now stands as its
 own task, TASK-024, with TASK-023 (the `.asmdef`) and `germio`'s own
@@ -479,7 +479,7 @@ now stand, not "not yet written" as this whole task once read:**
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
 | `animo`                   | the two personas — checked live, `examples/poc_pair.json` names both `place_curious` and `company_seeking` outright (its own TASK-013, closed).                                      | Done                                                                       |
 | `germio`                  | `Rule.actor`, `request_deed`, `update_need` (its own TASK-016 to TASK-039).                                                                                                          | Done — every one closed `[x]`, or dropped `[xx]` for a real, given reason. |
-| Modio                     | everything in P-02 to P-05 here.                                                                                                                                                     | Done                                                                       |
+| Modio                     | everything in PHASE-02 to PHASE-05 here.                                                                                                                                             | Done                                                                       |
 | Bridge                    | a real, given `IMind` wired to `animo.Engine` — no such wiring exists yet at all (see TASK-021 below). Without it, all three of the above stand apart, never joined.                 | Not started — the one true, real gap left                                  |
 | `Runtime/`                | asking Unity's own real `Physics`, filling the seek list each tick (`docs/modio_spec.md` §3.7, §3.7.3). Now its own task, TASK-024, standing on TASK-023 and `germio`'s TASK-067.    | Not started — this whole task's own second real gap                        |
 | `stemic`, not code at all | two given models, an Animator Controller, both `germio` Rule sets, two given prefabs, placed in a real level, checked to play — its own TASK-018 to TASK-026, every one `[ ]` still. | Not started                                                                |
@@ -1069,7 +1069,7 @@ where they stood: checked only on paper.
 **A real, given piece still missing outright, found this same day,
 never once named here before:** the check above fed `StageGate.Worth`
 a hand-made, given list of three candidates directly — `Runtime/`
-itself (TASK-006's own true "what is left for P-02": asking Unity's
+itself (TASK-006's own true "what is left for PHASE-02": asking Unity's
 own real `Physics` and filling that same list, tick by tick) has
 never once been built. `docs/modio_spec.md` §3.7 already gives its
 whole real shape (a wide, cheap check every tick, a straight line

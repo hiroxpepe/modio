@@ -14,7 +14,7 @@ namespace Modio.Tests.Tools {
     // public Classes
 
     /// <summary>
-    /// Unit tests for running a whole round through, with no Unity (modio P-05).
+    /// Unit tests for running a whole round through, with no Unity (modio PHASE-05).
     ///
     /// `animo` has a runner of its own, proving same input, same answer. Modio
     /// needs one too, and of the same shape: a list of what was seen, at what

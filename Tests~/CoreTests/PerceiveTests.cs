@@ -13,7 +13,7 @@ namespace Modio.Tests.Core {
     // public Classes
 
     /// <summary>
-    /// Unit tests for choosing which found thing to reach for (modio P-02).
+    /// Unit tests for choosing which found thing to reach for (modio PHASE-02).
     ///
     /// Runtime asks Unity's own Physics and hands back a plain list; this part
     /// takes that list, weighs it against memory, and picks one. **No Unity at

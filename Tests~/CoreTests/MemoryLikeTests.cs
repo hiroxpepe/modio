@@ -13,7 +13,7 @@ namespace Modio.Tests.Core {
 
     /// <summary>
     /// Unit tests for facing the other way: asking how it went with things of a
-    /// sort with this one (modio P-05, TASK-013 and TASK-017).
+    /// sort with this one (modio PHASE-05, TASK-013 and TASK-017).
     ///
     /// Facing back matches on the thing — one id, one row. **Facing forward
     /// matches on what Perceive handed back about it**: its kind, how far off,

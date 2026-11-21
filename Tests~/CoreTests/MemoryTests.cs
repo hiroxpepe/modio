@@ -12,7 +12,7 @@ namespace Modio.Tests.Core {
     // public Classes
 
     /// <summary>
-    /// Unit tests for the memory one character keeps (modio P-03).
+    /// Unit tests for the memory one character keeps (modio PHASE-03).
     ///
     /// Four posts: who, when, where, what. A row is written only where a deed
     /// ends Done. Rows are let go of by count, oldest first, so the table cannot

@@ -8,7 +8,7 @@ State on 2026-11-07, checked against the code.
 
 | # | Part | State |
 | --- | --- | --- |
-| 1 | Phases | `P-01`, `P-03`, `P-04`, and `P-05` are done; `P-02` (seeking) is in progress for the thin Unity edges alone; `P-06` (the join to `stemic`) is not begun |
+| 1 | Phases | `PHASE-01`, `PHASE-03`, `PHASE-04`, and `PHASE-05` are done; `PHASE-02` (seeking) is in progress for the thin Unity edges alone; `PHASE-06` (the join to `stemic`) is not begun |
 | 2 | The code | `Scripts/Modio.csproj` holds the real, working code: `Seek`, `Memory`, `Deed`, `Hand`, `IMind`, `EngineMind`, the source windows, and `NameSourceAdapter` |
 | 3 | The tests | 199 in `Tests~/CoreTests` and 106 in `Tests~/ConventionTests`, all pass |
 | 4 | The thin edges | `Runtime/` holds `SightEdge`, `HeadingEdge`, `BroadPhaseEdge`, and `RayEdge` (built 2026-09-22); none has been run in a real Unity |

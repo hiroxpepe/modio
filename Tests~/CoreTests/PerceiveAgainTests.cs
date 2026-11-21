@@ -13,7 +13,7 @@ namespace Modio.Tests.Core {
     // public Classes
 
     /// <summary>
-    /// Unit tests for "new again, if it has been a while" (modio P-03).
+    /// Unit tests for "new again, if it has been a while" (modio PHASE-03).
     ///
     /// Letting go by count keeps a table small, but it turns on how many rows
     /// come after — a place met once and then never thought of again sits there

@@ -13,7 +13,7 @@ namespace Modio.Tests.Core {
     // public Classes
 
     /// <summary>
-    /// Unit tests for deciding which hits are worth a straight line (modio P-02).
+    /// Unit tests for deciding which hits are worth a straight line (modio PHASE-02).
     ///
     /// Seeking runs in two stages: a wide cheap check every tick, and a straight
     /// line thrown only where the cheap one finds something. **Throwing a line is

@@ -13,7 +13,7 @@ namespace Modio.Tests.Core {
     // public Classes
 
     /// <summary>
-    /// Unit tests for keeping away from what ones like it did (modio P-05).
+    /// Unit tests for keeping away from what ones like it did (modio PHASE-05).
     ///
     /// The forward-facing question is not put to a mind, and not worked out from
     /// any rate. **It is put to the seek**: which of the found things to reach

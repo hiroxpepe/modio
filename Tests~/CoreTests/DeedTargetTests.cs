@@ -12,7 +12,7 @@ namespace Modio.Tests.Core {
     // public Classes
 
     /// <summary>
-    /// Unit tests for a Deed holding on to what it reached for (modio P-04).
+    /// Unit tests for a Deed holding on to what it reached for (modio PHASE-04).
     ///
     /// A deed that lands writes a row, and a row names what was done to
     /// (§4.1). **So a deed must carry the id of what it found**, from the

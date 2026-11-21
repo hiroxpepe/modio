@@ -14,7 +14,7 @@ namespace Modio.Tests.Core {
 
     /// <summary>
     /// Unit tests for holding a Behavior steady while a deed plays out
-    /// (modio P-04).
+    /// (modio PHASE-04).
     ///
     /// animo already holds what a deed needs: Lock(duration, Soft). Soft is what
     /// a deed wants — scores still work on the inside, and only what is given

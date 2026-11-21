@@ -13,7 +13,7 @@ namespace Modio.Tests.Core {
     // public Classes
 
     /// <summary>
-    /// Unit tests for how much room a memory is given (modio P-01, TASK-002).
+    /// Unit tests for how much room a memory is given (modio PHASE-01, TASK-002).
     ///
     /// A written-in number breaks: counted on stemic's own Level_1, which holds
     /// 12 blocks, a memory that holds every one leaves nothing new, and the want

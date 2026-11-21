@@ -14,7 +14,7 @@ namespace Modio.Tests.Core {
 
     /// <summary>
     /// Unit tests for asking after another character, rather than a thing
-    /// (modio P-01, TASK-003).
+    /// (modio PHASE-01, TASK-003).
     ///
     /// Counted against the 10 deeds the two given personas hold, a character has
     /// only two forward-facing questions to put:

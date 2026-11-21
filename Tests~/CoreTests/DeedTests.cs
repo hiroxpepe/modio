@@ -12,7 +12,7 @@ namespace Modio.Tests.Core {
     // public Classes
 
     /// <summary>
-    /// Unit tests for carrying one Behavior through over time (modio P-04).
+    /// Unit tests for carrying one Behavior through over time (modio PHASE-04).
     ///
     /// A Deed runs up to three steps — face, move, act — and ends one of three
     /// ways. **Done is the one gate into memory**; Failed and Dropped write
